@@ -4,7 +4,6 @@ html, body {
 
 body {
     margin: 0;
-
     background: linear-gradient(-45deg, #cc2b5e, #753a88, #FFFFFF);
     background-size: 400% 400%;
     animation: gradient 10s ease infinite;
