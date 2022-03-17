@@ -10,6 +10,12 @@ body {
     animation: gradient 10s ease infinite;
 
 }
+#canvas{
+  margin-left: 300px;
+  right: 0;
+  background-color:#b5e2e8;
+  border: 2px solid black;
+}
 .sidenav {
     height: 100%;
     width: 190px;
