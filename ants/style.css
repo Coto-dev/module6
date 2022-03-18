@@ -8,8 +8,14 @@ body {
     background: linear-gradient(-45deg, #2980B9, #6DD5FA, #FFFFFF);
     background-size: 400% 400%;
     animation: gradient 10s ease infinite;
-
+    display: flex;
 }
+#canvas{
+    margin-left: 30px;
+    right: 0;
+    background-color:#b5e2e8;
+    border: 2px solid black;
+    }
 .sidenav {
     height: 100%;
     width: 190px;
