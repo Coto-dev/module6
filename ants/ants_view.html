@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="style.css">
     <script src="ants_algs.js"> </script> 
+    
     <title>Интересные алогоритмы</title>
 </head>
 <body>
@@ -25,16 +26,22 @@
     <div class="float-container">
 
       <div class="float-child1">
-        <canvas id="canvas" width="800px" height="730px"></canvas>
+        <canvas id="canvas" width="800px" height="800px"></canvas>
       </div>
-
+      
       <div class="float-child2">
         <div class="forbutton">
-          <button class="butt">Сгенирировать лабиринт</button>
+          <button class="butt" id="file">Добавить мир</button>
+          <button class="butt" id="draw">Начать рисовать</button>
+          <input name="size_world" type="number" />
+          <button class="butt">Очистить мир</button>
+          <button class="butt">Разместить колонию</button>
+          <button class="butt">Разместить еду</button>
         </div>
     </div>
 
   </div>
-
+  <input type="file" id="file"></input>
+  <script src="paiting.js" defer></script>
     </body>
 </html>

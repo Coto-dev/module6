@@ -10,10 +10,13 @@ body {
     animation: gradient 10s ease infinite;
 
 }
+
 #canvas{
-  background-color:#b5e2e8;
-  border: 2px solid black;
-}
+    width: 800px;
+	height: 800px;
+	border: 3px solid black;
+	margin: 40px;
+  }
 
 .forbutton{
   width: 440px;
@@ -23,7 +26,7 @@ body {
 }
 
 .butt{
-    margin-top: 200px;
+    margin-top: 20px;
     margin-left: 30px;
     margin-right:3%;
     height:50px;
@@ -72,6 +75,13 @@ body {
     margin-left: 190px; 
     font-size: 28px; 
     padding: 0px 10px;
+}
+#c1 {
+	width: 300px;
+	height: 300px;
+	border: 3px solid black;
+	margin: 40px;
+	/*background-image: url(setka.png);*/
 }
 
 @media screen and (max-height: 450px) {
