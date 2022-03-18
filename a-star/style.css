@@ -11,28 +11,37 @@ body {
 
 }
 #canvas{
-  display:flex;
-  margin-left: 230px;
   background-color:#b5e2e8;
   border: 2px solid black;
 }
+
 .forbutton{
-    display:flex;
-    height:600px;
-    width:30%;
-    margin-left: 1150px;
-    margin-right: 3%;
-    background-color: #d0e0e2;
-    border:2px solid black;
+  width: 440px;
+  height: 730px;
+  background-color: #b5e2e8;
+  border:2px solid black;
   }
-  .butt{
+
+.butt{
     margin-top: 200px;
     margin-left: 30px;
-    margin-right:7%;
+    margin-right:3%;
     height:50px;
     width:200px;
     background-color: #3f85d4;
   }
+
+.float-container {
+    margin-left: 230px;
+}
+
+.float-child1{
+    float: left;
+}
+.float-child2{
+    float: right;
+    margin-right:100px;
+}
 .sidenav {
     height: 100%;
     width: 190px;
