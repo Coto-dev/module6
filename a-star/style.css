@@ -20,7 +20,7 @@ body {
   height: 730px;
   background-color: #b5e2e8;
   border:2px solid black;
-  }
+}
 
 .butt{
     margin-top: 200px;
@@ -29,7 +29,7 @@ body {
     height:50px;
     width:200px;
     background-color: #3f85d4;
-  }
+}
 
 .float-container {
     margin-left: 230px;
@@ -38,10 +38,12 @@ body {
 .float-child1{
     float: left;
 }
+
 .float-child2{
     float: right;
     margin-right:100px;
 }
+
 .sidenav {
     height: 100%;
     width: 190px;
@@ -67,8 +69,8 @@ body {
 }
 
 .main {
-    margin-left: 190px; /* Same as the width of the sidenav */
-    font-size: 28px; /* Increased text to enable scrolling */
+    margin-left: 190px; 
+    font-size: 28px; 
     padding: 0px 10px;
 }
 

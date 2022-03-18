@@ -3,43 +3,47 @@ html, body {
 }
 
 body {
+    margin: 0;
+
     background: linear-gradient(-45deg, #2980B9, #6DD5FA, #FFFFFF);
     background-size: 400% 400%;
     animation: gradient 10s ease infinite;
 
 }
 #canvas{
-  display: flex;
-  margin-left: 300px;
-  right: 0;
   background-color:#b5e2e8;
   border: 2px solid black;
 }
-.field{
-  height:800px;
-  margin-left:75%;
-  background-color:#b5e2e8;
-  border:2px solid black;
-  width:350px;
-  margin-bottom: 300px;
-}
+
 .forbutton{
-  display:flex;
-  height:800px;
-  width:40%;
-  margin-left: 800px;
-  margin-right: 5%;
+  width: 440px;
+  height: 730px;
   background-color: #b5e2e8;
   border:2px solid black;
 }
+
 .butt{
-  margin-top: 200px;
-  margin-left: 30px;
-  margin-right:3%;
-  height:50px;
-  width:200px;
-  background-color: #3f85d4;
+    margin-top: 200px;
+    margin-left: 30px;
+    margin-right:3%;
+    height:50px;
+    width:200px;
+    background-color: #3f85d4;
 }
+
+.float-container {
+    margin-left: 230px;
+}
+
+.float-child1{
+    float: left;
+}
+
+.float-child2{
+    float: right;
+    margin-right:100px;
+}
+
 .sidenav {
     height: 100%;
     width: 190px;
@@ -65,8 +69,8 @@ body {
 }
 
 .main {
-    margin-left: 190px; /* Same as the width of the sidenav */
-    font-size: 28px; /* Increased text to enable scrolling */
+    margin-left: 190px; 
+    font-size: 28px; 
     padding: 0px 10px;
 }
 
