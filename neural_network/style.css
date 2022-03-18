@@ -10,8 +10,8 @@ body {
     animation: gradient 10s ease infinite;
 
 }
-#canvas{
-  background-color:#b5e2e8;
+#canv{
+  background-color:#ffffff;
   border: 2px solid black;
 }
 .forbutton{
