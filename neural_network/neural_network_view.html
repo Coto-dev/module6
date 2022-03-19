@@ -24,14 +24,14 @@
 
       <div class="float-child1">
         <canvas id="canv" style="display: block;">Ваш браузер устарел, обновитесь.</canvas>
-        <script src="neural_network_alg.js"></script>
+        <script src="./neural_network_alg.js"></script>
        
       </div>
 
       <div class="float-child2">
         <div class="forbutton">
-            <button class="butt">Очистить</button>
-            <button class="butt">Распознать</button>
+            <button class="butt" id="clear" onclick="d.clear()">Очистить</button>
+            <button class="butt" id="find" onclick="find()">Распознать</button>
         </div>
     </div>
 

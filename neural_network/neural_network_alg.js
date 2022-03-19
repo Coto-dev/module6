@@ -1,12 +1,16 @@
 function DCanvas(el)
 		{
 			const ctx = el.getContext('2d');
-			const pixel = 160;
+			const pixel = 16;
 
 			let is_mouse_down = false;
 
 			canv.width = 800;
 			canv.height = 730;
+
+            this.clear = function() {
+				ctx.clearRect(0, 0, canv.width, canv.height);
+			}
 
 			this.drawLine = function(x1, y1, x2, y2, color = 'gray') {
 				ctx.beginPath();
@@ -16,6 +20,14 @@ function DCanvas(el)
 				ctx.moveTo(x1, y1);
 				ctx.lineTo(x2, y2);
 				ctx.stroke();
+			}
+            this.drawCell = function(x, y, w, h) {
+				ctx.fillStyle = 'blue';
+				ctx.strokeStyle = 'blue';
+				ctx.lineJoin = 'miter';
+				ctx.lineWidth = 1;
+				ctx.rect(x, y, w, h);
+				ctx.fill();
 			}
             this.drawGrid = function() {
 				const w = canv.width;
@@ -115,6 +127,13 @@ function DCanvas(el)
         })
         
     }
-    
+    let trainData = [];
+    let vector = [];
+    function find(){
+        vector = d.calculate(true);
+
+    }
     const d = new DCanvas(document.getElementById('canv'));
-    d.drawGrid();
+    ///////////////////////////////////////////////////////////////////
+    
+   
