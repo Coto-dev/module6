@@ -46,7 +46,9 @@ function DCanvas(el)
 				{
 					this.drawLine(0, y, w, y);
 				}
+               
         }
+    
         this.calculate = function(draw = false) {
             const w = canv.width;
             const h = canv.height;
@@ -118,7 +120,7 @@ function DCanvas(el)
                 ctx.stroke();
 
                 ctx.beginPath();
-                ctx.arc(e.offsetX, e.offsetY, pixel / 2, 0, Math.PI * 2);
+                ctx.arc(e.offsetX, e.offsetY, pixel /2, 0, Math.PI * 2);
                 ctx.fill();
 
                 ctx.beginPath();
@@ -127,13 +129,17 @@ function DCanvas(el)
         })
         
     }
-    let trainData = [];
-    let vector = [];
+
     function find(){
         vector = d.calculate(true);
 
     }
+    let trainData = [];
+    let vector = [];
+
     const d = new DCanvas(document.getElementById('canv'));
+
+   
     ///////////////////////////////////////////////////////////////////
     
    
