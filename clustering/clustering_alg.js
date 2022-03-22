@@ -1,27 +1,28 @@
 var canvas = document.getElementById("canvas"),
          ctx = canvas.getContext("2d");
-         var mouse = { x:0, y:0},
-        dots = [],centroidXY = [],minS=[],dotsToCentroid=[],centroidXYBegin=[],step=0
+         var dots = [],centroidXY=[],minS=[],dotsToCentroid=[],centroidXYBegin=[],step
         ,color = [],sumcentroidsX =[],sumcentroidsY =[],kolvoCenters=[];
+
         canvas.clear = function() {
             ctx.clearRect(0, 0, 800, 730);
-            dots = [];
-            centroidXY= [];
-            centroid =[];
-            minS=[];
+            mouse = { x:0, y:0},
+        dots = [],centroidXY = [],minS=[],dotsToCentroid=[],centroidXYBegin=[],step=0
+        ,color = [],sumcentroidsX =[],sumcentroidsY =[],kolvoCenters=[];
             ctx.fillStyle = "black";
-
-            
         }
         canvas.addEventListener('mousedown',function(e){
-            mouse.x = e.pageX - this.offsetLeft;
-            mouse.y = e.pageY - this.offsetTop;
-            dots.push([mouse.x , mouse.y])
+            var x,y;
+            x = e.pageX - this.offsetLeft;
+            y = e.pageY - this.offsetTop;
+            
+            dots.push([x , y])
+    
             ctx.beginPath();
-            ctx.arc(mouse.x , mouse.y ,15,0,Math.PI*2);
+            ctx.arc(x , y ,15,0,Math.PI*2);
             ctx.fill();
         });
         function ClusteringKmeans(){
+          
 
             function getRandomFloat(min, max) {
                 return Math.random() * (max - min) + min;
@@ -35,32 +36,45 @@ var canvas = document.getElementById("canvas"),
                 }
                 return color;
               }
-
+        
             var centroid = prompt('Сколь центроидов?',2)
-            step = Math.floor(dots.length/centroid);
-            for (let i=0,j=0;i<dots.length;i+=step){
-                centroidXY[j]=dots[i];
-                j++;
-            }
-        // for (let i=0;i<centroid;i++){
-        //     centroidXY[i][0]=getRandomFloat(1, 700);
-        //     centroidXY[i][1]=getRandomFloat(1, 700);
-        // }
-    
-            console.log( centroidXY);
-       
+            // step = Math.floor(dots.length/centroid);
+           
+           // console.log(typeof(dots));
+            // for (let i=0,j=0;i<dots.length;i+=step){
+            //     var x,y;
+            //     // x=dots[i][0];
+            //     // y=dots[i][1];
+            //     centroidXY.push([dots[i]]);
+            // }
+            //console.log(centroidXY);
+           // console.log(dots);
+          
+        for (let i=0;i<centroid;i++){
+            var x,y;
+            x=getRandomFloat(1, 800);
+            y=getRandomFloat(1, 730);
+           
+            centroidXY.push([x,y]);
+                    
+        }    
             for(let i = 0;i<centroid;i++){
                 color[i]=getRandomColor();
             }
-
+            var count=0;
            minS = [],dotsToCentroid=[];
-           while (centroidXYBegin != centroidXY){
+           while (count<7){
+               
             centroidXYBegin = centroidXY;
+            
             for (let i=0;i<dots.length;i++){ // проходим по всем точкам
                 var s=0, min=10000;
 
                 for (let j=0;j<centroid;j++){ // ищем расстояние между центрами и точками
-                        s=Math.sqrt(((centroidXY[j][0]-dots[i][0])**2) + ((centroidXY[j][1]-dots[i][1])**2));
+                    var x,y;
+                    x=centroidXY[j][0];
+                    y=centroidXY[j][1];
+                        s=Math.sqrt(((x-dots[i][0])**2) + ((y-dots[i][1])**2));
                        
                         if (s<min){
                             min = Math.min(min,s);
@@ -71,6 +85,19 @@ var canvas = document.getElementById("canvas"),
                     }
                    
             }
+            // function sleep(milliseconds) {
+            //     const date = Date.now();
+            //     let currentDate = null;
+            //     do {
+            //       currentDate = Date.now();
+            //     } while (currentDate - date < milliseconds);
+            //   }
+            // sleep(2000);
+            for (let index=0;index<dotsToCentroid.length;index++){
+                sumcentroidsX[index]=0;
+                sumcentroidsY[index]=0;
+                kolvoCenters[index]=0;
+                }
             for (let h=0;h<dotsToCentroid.length;h++){
                      ctx.beginPath();
                      ctx.fillStyle = color[dotsToCentroid[h]];
@@ -80,19 +107,20 @@ var canvas = document.getElementById("canvas"),
                 sumcentroidsY[dotsToCentroid[h]]+=dots[h][1];
                 kolvoCenters[dotsToCentroid[h]]++;
             }
-            for (let h=0;h<centroid.length;h++){
+            for (let h=0;h<centroidXY.length;h++){
                 centroidXY[h][0]=sumcentroidsX[h]/kolvoCenters[h];
                 centroidXY[h][1]=sumcentroidsY[h]/kolvoCenters[h];
-                // console.log( centroidXY[h][0]);
-                // console.log( centroidXY[h][1]);
-                // console.log(h);
-
+                // ctx.beginPath();
+                    //  ctx.fillStyle = color[dotsToCentroid[h]];
+                    //  ctx.arc(centroidXY[h][0] , centroidXY[h][1] ,30,0,Math.PI*2);
+                    //  ctx.fill();
+                console.log(sumcentroidsX[h]/kolvoCenters[h]);
             }
-            
+        // console.log(centroidXY);
             
             
                 
-            
+            count++;
         }
         }
 
