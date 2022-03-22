@@ -15,6 +15,16 @@ body {
   border: 2px solid black;
 }
 
+.size{
+    margin-left: 25px; 
+}
+
+.Text{
+    margin-top: 100px;
+    margin-left: 30px;
+    font-size:larger;
+}
+
 .forbutton{
   width: 440px;
   height: 730px;
@@ -23,12 +33,16 @@ body {
 }
 
 .butt{
-    margin-top: 200px;
+    margin-top: 50px;
     margin-left: 30px;
     margin-right:3%;
     height:50px;
     width:200px;
     background-color: #3f85d4;
+}
+
+.butt:hover {
+    background-color: #6DD5FA;
 }
 
 .float-container {
