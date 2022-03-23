@@ -41,7 +41,7 @@ var canvas = document.getElementById("canvas"),
               }
         
             var centroid = prompt('Сколь центроидов?',2)
-            step = Math.floor(dots.length/centroid)-1;
+            step = Math.floor(dots.length/centroid);
            
            // console.log(typeof(dots));
             for (let i=0,j=0;i<dots.length;i+=step){
