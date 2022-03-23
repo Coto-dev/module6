@@ -26,8 +26,17 @@
         ant_png.ctx = "img/ant.png";
 
         //ctx.drawImage(ant_png, 100, 190, 100, 100); 
-
-
+        var ant = new Array(3);
+        
+        for(let i=1;i<3;i++){
+            ant[i]={
+            x: Math.random(),
+            y: Math.random(),
+            eat: false,
+            angle: 0,
+        };
+        }
+        console.log(ant);
     </script>
     </body>
     </html>
