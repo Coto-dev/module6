@@ -1,7 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-
+<head>
+ <meta charset="UTF-8">
+ <link rel="stylesheet" href="style.css">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <meta http-equiv="X-UA-Compatible" content="ie=edge">
+ <title>Flappy Bird!</title>
+</head>
 <body>
-    <script src="ants_algs.js"> </script> 
-</body>
-</html>
+
+ <canvas id="canvas" width="800" height="800"></canvas>
+ <img id="source" src="img/ant.png" width="300" height="300"> 
+ <script>
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+        //var image = document.getElementById('source');
+        //i/age.onload = ()=>{
+        //ctx.drawImage(image,  10, 20, 87, 104);
+        //}
+        ctx.fillStyle = 'red';
+        ctx.fillRect(10,10,10,10);
+        
+
+        var ant_png = new Image();
+        ant_png.ctx = "img/ant.png";
+
+        //ctx.drawImage(ant_png, 100, 190, 100, 100); 
+
+
+    </script>
+    </body>
+    </html>
+
+        
