@@ -1,6 +1,6 @@
 const wallColor = "black";
 const freeColor = "white";
-let MatrixSize = 31;
+let MatrixSize = 41;
 
 var columns;
 var rows;
@@ -47,10 +47,6 @@ function CreateMatrix(columns, rows) {
 }
 
 function DrawMaze(columns, rows) {
-  contex.beginPath();
-  contex.rect(0, 0, canvas.width, canvas.height);
-  contex.fillStyle = BACKGROUND_COLOR;
-  contex.fill();
 
   for (let y = 0; y < columns; y++) {
     for (let x = 0; x < rows; x++) {
