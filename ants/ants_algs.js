@@ -2,7 +2,7 @@ var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 var ant_count = 100;
 var ant = new Array(ant_count);
-const speed = 1;
+const speed = 3;
 const size_world=80;
 var world=[];
 var feromon = [];
@@ -156,7 +156,8 @@ function drawField(){
 				else 
 				if(world[i][j]>0){
 					ctx.fillStyle = 'brown';
-					ctx.fillRect(j*10+Math.round(Math.random()*7), i*10+Math.round(Math.random()*7), 3, 3);
+					for(let k = 0;k< world[i][j];k++)
+						ctx.fillRect(j*10+Math.round(Math.random()*7), i*10+Math.round(Math.random()*7), 3, 3);
 				}
 		}
 	}
@@ -182,46 +183,56 @@ function createColony() {
 }
 
 function update_fer(){
+	let k =0;
 	for(let i=0;i<feromon.length;i++){
 		feromon[i].time --;
+		if (feromon[i].time<=0) k++;
 		}
-	}
-	for(let i=0;i<feromon.length;i++){
-		if (feromon[i].time == 0){
-			feromon[i].x+=0;feromon[i].y+=0;
-			world[feromon[i].x][feromon[i].y]--;
-			feromon.shift();
-			i--;
-	}
+	
+	feromon.splice(0, k);
 }
 
-function new_fer(x1,y1){
+function new_fer(i){
 	feromon.push({
-		time: 10,
-		x: x1,
-		y: y1,
+		time: speed,
+		x: ant[i].x,
+		y: ant[i].y,
 	})
-	x1+=0;y1+=0;
-	world[x1][y1]++;
+	world[ant[i].x][ant[i].y]++;
 }
 
 function ant_algoritm(){
 	update_fer();
+	console.log(feromon);
     for(let i=0;i<ant_count;i++){
 		ant[i].angle = Math.random()*200;
-		new_fer(ant[i].x,ant[i].y);
+		new_fer(i);
         var x = Math.round(ant[i].x + speed*Math.cos(ant[i].angle));
         var y = Math.round(ant[i].y + speed*Math.sin(ant[i].angle));
-        if((x >= size_world-2) || (y >= size_world-2) || (x<size_world&&y<size_world&&world[x][y]==-1)){
-			ant[i].angle += Math.PI;
-        	ant[i].x +=  Math.round(speed*Math.cos(ant[i].angle));
-        	ant[i].y +=  Math.round(speed*Math.sin(ant[i].angle));
+		if(x<0){
+			x=0;
+			ant[i].angle+=Math.PI;
+		}
+		else if(x>=80){
+			x=79;
+			ant[i].angle+=Math.PI;
+		}
+		if(y<0){
+			y=0;
+			ant[i].angle+=Math.PI;
+		}
+		else if(y>=80){
+			y=79;
+			ant[i].angle+=Math.PI;
+		}
+		if(world[x][y]==-1){
+			ant[i].angle+=Math.PI;
 		}
 		else{
 			ant[i].x = x;
 			ant[i].y = y;
 		}
-    }
+	}
     //setTimeout(drawField,900);
     //console.log(ant);
 	drawField();
