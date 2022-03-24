@@ -34,7 +34,7 @@
           <input id="matrixSize" type="range" min="5" max="60" value="30" class="range"
             onchange="document.getElementById('rangeValue').innerHTML = this.value">
           <span id="rangeValue">30</span>
-          <button id="CreateMaze" class="butt">Сгенирировать лабиринт</button>
+          <button id="CreateMaze" class="butt" onclick="CreateMazes()">Сгенирировать лабиринт</button>
           <br>
           <button id="StartMaze" class="butt">Старт</button>
           <button id="FinishMaze" class="butt">Финиш</button>
@@ -43,7 +43,7 @@
           <button id="RemoveWall" class="butt">Убрать стену</button>
           <br>
           <button id="BeginMaze" class="butt">Начать</button>
-          <button id="ClearMaze" class="butt">Очистить</button>
+          <button id="ClearMaze" class="butt" onclick="canvas.clear()">Очистить</button>
       </div>
     </div>
     <div>

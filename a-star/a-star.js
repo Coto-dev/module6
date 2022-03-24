@@ -6,7 +6,18 @@ var columns;
 var rows;
 var canvas = document.getElementById('canvas');
 var contex = canvas.getContext('2d');
-let Cellsize = canvas.width / MatrixSize;
+const isFinisButtonPressed = false;
+const isStartButtonPressed = false;
+
+class Cell {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
+let startCords = new Cell(0, 0);
+let finishCords = new Cell(0, 0);
 
 function rangeViewer() {
   document.getElementById("matrixSize").addEventListener("input", function () {
@@ -14,24 +25,44 @@ function rangeViewer() {
   });
 }
 
-const matrix = CreateMatrix(MatrixSize, MatrixSize);
+let Cellsize = canvas.width / MatrixSize;
+
 const erasers = [];
-for (let i = 0; i < 1; i++) {
+for (let i = 0; i < 2; i++) {
   erasers.push({
     x: 0,
     y: 0,
   });
 }
-matrix[0][0] = true;
-main();
-console.log(matrix);
-async function main() {
-  while (!isValidMaze()) {
+
+async function main(matrix) {
+  while (!isValidMaze(matrix)) {
     for (const eraser of erasers) {
       MoveErase(eraser);
     }
   }
-  DrawMaze(MatrixSize,MatrixSize);
+  DrawMaze(MatrixSize, MatrixSize);
+}
+//rangeViewer()
+//buttonEventListener()
+//updateMatrix();
+
+function matrixCreation() {
+  const matrix = CreateMatrix(MatrixSize, MatrixSize);
+  updateMatrix();
+  return matrix;
+}
+
+function updateMatrix() {
+  document.getElementById("matrixSize").addEventListener("mouseup", function () {
+    matrixSize = Number(document.getElementById("matrixSize").value);
+    startCords = new Cell(0, 0);
+    finishCords = new Cell(0, 0);
+    isFinisButtonPressed = false;
+    isStartButtonPressed = false;
+    //lastButton = "";
+    matrix = CreateMatrix(MatrixSize, MatrixSize);
+  });
 }
 
 function CreateMatrix(columns, rows) {
@@ -43,6 +74,7 @@ function CreateMatrix(columns, rows) {
     }
     matrix.push(row);
   }
+  matrix[0][0] = true;
   return matrix;
 }
 
@@ -54,8 +86,8 @@ function DrawMaze(columns, rows) {
 
       contex.beginPath();
       contex.rect(
-         x * Cellsize,
-         y * Cellsize,
+        x * Cellsize,
+        y * Cellsize,
         Cellsize,
         Cellsize
       );
@@ -100,7 +132,7 @@ function getRandomItem(array) {
   return array[index];
 }
 
-function isValidMaze() {
+function isValidMaze(matrix) {
   for (let y = 0; y < MatrixSize; y += 2) {
     for (let x = 0; x < MatrixSize; x += 2) {
       if (!matrix[y][x]) {
@@ -109,4 +141,31 @@ function isValidMaze() {
     }
   }
   return true;
+}/////////////////////////////////////////////////////////////////////////////////////////////////////
+// Обработчики событий нажатия на кнопки
+function buttonEventListener() {
+  let buttons = document.querySelectorAll(".butt");
+  buttons.forEach(function (button) {
+    button.addEventListener("mousedown", function () {
+      if (button.id === "ClearMaze") {
+        clearMatrix()
+      } else if (button.id === "CreateMaze") {
+        clearMatrix()
+        mazeCreation()
+      } else {
+        lastButton = button.innerText;
+      }
+    })
+
+  });
+}
+
+canvas.clear = function () {
+  contex.clearRect(0, 0, 730, 730);
+  updateMatrix();
+}
+
+function CreateMazes() {
+   matrix = matrixCreation();
+  main(matrix);
 }
