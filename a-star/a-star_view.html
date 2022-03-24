@@ -1,48 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="style.css">
-    <title>Интересные алогоритмы</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="style.css">
+  <title>Интересные алогоритмы</title>
 </head>
+
 <body>
 
-    <div class="sidenav">
-     <a href="../index.html">На Главную</a>
-      <a href="../a-star/a-star_view.html">А*</a>
-      <a href="../clustering/clustering_view.html">Алгоритм Кластеризации</a>
-      <a href="../genetic/genetic_view.html">Генетический алгортим</a>
-      <a href="../ants/ants_view.html">Муравьиный алгоритм</a>
-      <a href="../decision_tree/decision_tree_view.html">Дерево Решений</a>
-      <a href="../neural_network/neural_network_view.html">Нейронная сеть</a>
-    </div>
-
-    <div class="main">
-      <h2>Алгортим А*</h2>
-    </div>
-    <div class="float-container">
-
-      <div class="float-child1">
-        <canvas id="canvas" width="730px" height="730px"></canvas>
-      </div>
-
-      <div class="float-child2">
-        <div class="forbutton">
-          <p class="Text"><b>Введите размер лабиринта:</b><br>
-        <input id="matrixSize" type="range" min="5" max="60" value="30" class="range" onchange="document.getElementById('rangeValue').innerHTML = this.value">
-        <span id="rangeValue">30</span>
-          <button class="butt">Сгенирировать лабиринт</button>
-          <br>
-          <button class="butt">Старт</button>
-          <button class="butt">Финиш</button>
-          <br>
-          <button class="butt">Поставить стену</button>
-          <button class="butt">Убрать стену</button>
-          <br>
-          <button class="butt">Начать</button>
-          <button class="butt">Очистить</button>
-        </div>
+  <div class="sidenav">
+    <a href="../index.html">На Главную</a>
+    <a href="../a-star/a-star_view.html">А*</a>
+    <a href="../clustering/clustering_view.html">Алгоритм Кластеризации</a>
+    <a href="../genetic/genetic_view.html">Генетический алгортим</a>
+    <a href="../ants/ants_view.html">Муравьиный алгоритм</a>
+    <a href="../decision_tree/decision_tree_view.html">Дерево Решений</a>
+    <a href="../neural_network/neural_network_view.html">Нейронная сеть</a>
   </div>
-        <script src="./a-star.js"></script>
-    </body>
+
+  <div class="main">
+    <h2>Алгортим А*</h2>
+  </div>
+  <div class="float-container">
+
+    <div class="float-child1">
+      <canvas id="canvas" width="730px" height="730px"></canvas>
+    </div>
+
+    <div class="float-child2">
+      <div class="forbutton">
+        <p class="Text"><b>Введите размер лабиринта:</b><br>
+          <input id="matrixSize" type="range" min="5" max="60" value="30" class="range"
+            onchange="document.getElementById('rangeValue').innerHTML = this.value">
+          <span id="rangeValue">30</span>
+          <button id="CreateMaze" class="butt">Сгенирировать лабиринт</button>
+          <br>
+          <button id="StartMaze" class="butt">Старт</button>
+          <button id="FinishMaze" class="butt">Финиш</button>
+          <br>
+          <button id="CreateWall" class="butt">Поставить стену</button>
+          <button id="RemoveWall" class="butt">Убрать стену</button>
+          <br>
+          <button id="BeginMaze" class="butt">Начать</button>
+          <button id="ClearMaze" class="butt">Очистить</button>
+      </div>
+    </div>
+    <div>
+      <script src="./a-star.js"></script>
+</body>
+
 </html>
