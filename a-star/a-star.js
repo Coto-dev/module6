@@ -1,11 +1,12 @@
 const wallColor = "black";
 const freeColor = "white";
-let MatrixSize = 30;
+let MatrixSize = 31;
 
 var columns;
 var rows;
 var canvas = document.getElementById('canvas');
 var contex = canvas.getContext('2d');
+let Cellsize = canvas.width / MatrixSize;
 
 function rangeViewer() {
   document.getElementById("matrixSize").addEventListener("input", function () {
@@ -13,12 +14,24 @@ function rangeViewer() {
   });
 }
 
+const matrix = CreateMatrix(MatrixSize, MatrixSize);
 const erasers = [];
-for (let i = 0; i < 2; i++) {
+for (let i = 0; i < 1; i++) {
   erasers.push({
     x: 0,
     y: 0,
   });
+}
+matrix[0][0] = true;
+main();
+console.log(matrix);
+async function main() {
+  while (!isValidMaze()) {
+    for (const eraser of erasers) {
+      MoveErase(eraser);
+    }
+  }
+  DrawMaze(MatrixSize,MatrixSize);
 }
 
 function CreateMatrix(columns, rows) {
@@ -33,54 +46,27 @@ function CreateMatrix(columns, rows) {
   return matrix;
 }
 
-const matrix = CreateMatrix(MatrixSize, MatrixSize);
-matrix[0][0] = true;
-
-async function main() {
-  while (!isValidMaze()) {
-    for (const eraser of erasers) {
-      MoveErase(eraser);
-    }
-  }
-  DrawMaze();
-}
-
-main();
-
-function isValidMaze() {
-  for (let y = 0; y < MatrixSize; y += 2) {
-    for (let x = 0; x < MatrixSize; x += 2) {
-      if (!matrix[y][x]) {
-        return false;
-      }
-    }
-  }
-  return true;
-}
-
 function DrawMaze(columns, rows) {
   contex.beginPath();
   contex.rect(0, 0, canvas.width, canvas.height);
+  contex.fillStyle = BACKGROUND_COLOR;
   contex.fill();
 
-  for (let y = 0; y < rows; y++) {
-    for (let x = 0; x < columns; x++) {
+  for (let y = 0; y < columns; y++) {
+    for (let x = 0; x < rows; x++) {
       const color = matrix[y][x] ? freeColor : wallColor;
+
       contex.beginPath();
       contex.rect(
-        x * CellSize,
-        y * CellSize,
-        CellSize,
-        CellSize);
+         x * Cellsize,
+         y * Cellsize,
+        Cellsize,
+        Cellsize
+      );
       contex.fillStyle = color;
       contex.fill();
     }
   }
-}
-
-function getRandomItem(array) {
-  const index = Math.floor(Math.random() * array.length);
-  return array[index];
 }
 
 function MoveErase(eraser) {
@@ -109,6 +95,22 @@ function MoveErase(eraser) {
 
   if (!matrix[eraser.y][eraser.x]) {
     matrix[eraser.y][eraser.x] = true;
-    matrix[eraser.y - dy / 2][eraser.x - dx / 2] = 0
+    matrix[eraser.y - dy / 2][eraser.x - dx / 2] = true;
   }
+}
+
+function getRandomItem(array) {
+  const index = Math.floor(Math.random() * array.length);
+  return array[index];
+}
+
+function isValidMaze() {
+  for (let y = 0; y < MatrixSize; y += 2) {
+    for (let x = 0; x < MatrixSize; x += 2) {
+      if (!matrix[y][x]) {
+        return false;
+      }
+    }
+  }
+  return true;
 }
