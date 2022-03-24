@@ -27,7 +27,12 @@
 
         //ctx.drawImage(ant_png, 100, 190, 100, 100); 
         var ant = new Array(3);
-        
+        ant[0]={
+            x: Math.random(),
+            y: Math.random(),
+            eat: false,
+            angle: 0,
+        };
         for(let i=1;i<3;i++){
             ant[i]={
             x: Math.random(),

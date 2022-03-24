@@ -2,11 +2,15 @@ var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 var ant_count = 100;
 var ant = new Array(ant_count);
-var speed = 1;
-var size_world=80;
+const speed = 1;
+const size_world=80;
 var world=[];
 var feromon = [];
-feromon[0] = {}
+feromon[0] = {
+	time: 10,
+	x: 0,
+	y: 0
+}
 var eat_count=0;
 var timer;
 var home = {
@@ -123,7 +127,6 @@ function createWorld(){//инициализирует мир
 	}
 }
 
-
 function drawAnt(){
     ctx.fillStyle = 'blue';
     for(let i=0;i<ant_count;i++)
@@ -136,19 +139,24 @@ function drawField(){
 	ctx.clearRect(0, 0, 800, 800);
 	for (var i=0; i<size_world; i++){
 		for (var j=0; j<size_world; j++){
-			if (world[i][j]==-1){
+			if (world[i][j]==-1){//стена
 				ctx.fillStyle = 'black';
 				ctx.fillRect(j*10, i*10, 10, 10);
 			}
 			else 
-				if(world[i][j]==-2){
+				if(world[i][j]==-2){//дом
 					ctx.fillStyle = 'red';
 					ctx.fillRect(j*10, i*10, 20, 20);
 				}
 				else
-				if(world[i][j]>0){
+				if(world[i][j]<=-3){//еда
 					ctx.fillStyle = 'green';
 					ctx.fillRect(j*10, i*10, 20, 20);
+				}
+				else 
+				if(world[i][j]>0){
+					ctx.fillStyle = 'brown';
+					ctx.fillRect(j*10+Math.round(Math.random()*7), i*10+Math.round(Math.random()*7), 3, 3);
 				}
 		}
 	}
@@ -173,16 +181,41 @@ function createColony() {
         }
 }
 
+function update_fer(){
+	for(let i=0;i<feromon.length;i++){
+		feromon[i].time --;
+		}
+	}
+	for(let i=0;i<feromon.length;i++){
+		if (feromon[i].time == 0){
+			feromon[i].x+=0;feromon[i].y+=0;
+			world[feromon[i].x][feromon[i].y]--;
+			feromon.shift();
+			i--;
+	}
+}
+
+function new_fer(x1,y1){
+	feromon.push({
+		time: 10,
+		x: x1,
+		y: y1,
+	})
+	x1+=0;y1+=0;
+	world[x1][y1]++;
+}
 
 function ant_algoritm(){
+	update_fer();
     for(let i=0;i<ant_count;i++){
 		ant[i].angle = Math.random()*200;
+		new_fer(ant[i].x,ant[i].y);
         var x = Math.round(ant[i].x + speed*Math.cos(ant[i].angle));
         var y = Math.round(ant[i].y + speed*Math.sin(ant[i].angle));
-        if((x >= size_world-2) || (y >= size_world-2) /*|| world[x][y]==-1*/){
+        if((x >= size_world-2) || (y >= size_world-2) || (x<size_world&&y<size_world&&world[x][y]==-1)){
 			ant[i].angle += Math.PI;
-        	ant[i].x += speed*Math.cos(ant[i].angle);
-        	ant[i].y += speed*Math.sin(ant[i].angle);
+        	ant[i].x +=  Math.round(speed*Math.cos(ant[i].angle));
+        	ant[i].y +=  Math.round(speed*Math.sin(ant[i].angle));
 		}
 		else{
 			ant[i].x = x;
