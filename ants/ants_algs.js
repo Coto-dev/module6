@@ -2,12 +2,13 @@ var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 var ant_count = 100;
 var ant = new Array(ant_count);
-const speed = 3;
+const speed = 1;
+const time = 50;
 const size_world=80;
 var world=[];
 var feromon = [];
 feromon[0] = {
-	time: 10,
+	time: time,
 	x: 0,
 	y: 0
 }
@@ -186,19 +187,22 @@ function update_fer(){
 	let k =0;
 	for(let i=0;i<feromon.length;i++){
 		feromon[i].time --;
-		if (feromon[i].time<=0) k++;
+		if (feromon[i].time<=0) {
+			k++;
+			world[feromon[i].y][feromon[i].x]--;
 		}
+	}
 	
 	feromon.splice(0, k);
 }
 
 function new_fer(i){
 	feromon.push({
-		time: speed,
+		time: time,
 		x: ant[i].x,
 		y: ant[i].y,
 	})
-	world[ant[i].x][ant[i].y]++;
+	world[ant[i].y][ant[i].x]++;
 }
 
 function ant_algoritm(){
@@ -257,8 +261,8 @@ console.log(ant);
 //console.log(ant);
 
 eat_count = 2;
-world[13][20]=1;
-world[33][20]=1;
+world[13][20]=-5;
+world[33][20]=-5;
 home.x=10;
 home.y=20;
 
@@ -268,6 +272,6 @@ drawField();
 //drawField();
 //ant_algoritm();
 
- setInterval(ant_algoritm, 100);
+ setInterval(ant_algoritm, 500);
 
 ant.show;
