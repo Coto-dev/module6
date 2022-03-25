@@ -1,6 +1,6 @@
 const wallColor = "black";
 const freeColor = "white";
-let MatrixSize = 41;
+let MatrixSize = 32;
 
 var columns;
 var rows;
@@ -19,6 +19,11 @@ class Cell {
 let startCords = new Cell(0, 0);
 let finishCords = new Cell(0, 0);
 
+function randomInteger(min, max) {
+  let rand = min + Math.random() * (max + 1 - min);
+  return Math.floor(rand);
+}
+
 function rangeViewer() {
   document.getElementById("matrixSize").addEventListener("input", function () {
     document.getElementById("rangeValue").textContent = document.getElementById("matrixSize").value;
@@ -36,11 +41,36 @@ for (let i = 0; i < 2; i++) {
 }
 
 async function main(matrix) {
-  while (!isValidMaze(matrix)) {
-    for (const eraser of erasers) {
-      MoveErase(eraser);
+  let size = MatrixSize;
+  if (MatrixSize % 2 === 0) {
+    size--;
+    for (let i = 0; i < MatrixSize; i++) {
+      matrix[i][size] = randomInteger(0, 1);
+      matrix[size][i] = randomInteger(0, 1);
     }
   }
+  while (!isValidMaze(matrix)) {
+    for (const eraser of erasers) {
+      MoveErase(size, eraser);
+    }
+  }
+  /*if (MatrixSize % 2 === 0) {
+   for (let i = 0; i < MatrixSize; i++) {
+     if (matrix[i][size-1] == 0) {
+       matrix[i][size] = 0;
+     }
+     else {
+       matrix[i][size] = 1;
+     }
+     if (matrix[size-1][i] == 0) {
+       matrix[size][i] = 0;
+     }
+     else {
+       matrix[size][i] = 1;
+     }
+
+   }
+ }*/
   DrawMaze(MatrixSize, MatrixSize);
 }
 //rangeViewer()
@@ -97,14 +127,14 @@ function DrawMaze(columns, rows) {
   }
 }
 
-function MoveErase(eraser) {
+function MoveErase(size, eraser) {
   const directions = [];
 
   if (eraser.x > 0) {
     directions.push([-2, 0]);
   }
 
-  if (eraser.x < MatrixSize - 1) {
+  if (eraser.x < size - 1) {
     directions.push([2, 0]);
   }
 
@@ -112,7 +142,7 @@ function MoveErase(eraser) {
     directions.push([0, -2]);
   }
 
-  if (eraser.y < MatrixSize - 1) {
+  if (eraser.y < size - 1) {
     directions.push([0, 2]);
   }
 
@@ -166,6 +196,6 @@ canvas.clear = function () {
 }
 
 function CreateMazes() {
-   matrix = matrixCreation();
+  matrix = matrixCreation();
   main(matrix);
 }
