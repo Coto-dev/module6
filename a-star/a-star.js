@@ -1,7 +1,7 @@
 const wallColor = "black";
 const freeColor = "white";
 
-var MatrixSize = 31;
+var MatrixSize;
 var columns;
 var rows;
 var canvas = document.getElementById('canvas');
@@ -35,6 +35,9 @@ const erasers = {
 }
 
 async function main(matrix) {
+  document.getElementById("matrixSize").addEventListener("mouseup", function () {
+    MatrixSize = Number(document.getElementById("matrixSize").value);
+  });
   let size = MatrixSize;
   if (MatrixSize % 2 === 0) {
     size--;
@@ -44,68 +47,22 @@ async function main(matrix) {
     }
   }
   while (!isValidMaze(matrix)) {
-    //for (const eraser of erasers) {
     MoveErase(size, erasers);
-    // }
   }
-  /*if (MatrixSize % 2 === 0) {
-   for (let i = 0; i < MatrixSize; i++) {
-     if (matrix[i][size-1] == 0) {
-       matrix[i][size] = 0;
-     }
-     else {
-       matrix[i][size] = 1;
-     }
-     if (matrix[size-1][i] == 0) {
-       matrix[size][i] = 0;
-     }
-     else {
-       matrix[size][i] = 1;
-     }
-
-   }
- }*/
   DrawMaze(MatrixSize, MatrixSize);
 }
 
-function matrixCreation() {
-  var matrix = CreateMatrix();
-  //updateMatrix();
-  return matrix;
-}
-
-function updateMatrix() {
-  document.getElementById("matrixSize").addEventListener("mouseup", function () {
-    MatrixSize = Number(document.getElementById("matrixSize").value);
-    startCords = new Cell(0, 0);
-    finishCords = new Cell(0, 0);
-    isFinisButtonPressed = false;
-    isStartButtonPressed = false;
-    lastButton = "";
-    let matrix = CreateMatrix(MatrixSize, MatrixSize);
-    return matrix;
-  });
-}
-
-function GetMatrixSize() {
-  document.getElementById("matrixSize").addEventListener("mouseup", function () {
-    let MatrixSize = Number(document.getElementById("matrixSize").value);
-    return MatrixSize;
-  });
-}
 function CreateMatrix() {
   document.getElementById("matrixSize").addEventListener("mouseup", function () {
     MatrixSize = Number(document.getElementById("matrixSize").value);
   });
 
-  //MatrixSize = GetMatrixSize;
   startCords = new Cell(0, 0);
   finishCords = new Cell(0, 0);
   isFinisButtonPressed = false;
   isStartButtonPressed = false;
   lastButton = "";
-
-  var matrix = [];
+  const matrix = [];
   for (let y = 0; y < MatrixSize; y++) {
     const row = [];
     for (let x = 0; x < MatrixSize; x++) {
