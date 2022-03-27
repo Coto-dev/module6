@@ -1,13 +1,14 @@
 const wallColor = "black";
 const freeColor = "white";
-let MatrixSize = 32;
-
+var MatrixSize = 31;
+let lastButton = "";
 var columns;
 var rows;
 var canvas = document.getElementById('canvas');
 var contex = canvas.getContext('2d');
-const isFinisButtonPressed = false;
-const isStartButtonPressed = false;
+
+let isFinisButtonPressed = false;
+let isStartButtonPressed = false;
 
 class Cell {
   constructor(x, y) {
@@ -32,12 +33,8 @@ function rangeViewer() {
 
 let Cellsize = canvas.width / MatrixSize;
 
-const erasers = [];
-for (let i = 0; i < 2; i++) {
-  erasers.push({
-    x: 0,
-    y: 0,
-  });
+const erasers = {
+  x: 0, y: 0
 }
 
 async function main(matrix) {
@@ -50,9 +47,9 @@ async function main(matrix) {
     }
   }
   while (!isValidMaze(matrix)) {
-    for (const eraser of erasers) {
-      MoveErase(size, eraser);
-    }
+    //for (const eraser of erasers) {
+    MoveErase(size, erasers);
+    // }
   }
   /*if (MatrixSize % 2 === 0) {
    for (let i = 0; i < MatrixSize; i++) {
@@ -73,39 +70,55 @@ async function main(matrix) {
  }*/
   DrawMaze(MatrixSize, MatrixSize);
 }
-//rangeViewer()
-//buttonEventListener()
-//updateMatrix();
 
 function matrixCreation() {
-  const matrix = CreateMatrix(MatrixSize, MatrixSize);
-  updateMatrix();
+  var matrix = CreateMatrix();
+  //updateMatrix();
   return matrix;
 }
 
 function updateMatrix() {
   document.getElementById("matrixSize").addEventListener("mouseup", function () {
-    matrixSize = Number(document.getElementById("matrixSize").value);
+    MatrixSize = Number(document.getElementById("matrixSize").value);
     startCords = new Cell(0, 0);
     finishCords = new Cell(0, 0);
     isFinisButtonPressed = false;
     isStartButtonPressed = false;
-    //lastButton = "";
-    matrix = CreateMatrix(MatrixSize, MatrixSize);
+    lastButton = "";
+    let matrix = CreateMatrix(MatrixSize, MatrixSize);
+    return matrix;
   });
 }
 
-function CreateMatrix(columns, rows) {
-  const matrix = [];
-  for (let y = 0; y < rows; y++) {
-    const row = [];
-    for (let x = 0; x < columns; x++) {
-      row.push(false);
+function GetMatrixSize() {
+  document.getElementById("matrixSize").addEventListener("mouseup", function () {
+    let MatrixSize = Number(document.getElementById("matrixSize").value);
+    return MatrixSize;
+  });
+}
+function CreateMatrix() {
+  document.getElementById("matrixSize").addEventListener("mouseup", function () {
+    MatrixSize = Number(document.getElementById("matrixSize").value);
+  });
+
+    //MatrixSize = GetMatrixSize;
+    startCords = new Cell(0, 0);
+    finishCords = new Cell(0, 0);
+    isFinisButtonPressed = false;
+    isStartButtonPressed = false;
+    lastButton = "";
+
+    var matrix = [];
+    for (let y = 0; y < MatrixSize; y++) {
+      const row = [];
+      for (let x = 0; x < MatrixSize; x++) {
+        row.push(false);
+      }
+      matrix.push(row);
     }
-    matrix.push(row);
-  }
-  matrix[0][0] = true;
-  return matrix;
+    matrix[0][0] = true;
+
+    return matrix;
 }
 
 function DrawMaze(columns, rows) {
@@ -165,13 +178,14 @@ function getRandomItem(array) {
 function isValidMaze(matrix) {
   for (let y = 0; y < MatrixSize; y += 2) {
     for (let x = 0; x < MatrixSize; x += 2) {
+      console.log
       if (!matrix[y][x]) {
         return false;
       }
     }
   }
   return true;
-}/////////////////////////////////////////////////////////////////////////////////////////////////////
+}
 // Обработчики событий нажатия на кнопки
 function buttonEventListener() {
   let buttons = document.querySelectorAll(".butt");
@@ -196,6 +210,21 @@ canvas.clear = function () {
 }
 
 function CreateMazes() {
-  matrix = matrixCreation();
+   matrix = CreateMatrix();
+  //matrix = matrixCreation();
+  //updateMatrix();
   main(matrix);
+}
+
+function CreateWall(matrix) {
+  canvas.addEventListener('mousedown', function (e) {
+    var cordX, cordY;
+    cordX = e.pageX - this.offsetLeft;
+    cordY = e.pageY - this.offsetTop;
+    let x = Math.trunc(cordX / Cellsize);
+    let y = Math.trunc(cordY / Cellsize);
+    //console.log(x, y);
+  });
+  matrix[y][x] = false;
+  DrawMaze(MatrixSize, MatrixSize);
 }
