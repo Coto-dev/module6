@@ -1,24 +1,23 @@
 const wallColor = "black";
 const freeColor = "white";
+
 var MatrixSize = 31;
-let lastButton = "";
 var columns;
 var rows;
 var canvas = document.getElementById('canvas');
 var contex = canvas.getContext('2d');
-
-let isFinisButtonPressed = false;
-let isStartButtonPressed = false;
-
 class Cell {
   constructor(x, y) {
     this.x = x;
     this.y = y;
   }
 }
-
 let startCords = new Cell(0, 0);
 let finishCords = new Cell(0, 0);
+let isFinisButtonPressed = false;
+let isStartButtonPressed = false;
+let lastButton = "";
+var Cellsize;
 
 function randomInteger(min, max) {
   let rand = min + Math.random() * (max + 1 - min);
@@ -30,8 +29,6 @@ function rangeViewer() {
     document.getElementById("rangeValue").textContent = document.getElementById("matrixSize").value;
   });
 }
-
-let Cellsize = canvas.width / MatrixSize;
 
 const erasers = {
   x: 0, y: 0
@@ -101,28 +98,28 @@ function CreateMatrix() {
     MatrixSize = Number(document.getElementById("matrixSize").value);
   });
 
-    //MatrixSize = GetMatrixSize;
-    startCords = new Cell(0, 0);
-    finishCords = new Cell(0, 0);
-    isFinisButtonPressed = false;
-    isStartButtonPressed = false;
-    lastButton = "";
+  //MatrixSize = GetMatrixSize;
+  startCords = new Cell(0, 0);
+  finishCords = new Cell(0, 0);
+  isFinisButtonPressed = false;
+  isStartButtonPressed = false;
+  lastButton = "";
 
-    var matrix = [];
-    for (let y = 0; y < MatrixSize; y++) {
-      const row = [];
-      for (let x = 0; x < MatrixSize; x++) {
-        row.push(false);
-      }
-      matrix.push(row);
+  var matrix = [];
+  for (let y = 0; y < MatrixSize; y++) {
+    const row = [];
+    for (let x = 0; x < MatrixSize; x++) {
+      row.push(false);
     }
-    matrix[0][0] = true;
+    matrix.push(row);
+  }
+  matrix[0][0] = true;
 
-    return matrix;
+  return matrix;
 }
 
 function DrawMaze(columns, rows) {
-
+  Cellsize = canvas.width / MatrixSize;
   for (let y = 0; y < columns; y++) {
     for (let x = 0; x < rows; x++) {
       const color = matrix[y][x] ? freeColor : wallColor;
@@ -210,7 +207,7 @@ canvas.clear = function () {
 }
 
 function CreateMazes() {
-   matrix = CreateMatrix();
+  matrix = CreateMatrix();
   //matrix = matrixCreation();
   //updateMatrix();
   main(matrix);
