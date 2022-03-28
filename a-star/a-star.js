@@ -217,7 +217,7 @@ function CreateWall() {
   });
 }
 
-function CreateWall() {
+function RemoveWall() {
   canvas.addEventListener('mousedown', function (e) {
     var cordX, cordY;
     cordX = e.pageX - this.offsetLeft;
