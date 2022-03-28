@@ -22,7 +22,6 @@ class Node {
     this.parentX = parentX;
     this.parentY = parentY;
   }
-
   removeAll() {
     this.value = 0;
     this.f = 0;
@@ -34,12 +33,21 @@ class Node {
 
 }
 
-let startCords = new Cell(0, 0);
-let finishCords = new Cell(0, 0);
-let isFinisButtonPressed = false;
-let isStartButtonPressed = false;
-let lastButton = "";
+var startCords = new Cell(0, 0);
+var finishCords = new Cell(0, 0);
+var isFinisButtonPressed = false;
+var isStartButtonPressed = false;
+var lastButton = "";
 var Cellsize;
+
+function createMatrix() {
+  for (let i = 0; i < matrixSize; i++) {
+    aStarMatrix[i] = new Array(matrixSize);
+    for (let j = 0; j < matrixSize; j++) {
+      aStarMatrix[i][j] = new Node(0, 0, 0, 0, 0, 0);
+    }
+  }
+}
 
 function randomInteger(min, max) {
   let rand = min + Math.random() * (max + 1 - min);
@@ -85,7 +93,7 @@ function CreateMatrix() {
   isFinisButtonPressed = false;
   isStartButtonPressed = false;
   lastButton = "";
-
+  matrix = [];
   for (let y = 0; y < MatrixSize; y++) {
     const row = [];
     for (let x = 0; x < MatrixSize; x++) {
@@ -140,7 +148,7 @@ function MoveErase(size, eraser) {
 
   eraser.x += +dx;
   eraser.y += +dy;
- 
+
   if (eraser.x < 0) {
     eraser.x *= -1;
   }
@@ -178,7 +186,6 @@ function isValidMaze(matrix) {
 
 canvas.clear = function () {
   contex.clearRect(0, 0, 730, 730);
-  updateMatrix();
 }
 
 function CreateMazes() {
@@ -219,8 +226,10 @@ function DrawStart() {
     cordY = e.pageY - this.offsetTop;
     var x = Math.trunc(cordX / Cellsize);
     var y = Math.trunc(cordY / Cellsize);
-    if (matrix[x][y]===true)
-    {
+    console.log(matrix);
+    console.log(x, y);
+    if ((matrix[y][x] === true) || (matrix[y][x] === 1)) {
+      startCords = new Cell(x, y);
       const color = 'green';
       contex.beginPath();
       contex.rect(
@@ -232,8 +241,8 @@ function DrawStart() {
       contex.fillStyle = color;
       contex.fill();
     }
-    else{
-      alert('Это стена');
+    else {
+      alert("Это стена");
     }
   });
 }
@@ -245,8 +254,8 @@ function DrawFinish() {
     cordY = e.pageY - this.offsetTop;
     var x = Math.trunc(cordX / Cellsize);
     var y = Math.trunc(cordY / Cellsize);
-    if (matrix[x][y]===true)
-    {
+    if ((matrix[y][x] === true) || (matrix[y][x] === 1)) {
+      finishCords = new Cell(x, y);
       const color = 'red';
       contex.beginPath();
       contex.rect(
@@ -258,8 +267,8 @@ function DrawFinish() {
       contex.fillStyle = color;
       contex.fill();
     }
-    else{
-      alert('Это стена');
+    else {
+      alert("Это стена!");
     }
   });
 }
