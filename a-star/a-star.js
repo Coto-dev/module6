@@ -176,23 +176,6 @@ function isValidMaze(matrix) {
   }
   return true;
 }
-// Обработчики событий нажатия на кнопки
-function buttonEventListener() {
-  let buttons = document.querySelectorAll(".butt");
-  buttons.forEach(function (button) {
-    button.addEventListener("mousedown", function () {
-      if (button.id === "ClearMaze") {
-        clearMatrix()
-      } else if (button.id === "CreateMaze") {
-        clearMatrix()
-        mazeCreation()
-      } else {
-        lastButton = button.innerText;
-      }
-    })
-
-  });
-}
 
 canvas.clear = function () {
   contex.clearRect(0, 0, 730, 730);
@@ -227,5 +210,45 @@ function RemoveWall() {
 
     matrix[y][x] = true;
     DrawMaze(MatrixSize, MatrixSize);
+  });
+}
+
+function DrawStart() {
+  canvas.addEventListener('mousedown', function (e) {
+    var cordX, cordY;
+    cordX = e.pageX - this.offsetLeft;
+    cordY = e.pageY - this.offsetTop;
+    var x = Math.trunc(cordX / Cellsize);
+    var y = Math.trunc(cordY / Cellsize);
+    const color = 'green';
+    contex.beginPath();
+    contex.rect(
+      x * Cellsize,
+      y * Cellsize,
+      Cellsize,
+      Cellsize
+    );
+    contex.fillStyle = color;
+    contex.fill();
+  });
+}
+
+function DrawFinish() {
+  canvas.addEventListener('mousedown', function (e) {
+    var cordX, cordY;
+    cordX = e.pageX - this.offsetLeft;
+    cordY = e.pageY - this.offsetTop;
+    var x = Math.trunc(cordX / Cellsize);
+    var y = Math.trunc(cordY / Cellsize);
+    const color = 'red';
+    contex.beginPath();
+    contex.rect(
+      x * Cellsize,
+      y * Cellsize,
+      Cellsize,
+      Cellsize
+    );
+    contex.fillStyle = color;
+    contex.fill();
   });
 }
