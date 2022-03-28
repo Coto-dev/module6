@@ -1,7 +1,7 @@
 const wallColor = "black";
 const freeColor = "white";
 
-var MatrixSize;
+var MatrixSize = 30;
 var columns;
 var rows;
 var canvas = document.getElementById('canvas');
@@ -38,7 +38,7 @@ async function main(matrix) {
   document.getElementById("matrixSize").addEventListener("mouseup", function () {
     MatrixSize = Number(document.getElementById("matrixSize").value);
   });
-  let size = MatrixSize;
+  var size = MatrixSize;
   if (MatrixSize % 2 === 0) {
     size--;
     for (let i = 0; i < MatrixSize; i++) {
@@ -49,6 +49,7 @@ async function main(matrix) {
   while (!isValidMaze(matrix)) {
     MoveErase(size, erasers);
   }
+
   DrawMaze(MatrixSize, MatrixSize);
 }
 
@@ -62,7 +63,8 @@ function CreateMatrix() {
   isFinisButtonPressed = false;
   isStartButtonPressed = false;
   lastButton = "";
-  const matrix = [];
+
+  var matrix = [];
   for (let y = 0; y < MatrixSize; y++) {
     const row = [];
     for (let x = 0; x < MatrixSize; x++) {
@@ -115,9 +117,23 @@ function MoveErase(size, eraser) {
 
   var [dx, dy] = getRandomItem(directions);
 
-  eraser.x += dx;
-  eraser.y += dy;
-
+  eraser.x += +dx;
+  eraser.y += +dy;
+  console.log(eraser.x);
+  console.log(eraser.y);
+  if (eraser.x < 0) {
+    eraser.x *= -1;
+  }
+  if (eraser.y < 0) {
+    eraser.y *= -1;
+  }
+  if (eraser.x >= size) {
+    eraser.x = size - 1;
+    dy
+  }
+  if (eraser.y>= size) {
+    eraser.y = size - 1;
+  }
   if (!matrix[eraser.y][eraser.x]) {
     matrix[eraser.y][eraser.x] = true;
     matrix[eraser.y - dy / 2][eraser.x - dx / 2] = true;
@@ -165,8 +181,6 @@ canvas.clear = function () {
 
 function CreateMazes() {
   matrix = CreateMatrix();
-  //matrix = matrixCreation();
-  //updateMatrix();
   main(matrix);
 }
 
@@ -175,10 +189,10 @@ function CreateWall(matrix) {
     var cordX, cordY;
     cordX = e.pageX - this.offsetLeft;
     cordY = e.pageY - this.offsetTop;
-    let x = Math.trunc(cordX / Cellsize);
-    let y = Math.trunc(cordY / Cellsize);
-    //console.log(x, y);
-  });
+    var x = Math.trunc(cordX / Cellsize);
+    var y = Math.trunc(cordY / Cellsize);
+  
   matrix[y][x] = false;
   DrawMaze(MatrixSize, MatrixSize);
+});
 }
