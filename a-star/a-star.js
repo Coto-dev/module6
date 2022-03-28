@@ -6,6 +6,7 @@ var columns;
 var rows;
 var canvas = document.getElementById('canvas');
 var contex = canvas.getContext('2d');
+
 class Cell {
   constructor(x, y) {
     this.x = x;
@@ -13,42 +14,15 @@ class Cell {
   }
 }
 
-class Node {
-  constructor(value, f, g, h, parentX, parentY) {
-    this.value = value;
-    this.f = f;
-    this.h = h;
-    this.g = g;
-    this.parentX = parentX;
-    this.parentY = parentY;
-  }
-  removeAll() {
-    this.value = 0;
-    this.f = 0;
-    this.g = 0;
-    this.h = 0;
-    this.parentX = 0;
-    this.parentY = 0;
-  }
-
-}
-
 var startCords = new Cell(0, 0);
 var finishCords = new Cell(0, 0);
+let Graph = new Array(MatrixSize);
 var isFinisButtonPressed = false;
 var isStartButtonPressed = false;
 var lastButton = "";
 var Cellsize;
 
-function createMatrix() {
-  for (let i = 0; i < matrixSize; i++) {
-    aStarMatrix[i] = new Array(matrixSize);
-    for (let j = 0; j < matrixSize; j++) {
-      aStarMatrix[i][j] = new Node(0, 0, 0, 0, 0, 0);
-    }
-  }
-}
-
+//создание матрицы и генерация лабиринта
 function randomInteger(min, max) {
   let rand = min + Math.random() * (max + 1 - min);
   return Math.floor(rand);
@@ -184,8 +158,14 @@ function isValidMaze(matrix) {
   return true;
 }
 
+//обработчики событий
 canvas.clear = function () {
   contex.clearRect(0, 0, 730, 730);
+  startCords = new Cell(0, 0);
+  finishCords = new Cell(0, 0);
+  isFinisButtonPressed = false;
+  isStartButtonPressed = false;
+  lastButton = "";
 }
 
 function CreateMazes() {
@@ -224,43 +204,17 @@ function DrawStart() {
     var cordX, cordY;
     cordX = e.pageX - this.offsetLeft;
     cordY = e.pageY - this.offsetTop;
-    var x = Math.trunc(cordX / Cellsize);
-    var y = Math.trunc(cordY / Cellsize);
-    console.log(matrix);
-    console.log(x, y);
-    if ((matrix[y][x] === true) || (matrix[y][x] === 1)) {
-      startCords = new Cell(x, y);
+    var sx = Math.trunc(cordX / Cellsize);
+    var sy = Math.trunc(cordY / Cellsize);
+    if ((matrix[sy][sx] === true) || (matrix[sy][sx] === 1)) {
+      isStartButtonPressed = true;
+      startCords.x = sx;
+      startCords.y = sy;
       const color = 'green';
       contex.beginPath();
       contex.rect(
-        x * Cellsize,
-        y * Cellsize,
-        Cellsize,
-        Cellsize
-      );
-      contex.fillStyle = color;
-      contex.fill();
-    }
-    else {
-      alert("Это стена");
-    }
-  });
-}
-
-function DrawFinish() {
-  canvas.addEventListener('mousedown', function (e) {
-    var cordX, cordY;
-    cordX = e.pageX - this.offsetLeft;
-    cordY = e.pageY - this.offsetTop;
-    var x = Math.trunc(cordX / Cellsize);
-    var y = Math.trunc(cordY / Cellsize);
-    if ((matrix[y][x] === true) || (matrix[y][x] === 1)) {
-      finishCords = new Cell(x, y);
-      const color = 'red';
-      contex.beginPath();
-      contex.rect(
-        x * Cellsize,
-        y * Cellsize,
+        sx * Cellsize,
+        sy * Cellsize,
         Cellsize,
         Cellsize
       );
@@ -271,4 +225,237 @@ function DrawFinish() {
       alert("Это стена!");
     }
   });
+}
+
+function DrawFinish() {
+  canvas.addEventListener('mousedown', function (e) {
+    var cordX, cordY;
+    cordX = e.pageX - this.offsetLeft;
+    cordY = e.pageY - this.offsetTop;
+    var fx = Math.trunc(cordX / Cellsize);
+    var fy = Math.trunc(cordY / Cellsize);
+    if ((matrix[fy][fx] === true) || (matrix[fy][fx] === 1)) {
+      finishCords.x = fx;
+      finishCords.y = fy;
+      isFinisButtonPressed = true;
+
+      const color = 'red';
+      contex.beginPath();
+      contex.rect(
+        fx * Cellsize,
+        fy * Cellsize,
+        Cellsize,
+        Cellsize
+      );
+      contex.fillStyle = color;
+      contex.fill();
+    }
+    else {
+      alert("Это стена!");
+    }
+  });
+}
+
+
+//алгоритм А*
+
+class Node {
+  constructor(value, f, g, h, X, Y) {
+    this.value = value;
+    this.f = f;//сколько энергии нам понадобится, мы предсказываем нам понадобится, чтобы добраться до конца используя этот узел 
+    this.h = h;
+    this.g = g;//вес, сколько энергии нам понадобилось, чтобы добраться до этого узла
+    this.X = X;
+    this.Y = Y;
+  }
+  removeAll() {
+    this.value = 0;
+    this.f = 0;
+    this.g = 0;
+    this.h = 0;
+    this.X = 0;
+    this.Y = 0;
+  }
+
+}
+
+function createMatrix() {
+  for (let i = 0; i < MatrixSize; i++) {
+    Graph[i] = new Array(MatrixSize);
+    for (let j = 0; j < MatrixSize; j++) {
+      Graph[i][j] = new Node(0, 0, 0, 0, 0, 0);
+      Graph[i][j].value = 0;
+      if ((matrix[i][j] === 1) || (matrix[i][j] === false)) {
+        Graph[i][j].value = 1;
+      }
+    }
+  }
+}
+
+let index = 0;
+let breakFlag = false;
+let OpenList = [];
+let CloseList = [];
+let changeList = []
+
+function GetDist(first, second) {
+  return Math.abs(first.x - second.x) + Math.abs(first.y - second.y);//эвристическая функция для h
+}
+
+function isClosed(temp) {
+  for (let i = 0; i < CloseList.length; i++) {
+    if (temp.x === CloseList[i].x && temp.y === CloseList[i].y) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function isOpened(temp) {
+  for (let i = 0; i < OpenList.length; i++) {
+    if (temp.x === OpenList[i].x && temp.y === OpenList[i].y) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function getMinCell() {//ищем минимальный f
+  let min = 9999999;
+  let temp = new Cell(0, 0);
+
+  for (let i = 0; i < OpenList.length; i++) {
+    const dx = OpenList[i].x;
+    const dy = OpenList[i].y;
+
+    if (Graph[dy][dx].f < min) {
+      min = Graph[dy][dx];
+      index = i;
+      temp = new Cell(dx, dy);
+    }
+  }
+  return temp;
+}
+
+function CheckPath(current) {
+  const x = current.x;
+  const y = current.y;
+
+  OpenList.splice(index, 1);
+  CloseList.push(current);
+  if (y - 1 >= 0 && Graph[y][x].value !== 1 && !isClosed(new Cell(x, y - 1))) {//пока не долшли до конца
+    if (!isOpened(new Cell(x, y - 1))) {
+      Graph[y - 1][x].X = x;
+      Graph[y - 1][x].Y = y;
+      Graph[y - 1][x].h = GetDist(new Cell(x, y - 1), finishCords);
+      Graph[y - 1][x].g = 10 + Graph[y][x].g;
+      Graph[y - 1][x].f = Graph[y - 1][x].h + Graph[y - 1][x].g;
+      OpenList.push(new Cell(x, y - 1));
+      
+      if (x === finishCords.x && y - 1 === finishCords.y) {
+        breakFlag = true;
+        return 0;
+      }
+    } else if (Graph[y - 1][x].g > Graph[y][x].g) {
+      Graph[y - 1][x].X = x;
+      Graph[y - 1][x].Y = y;
+      Graph[y - 1][x].g = 10 + Graph[y][x].g;
+      Graph[y - 1][x].f = Graph[y - 1][x].h + Graph[y - 1][x].g;
+    }
+  }
+  //down
+  if (y + 1 < matrixSize && Graph[y + 1][x].value !== 1 && !isClosed(new Cell(x, y + 1))) {
+    if (!isOpened(new Cell(x, y + 1))) {
+      Graph[y + 1][x].X = x;
+      Graph[y + 1][x].Y = y;
+      Graph[y + 1][x].h = GetDist(new Cell(x, y + 1), finishCords);
+      Graph[y + 1][x].g = 10 + Graph[y][x].g;
+      Graph[y + 1][x].f = Graph[y + 1][x].h + Graph[y + 1][x].g;
+      OpenList.push(new Cell(x, y + 1));
+      if (x === finishCords.x && y + 1 === finishCords.y) {
+        breakFlag = true;
+        return 0;
+      }
+    } else if (Graph[y + 1][x].g > Graph[y][x].g) {
+      Graph[y + 1][x].X = x;
+      Graph[y + 1][x].Y = y;
+      Graph[y + 1][x].g = 10 + Graph[y][x].g;
+      Graph[y + 1][x].f = Graph[y + 1][x].h + Graph[y + 1][x].g;
+    }
+  }
+  //left
+  if (x - 1 >= 0 && Graph[y][x - 1].value !== 1 && !isClosed(new Cell(x - 1, y))) {
+    if (!isOpened(new Cell(x - 1, y))) {
+      Graph[y][x - 1].X = x;
+      Graph[y][x - 1].Y = y;
+      Graph[y][x - 1].h = GetDist(new Cell(x - 1, y), finishCords);
+      Graph[y][x - 1].g = 10 + Graph[y][x].g;
+      Graph[y][x - 1].f = Graph[y][x - 1].h + Graph[y][x - 1].g;
+      OpenList.push(new Cell(x - 1, y));
+      if (x - 1 === finishCords.x && y === finishCords.y) {
+        breakFlag = true;
+        return 0;
+      }
+    } else if (Graph[y][x - 1].g > Graph[y][x].g) {
+      Graph[y][x - 1].X = x;
+      Graph[y][x - 1].Y = y;
+      Graph[y][x - 1].g = 10 + Graph[y][x].g;
+      Graph[y][x - 1].f = Graph[y][x - 1].h + Graph[y][x - 1].g;
+    }
+  }
+  //right
+  if (x + 1 < matrixSize && Graph[y][x + 1].value !== 1 && !isClosed(new Cell(x + 1, y))) {
+    if (!isOpened(new Cell(x + 1, y))) {
+      Graph[y][x + 1].X = x;
+      Graph[y][x + 1].Y = y;
+      Graph[y][x + 1].h = GetDist(new Cell(x + 1, y), finishCords);
+      Graph[y][x + 1].g = 10 + Graph[y][x].g;
+      Graph[y][x + 1].f = Graph[y][x + 1].h + Graph[y][x + 1].g;
+      OpenList.push(new Cell(x + 1, y));
+      if (x + 1 === finishCords.x && y === finishCords.y) {
+        breakFlag = true;
+        return 0;
+      }
+    } else if (Graph[y][x + 1].g > Graph[y][x].g) {
+      Graph[y][x + 1].X = x;
+      Graph[y][x + 1].Y = y;
+      Graph[y][x + 1].g = 10 + Graph[y][x].g;
+      Graph[y][x + 1].f = Graph[y][x - 1].h + Graph[y][x + 1].g;
+    }
+  }
+}
+
+async function aStar() {
+  let flag = false
+  OpenList.push(startCords);
+  CheckPath(startCords)
+  while (!breakFlag) {
+    var min = getMinCell();
+    CheckPath(min);
+    if (OpenList.length <= 0) {
+      flag = true
+      alert("Путь не был найден")
+      break;
+    }
+    await new Promise(resolve => setTimeout(resolve, 10))
+  }
+  if (!flag) {
+    await drawPath()
+  }
+
+
+  OpenList.splice(0, OpenList.length);
+  changeList.splice(0, changeList.length);
+  CloseList.splice(0, CloseList.length);
+  index = 0;
+  breakFlag = false;
+}
+
+async function FindingPath() {
+  createMatrix();
+  if (isFinisButtonPressed && isStartButtonPressed) {
+    await aStar()
+  } else {
+    alert("please, input start and finish cells")
+  }
 }
