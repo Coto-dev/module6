@@ -140,8 +140,7 @@ function MoveErase(size, eraser) {
 
   eraser.x += +dx;
   eraser.y += +dy;
-  console.log(eraser.x);
-  console.log(eraser.y);
+ 
   if (eraser.x < 0) {
     eraser.x *= -1;
   }
@@ -220,16 +219,22 @@ function DrawStart() {
     cordY = e.pageY - this.offsetTop;
     var x = Math.trunc(cordX / Cellsize);
     var y = Math.trunc(cordY / Cellsize);
-    const color = 'green';
-    contex.beginPath();
-    contex.rect(
-      x * Cellsize,
-      y * Cellsize,
-      Cellsize,
-      Cellsize
-    );
-    contex.fillStyle = color;
-    contex.fill();
+    if (matrix[x][y]===true)
+    {
+      const color = 'green';
+      contex.beginPath();
+      contex.rect(
+        x * Cellsize,
+        y * Cellsize,
+        Cellsize,
+        Cellsize
+      );
+      contex.fillStyle = color;
+      contex.fill();
+    }
+    else{
+      alert('Это стена');
+    }
   });
 }
 
@@ -240,15 +245,21 @@ function DrawFinish() {
     cordY = e.pageY - this.offsetTop;
     var x = Math.trunc(cordX / Cellsize);
     var y = Math.trunc(cordY / Cellsize);
-    const color = 'red';
-    contex.beginPath();
-    contex.rect(
-      x * Cellsize,
-      y * Cellsize,
-      Cellsize,
-      Cellsize
-    );
-    contex.fillStyle = color;
-    contex.fill();
+    if (matrix[x][y]===true)
+    {
+      const color = 'red';
+      contex.beginPath();
+      contex.rect(
+        x * Cellsize,
+        y * Cellsize,
+        Cellsize,
+        Cellsize
+      );
+      contex.fillStyle = color;
+      contex.fill();
+    }
+    else{
+      alert('Это стена');
+    }
   });
 }
