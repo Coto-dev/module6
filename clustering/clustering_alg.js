@@ -245,14 +245,6 @@ var canvas = document.getElementById("canvas"),
            var centroid = prompt('Сколь центроидов?',2)
             ClusteringHierarchical(centroid);
             ClusteringKmeans(centroid);
-      
-            // var button = document.createElement('button');
-            // button.classList.add('butt');
-            // div.classList.add('float-child2');
-            // div.classList.add('forbutton')
-            // var textInBtn = document.createTextNode('Показать К-средних');
-            // button.appendChild(textInBtn);
-            // document.body.appendChild(button);
         }
        
         
