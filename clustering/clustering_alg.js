@@ -45,14 +45,14 @@ var canvas = document.getElementById("canvas"),
         //     });
         //     }
 
-        function ClusteringKmeans(){
+        function ClusteringKmeans(centroid){
             centroidXY = [],
             dotsToCentroid=[],
             centroidXYBegin=[],step=0,
             color = [],sumcentroidsX =[],
             sumcentroidsY =[],kolvoCenters=[];
-            
-            var centroid = prompt('Сколь центроидов?',2)
+            if (centroid==0)
+             centroid = prompt('Сколь центроидов?',2)
             if (dots.length < centroid){
                 alert('Ошибка');
                 canvas.clear();
@@ -103,12 +103,12 @@ var canvas = document.getElementById("canvas"),
                 kolvoCenters[index]=0;
                 }
                // await delay(1000);
-                ctx.clearRect(0, 0, 800, 730);
+               // ctx.clearRect(0, 0, 800, 730);
             for (let h=0;h<dotsToCentroid.length;h++){
                
                      ctx.beginPath();
                      ctx.fillStyle = color[dotsToCentroid[h]];
-                     ctx.arc(dots[h][0] , dots[h][1] ,15,0,Math.PI*2);
+                     ctx.arc(dots[h][0] , dots[h][1] ,20,0,Math.PI*2);
                      ctx.fill();
                 sumcentroidsX[dotsToCentroid[h]]+=dots[h][0];
                 sumcentroidsY[dotsToCentroid[h]]+=dots[h][1];
@@ -135,12 +135,17 @@ var canvas = document.getElementById("canvas"),
        
                     
         
-        function ClusteringHierarchical(){
+        function ClusteringHierarchical(centroid){
             var clusters = [],sumX=0,sumY=0,centroids=[];
-            var minn=500,constI,constJ,count=0;
+            var minn=1000,constI,constJ,count=0;
             var h=[],container=[[]];
-
-            var centroid = prompt('Сколь центроидов?',2)
+            if (centroid==0)
+             centroid = prompt('Сколь центроидов?',2);
+             if (dots.length < centroid){
+                alert('Ошибка');
+                canvas.clear();
+                
+            }
             for(let i = 0;i<dots.length;i++){
                 color[i]=getRandomColor();
             }
@@ -154,6 +159,7 @@ var canvas = document.getElementById("canvas"),
             
                 container[i,i]=[i];
             }
+            count = container.length;
             while(count!=centroid){
                 count=0;
                 console.log('clusters.length',clusters.length);
@@ -201,9 +207,14 @@ var canvas = document.getElementById("canvas"),
                 kolvoCenters = 0;
                 for (let i=0;i<container[constI].length;i++){
                     ctx.beginPath();
-                     ctx.fillStyle = color[constI];
-                     ctx.arc(dots[container[constI][i]][0] , dots[container[constI][i]][1] ,15,0,Math.PI*2);
-                     ctx.fill();
+                    //  ctx.fillStyle = color[constI];
+                    //  ctx.arc(dots[container[constI][i]][0] , dots[container[constI][i]][1] ,25,0,Math.PI*2);
+                    //  ctx.fill();
+                    ctx.lineWidth = 15;
+                    ctx.strokeStyle = color[constI];
+                    ctx.arc(dots[container[constI][i]][0] , dots[container[constI][i]][1] ,20,0,Math.PI*2);
+                    ctx.stroke();
+                    //ctx.fill();
                     sumX+=dots[container[constI][i]][0];
                     sumY+=dots[container[constI][i]][1];
                     kolvoCenters++;
@@ -227,7 +238,13 @@ var canvas = document.getElementById("canvas"),
                count++;
               }
             }
+            
              
+        }
+        function match(){
+           var centroid = prompt('Сколь центроидов?',2)
+            ClusteringHierarchical(centroid);
+            ClusteringKmeans(centroid);
         }
        
         
