@@ -353,7 +353,7 @@ function CheckPath(current) {
       OpenList.push(new Cell(x, y - 1));
       cell.x = x;
       cell.y = y - 1;
-      cell.classList.add("currentCell")
+     // cell.classList.add("currentCell")
       if (x === finishCords.x && y - 1 === finishCords.y) {
         breakFlag = true;
         return 0;
@@ -376,7 +376,7 @@ function CheckPath(current) {
       OpenList.push(new Cell(x, y + 1));
       cell.y = y + 1;
       cell.x = x;
-      cell.classList.add("currentCell")
+      //cell.classList.add("currentCell")
       if (x === finishCords.x && y + 1 === finishCords.y) {
         breakFlag = true;
         return 0;
@@ -399,7 +399,7 @@ function CheckPath(current) {
       OpenList.push(new Cell(x - 1, y));
       cell.x = x - 1;
       cell.y = y;
-      cell.classList.add("currentCell")
+      //cell.classList.add("currentCell")
       if (x - 1 === finishCords.x && y === finishCords.y) {
         breakFlag = true;
         return 0;
@@ -422,7 +422,7 @@ function CheckPath(current) {
       OpenList.push(new Cell(x + 1, y));
       cell.x = x + 1;
       cell.y = y;
-      cell.classList.add("currentCell")
+     // cell.classList.add("currentCell")
       if (x + 1 === finishCords.x && y === finishCords.y) {
         breakFlag = true;
         return 0;
@@ -440,18 +440,30 @@ async function drawPath() {
   let x = finishCords.x;
   let y = finishCords.y;
   let cell = new Cell(x, y);
-  cell.classList.remove("currentCell")
+ // cell.classList.remove("currentCell")
   while (x !== startCords.x || y !== startCords.y) {
+    if (x !== finishCords.x || y !== finishCords.y){
+    const color = 'blue';
+    contex.beginPath();
+    contex.rect(
+      x * Cellsize,
+      y * Cellsize,
+      Cellsize,
+      Cellsize
+    );
+    contex.fillStyle = color;
+    contex.fill();
+    }
     let temp = x;
     x = Graph[y][temp].X;
     y = Graph[y][temp].Y;
     cell.x = x;
     cell.y = y;
-    cell.classList.add("path");
+    //cell.classList.add("path");
     await new Promise(resolve => setTimeout(resolve, 30))
   }
-  cell.classList.remove("path");
-  cell.classList.remove("currentCell");
+  //cell.classList.remove("path");
+  //cell.classList.remove("currentCell");
 
 }
 
