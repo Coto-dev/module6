@@ -108,7 +108,7 @@ var canvas = document.getElementById("canvas"),
                
                      ctx.beginPath();
                      ctx.fillStyle = color[dotsToCentroid[h]];
-                     ctx.arc(dots[h][0] , dots[h][1] ,20,0,Math.PI*2);
+                     ctx.arc(dots[h][0] , dots[h][1] ,10,0,Math.PI*2);
                      ctx.fill();
                 sumcentroidsX[dotsToCentroid[h]]+=dots[h][0];
                 sumcentroidsY[dotsToCentroid[h]]+=dots[h][1];
@@ -210,9 +210,9 @@ var canvas = document.getElementById("canvas"),
                     //  ctx.fillStyle = color[constI];
                     //  ctx.arc(dots[container[constI][i]][0] , dots[container[constI][i]][1] ,25,0,Math.PI*2);
                     //  ctx.fill();
-                    ctx.lineWidth = 15;
+                    ctx.lineWidth = 10;
                     ctx.strokeStyle = color[constI];
-                    ctx.arc(dots[container[constI][i]][0] , dots[container[constI][i]][1] ,20,0,Math.PI*2);
+                    ctx.arc(dots[container[constI][i]][0] , dots[container[constI][i]][1] ,10,0,Math.PI*2);
                     ctx.stroke();
                     //ctx.fill();
                     sumX+=dots[container[constI][i]][0];
@@ -241,10 +241,116 @@ var canvas = document.getElementById("canvas"),
             
              
         }
+        function Ostnov(centroid){
+            var clusters=[];
+            var matrix=[[]];
+            var answer=[[]];
+            for (let i=0;i<dots.length;i++){
+            
+                matrix[i]=[0];
+            }
+            for (let i=0;i<dots.length;i++){
+            
+                answer[i]=[];
+            }
+            for (let i=0;i<dots.length;i++){
+                for (let j=0;j<dots.length;j++){
+            
+                answer[i][j]=[0];
+                }
+            }
+            
+
+            if (centroid==0)
+             centroid = prompt('Сколь центроидов?',2);
+             if (dots.length < centroid){
+                alert('Ошибка');
+                canvas.clear();
+                
+            }
+            for(let i = 0;i<dots.length;i++){
+                color[i]=getRandomColor();
+            }
+            for (let i=0,j=0;i<dots.length;i++){
+                var x,y;
+                x=dots[i][0];
+                y=dots[i][1];
+                clusters.push([x,y]);
+            }
+            for (let i=0;i<clusters.length;i++){
+                var s=0, x,y;
+                for (let j=0;j<clusters.length;j++){
+                    if (i!=j && clusters[i]!=undefined && clusters[j]!=undefined){
+                    x=clusters[j][0];
+                    y=clusters[j][1];
+                s=Math.sqrt(((x-clusters[i][0])**2) + ((y-clusters[i][1])**2));
+                matrix[i][j]=s;
+                    }
+                    else  matrix[i][j]=0;
+                }
+            }
+
+
+
+function algPrima(n) {
+    let sum=0;
+    used=[];
+    used[0] = true;
+    for (let l = 0; l < n - 1; l++) {
+        let minx = -1, miny = -1;
+        for (let i = 0; i < n; i++)
+            if (used[i])
+                for (let j = 0; j < n; j++)
+                    if (!used[j] && matrix[i][j] > 0 && (miny == -1 || matrix[i][j] < matrix[miny][minx]))
+                        miny = i, minx = j;
+        used[minx] = true;
+        answer[miny][minx] = matrix[miny][minx];
+        answer[minx][miny] = matrix[miny][minx];
+        sum += answer[miny][minx];
+    }
+    
+    }
+    let n;
+    algPrima(dots.length);
+    var count = centroid-1;
+    while(count>0){
+        var maxx=0;
+        for (let i=0;i<answer.length;i++){
+            for (let j=0;j<answer.length;j++){
+                if (answer[i][j]>maxx){
+                maxx=Math.max(answer[i][j],maxx);
+                constI=i;
+                constJ=j;
+                }
+            }
+        }
+        answer[constI][constJ]=0;
+        answer[constJ][constI]=0;
+        count--;
+       
+    }
+    for (let i=0;i<answer.length;i++){
+        for (let j=0;j<answer.length;j++){
+            if(answer[i][j]!=0){
+            ctx.beginPath();
+            ctx.lineWidth = 15;
+            ctx.strokeStyle = color[1];
+            ctx.moveTo(dots[i][0], dots[i][1]);
+            ctx.lineTo(dots[j][0], dots[j][1]);
+            ctx.stroke();
+            }
+        }
+    }
+
+            console.log(answer);
+    
+        }
+
         function match(){
            var centroid = prompt('Сколь центроидов?',2)
             ClusteringHierarchical(centroid);
             ClusteringKmeans(centroid);
+            Ostnov(centroid);
         }
        
         
