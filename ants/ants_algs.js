@@ -1,13 +1,19 @@
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
-var ant_count = 100;
+var ant_count = 50;
 var ant = new Array(ant_count);
 const speed = 1;
 const time = 50;
 const size_world=80;
 var world=[];
-var feromon = [];
-feromon[0] = {
+var fer_to_home = [];
+fer_to_home[0] = {
+	time: time,
+	x: 0,
+	y: 0
+}
+var fer_eat = [];
+fer_eat[0] = {
 	time: time,
 	x: 0,
 	y: 0
@@ -115,8 +121,8 @@ canvas.onclick = function(event){//это чтобы рисовать стены
 	//console.log(y);
 	x = Math.floor(x/10); //300 /10 = 30
 	y = Math.floor(y/10); //300 /10 = 
-	world[x][y]=-1;
-	world[home.x][home.y]=-2;
+	world[x][y].map=-1;
+	world[home.x][home.y].map=-2;
 	//console.log(world);
 	drawField();
 }
@@ -125,8 +131,17 @@ function createWorld(){//инициализирует мир
 	var n=size_world, m=size_world;
 	for (var i=0; i<m; i++){
 		world[i]=[];
+		world[i][0]={
+			map: 0,
+			eat: 0,
+			to_home:0
+		}
 		for (var j=0; j<n; j++){
-			world[i][j]=0;
+			world[i][j]={
+				map: 0,
+				eat: 0,
+				to_home:0
+			};
 		}
 		//world[i][80-i]=-1;
 		//world[i][i]=-1;
@@ -141,7 +156,10 @@ function drawAnt(){
 function drawFood(){
     ctx.fillStyle = 'green';
     for(let i=0;i<eat.length;i++)
-        ctx.fillRect(eat[i].x*10, 10*eat[i].y,20,20);
+        {}
+}
+function drawWall(){
+
 }
 //-1-стена
 //-2-дом
@@ -150,18 +168,24 @@ function drawField(){
 	ctx.clearRect(0, 0, 800, 800);
 	for (var i=0; i<size_world; i++){
 		for (var j=0; j<size_world; j++){
-			if (world[i][j]==-1){//стена
+			if (world[i][j].map==-1){//стена
 				ctx.fillStyle = 'black';
 				ctx.fillRect(i*10, j*10, 10, 10);
 			}
-
-				else 
-				if(world[i][j]>0){
-					ctx.fillStyle = 'brown';
-					for(let k = 0;k< world[i][j];k++)
-						ctx.fillRect(i*10+Math.round(Math.random()*7), j*10+Math.round(Math.random()*7), 3, 3);
-				}
+			else
+				if(world[i][j].map>0){
+					ctx.fillStyle = 'green';
+					ctx.fillRect(i*10, 10*j,20,20);
+				} 
 		}
+	}
+	ctx.fillStyle = 'green';
+	for(let i=0;i<fer_eat.length;i++){
+		ctx.fillRect(fer_eat[i].x*10+Math.round(Math.random()*7), fer_eat[i].y*10+Math.round(Math.random()*7), 3, 3);
+	}
+	ctx.fillStyle = 'brown';
+	for(let i=0;i<fer_to_home.length;i++){
+		ctx.fillRect(fer_to_home[i].x*10+Math.round(Math.random()*7), fer_to_home[i].y*10+Math.round(Math.random()*7), 3, 3);
 	}
     drawAnt();
 	drawFood();
@@ -174,14 +198,14 @@ function createColony() {
         ant[0]={
             x: home.x,//Math.floor(Math.random()*100)%80,
             y: home.y,//Math.floor(Math.random()*100)%80,
-            eat: false,
+			eat: 0,
             angle: Math.random()*100,
         };
         for(let i=1;i<ant_count;i++){
             ant[i]={
 			 	x: home.x,//Math.floor(Math.random()*100)%80,
 				y: home.y,//Math.floor(Math.random()*100)%80,
-				eat: false,
+				eat: 0,
             	angle: Math.random()*100,
         };
         }
@@ -189,34 +213,59 @@ function createColony() {
 
 function update_fer(){
 	let k =0;
-	for(let i=0;i<feromon.length;i++){
-		feromon[i].time --;
-		if (feromon[i].time<=0) {
+	for(let i=0;i<fer_to_home.length;i++){
+		fer_to_home[i].time --;
+		if (fer_to_home[i].time<=0) {
 			k++;
-			world[feromon[i].x][feromon[i].y]--;
+			world[fer_to_home[i].x][fer_to_home[i].y].to_home--;
 		}
 	}
 	
-	feromon.splice(0, k);
+	fer_to_home.splice(0, k);
+	k = 0;
+	for(let i=0;i<fer_eat.length;i++){
+		fer_eat[i].time --;
+		if (fer_eat[i].time<=0) {
+			k++;
+			world[fer_eat[i].x][fer_eat[i].y].eat--;
+		}
+	}
+	
+	fer_eat.splice(0, k);
 }
 
-function new_fer(i){
-	feromon.push({
+function new_fer_to_home(i){
+	fer_to_home.push({
 		time: time,
 		x: ant[i].x,
 		y: ant[i].y,
 	})
-	world[ant[i].x][ant[i].y]++;
+	world[ant[i].x][ant[i].y].to_home++;
+}
+
+function new_fer_eat(i){
+	fer_eat.push({
+		time: time,
+		x: ant[i].x,
+		y: ant[i].y,
+	})
+	world[ant[i].x][ant[i].y].eat++;
 }
 
 function ant_algoritm(){
 	update_fer();
-	console.log(feromon);
+	console.log(ant);
+	console.log(fer_to_home);
     for(let i=0;i<ant_count;i++){
 		ant[i].angle = Math.random()*200;
-		new_fer(i);
+		if (ant[i].eat == 0)	
+			new_fer_to_home(i);
+		else new_fer_eat(i);
         var x = Math.round(ant[i].x + speed*Math.cos(ant[i].angle));
         var y = Math.round(ant[i].y + speed*Math.sin(ant[i].angle));
+		for(let j = 0;j<5;j++){
+			
+		}
 		if(x<0){
 			x=0;
 			ant[i].angle+=Math.PI;
@@ -233,13 +282,21 @@ function ant_algoritm(){
 			y=79;
 			ant[i].angle+=Math.PI;
 		}
-		if(world[x][y]==-1){
+		if(world[x][y].map==-1){
 			ant[i].angle+=Math.PI;
 		}
 		else{
 			ant[i].x = x;
 			ant[i].y = y;
 		}
+		if(world[ant[i].x][ant[i].y].map>0){
+			ant[i].eat = world[ant[i].x][ant[i].y].map;
+		}
+		else
+			if(world[ant[i].x][ant[i].y].map==-2){
+				ant[i].eat = 0;
+		}
+		//console.log(fer_eat);
 	}
     //setTimeout(drawField,900);
     //console.log(ant);
@@ -253,8 +310,8 @@ function start_(){
     ant_algoritm();
 }
 
-home.x=10;
-home.y=20;
+home.x=40;
+home.y=40;
 createColony();
 createWorld();
 
@@ -262,22 +319,15 @@ createWorld();
 
 
 
-console.log(ant);
+//console.log(ant);
 //console.log(ant);
 
-//eat_count = 2;
+//eat = 2;
 //world[0][20]=-5;
-eat[1]={
-	x:0,
-	y:20,
-	count:5
-}
 
-eat[2]={
-	x:33,
-	y:20,
-	count:5
-}
+world[20][20].map = 5;
+world[33][20].map = 5;
+
 //world[33][20]=-5;
 world[home.x][home.y]=-2;
 
@@ -287,6 +337,6 @@ drawField();
 //drawField();
 //ant_algoritm();
 
- setInterval(ant_algoritm, 500);
+ setInterval(ant_algoritm, 10);
 
 ant.show;
