@@ -40,7 +40,7 @@ const erasers = {
 
 async function main(matrix) {
   document.getElementById("matrixSize").addEventListener("mouseup", function () {
-    MatrixSize = Number(document.getElementById("MatrixSize").value);
+    MatrixSize = Number(document.getElementById("matrixSize").value);
   });
   var size = MatrixSize;
   if (MatrixSize % 2 === 0) {
@@ -59,10 +59,10 @@ async function main(matrix) {
 
 function CreateMatrix() {
   document.getElementById("matrixSize").addEventListener("mouseup", function () {
-    MatrixSize = Number(document.getElementById("MatrixSize").value);
+    MatrixSize = Number(document.getElementById("matrixSize").value);
   });
 
-  startCords = new Cell(22, 2);
+  startCords = new Cell(0, 0);
   finishCords = new Cell(0, 0);
   //isFinisButtonPressed = false;
   //isStartButtonPressed = false;
@@ -446,7 +446,7 @@ async function drawPath() {
     x = Graph[y][temp].X;
     y = Graph[y][temp].Y;
     cell.x = x;
-    cell.x = y;
+    cell.y = y;
     cell.classList.add("path");
     await new Promise(resolve => setTimeout(resolve, 30))
   }
