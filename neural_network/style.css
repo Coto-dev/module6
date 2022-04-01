@@ -10,6 +10,9 @@ body {
     animation: gradient 10s ease infinite;
 
 }
+#myTBL td     {background: white; color: black}
+#myTBL td.act {background: black; color: white}
+
 #canv{
   background-color:#ffffff;
   border: 2px solid black;
