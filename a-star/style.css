@@ -10,13 +10,15 @@ body {
 }
 
 #canvas{
-    background-color:  	 #1f2833;
-    border:2px solid #0c5656;
+    background-color: #19202a;
+    border:2px solid #073a3a;
     border-radius: 25px;
 }
+
 .size{
     margin-left: 25px; 
 }
+
 .text{
     color:  #049898; 
 }
@@ -24,15 +26,14 @@ body {
 .Text{
     margin-top: 70px;
     margin-left: 30px;
-    font-size:larger;
-    color:  #2ebaba;
+    font-size: x-large;
+    color:  #049898;
 }
 
 .forbutton{
-  width: 460px;
+  width: 500px;
   height: 730px;
-  background-color:  #1f2833;
-  border:2px solid #0c5656;
+  background-color: #0B0C10;
   border-radius: 25px;
 }
 
@@ -41,8 +42,9 @@ body {
     margin-left: 30px;
     margin-right:3%;
     height:50px;
-    width:150px;
-    background-color:  #2ebaba;
+    width:180px;
+    background-color:  #3bb8b8;
+    border-radius: 10px;
 }
 
 .range{
@@ -50,14 +52,17 @@ body {
     margin-left: 30px;
     margin-right:3%;
     width:300px;
+    background: #3bb8b8;
 }
 
 #rangeValue{
     margin-right:3%;
-    font-size:larger;
+    font-size:x-large;
+    color: #049898;
 }
+
 .butt:hover {
-    background-color: #6DD5FA;
+    background-color: #127b79;
 }
 
 .float-container {
@@ -94,7 +99,7 @@ body {
 }
 
 .sidenav a:hover {
-    color: #00cccc;
+    color: #59eae8;
 }
 
 .main {
