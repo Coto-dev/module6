@@ -24,7 +24,9 @@ body {
 .float-container {
     margin-left: 230px;
 }
-
+.butt:hover {
+    background-color: #6DD5FA;
+}
 .float-child1{
     float: left;
 }
