@@ -1,9 +1,9 @@
 const wallColor = "black";
 const freeColor = "white";
+const FinishColor = 'red';
+const StartColor = 'green';
 var matrix = [];
 var MatrixSize = 30;
-var columns;
-var rows;
 var canvas = document.getElementById('canvas');
 var contex = canvas.getContext('2d');
 
@@ -14,13 +14,26 @@ class Cell {
   }
 }
 
-let startCords = new Cell(5, 22);
-let finishCords = new Cell(22, 2);
-let Graph = new Array(MatrixSize);
-var isFinisButtonPressed = true;
-var isStartButtonPressed = true;
-var lastButton = "";
+var startCords = new Cell(0, 0);
+var finishCords = new Cell(0, 0);
+var Graph = new Array(MatrixSize);
+var FinishButton = false;
+var StartButton = false;
+var CreateWallButton = false;
+var RemoveWallButton = false;
 var Cellsize;
+
+function DrawInCanvas(color, x, y) {
+  contex.beginPath();
+  contex.rect(
+    x * Cellsize,
+    y * Cellsize,
+    Cellsize,
+    Cellsize
+  );
+  contex.fillStyle = color;
+  contex.fill();
+}
 
 //создание матрицы и генерация лабиринта
 function randomInteger(min, max) {
@@ -64,9 +77,8 @@ function CreateMatrix() {
 
   startCords = new Cell(0, 0);
   finishCords = new Cell(0, 0);
-  //isFinisButtonPressed = false;
-  //isStartButtonPressed = false;
-  lastButton = "";
+  FinishButton = false;
+  StartButton = false;
   matrix = [];
   for (let y = 0; y < MatrixSize; y++) {
     const row = [];
@@ -85,16 +97,7 @@ function DrawMaze(columns, rows) {
   for (let y = 0; y < columns; y++) {
     for (let x = 0; x < rows; x++) {
       const color = matrix[y][x] ? freeColor : wallColor;
-
-      contex.beginPath();
-      contex.rect(
-        x * Cellsize,
-        y * Cellsize,
-        Cellsize,
-        Cellsize
-      );
-      contex.fillStyle = color;
-      contex.fill();
+      DrawInCanvas(color, x, y);
     }
   }
 }
@@ -163,9 +166,8 @@ canvas.clear = function () {
   contex.clearRect(0, 0, 730, 730);
   startCords = new Cell(0, 0);
   finishCords = new Cell(0, 0);
-  isFinisButtonPressed = false;
-  isStartButtonPressed = false;
-  lastButton = "";
+  FinishButton = false;
+  StartButton = false;
 }
 
 function CreateMazes() {
@@ -174,84 +176,59 @@ function CreateMazes() {
 }
 
 function CreateWall() {
-  canvas.addEventListener('mousedown', function (e) {
-    var cordX, cordY;
-    cordX = e.pageX - this.offsetLeft;
-    cordY = e.pageY - this.offsetTop;
-    var x = Math.trunc(cordX / Cellsize);
-    var y = Math.trunc(cordY / Cellsize);
-
-    matrix[y][x] = false;
-    DrawMaze(MatrixSize, MatrixSize);
-  });
+  CreateWallButton = true;
+  RemoveWallButton = false;
 }
 
 function RemoveWall() {
-  canvas.addEventListener('mousedown', function (e) {
-    let cordX, cordY;
-    cordX = e.pageX - this.offsetLeft;
-    cordY = e.pageY - this.offsetTop;
-    var x = Math.trunc(cordX / Cellsize);
-    var y = Math.trunc(cordY / Cellsize);
-
-    matrix[y][x] = true;
-    DrawMaze(MatrixSize, MatrixSize);
-  });
+  CreateWallButton = false;
+  RemoveWallButton = true;
 }
 
-canvas.addEventListener('mousedown', function (ef) {
-  let cordfX, cordfY;
-  cordfX = ef.pageX - this.offsetLeft;
-  cordfY = ef.pageY - this.offsetTop;
-  let fx = Math.trunc(cordfX / Cellsize);
-  let fy = Math.trunc(cordfY / Cellsize);
-  if ((matrix[fy][fx] === true) || (matrix[fy][fx] === 1)) {
-    if (isFinisButtonPressed) {
-      finishCords.x = fx;
-      finishCords.y = fy;
-      isFinisButtonPressed = true;
-
-      const color = 'red';
-      contex.beginPath();
-      contex.rect(
-        fx * Cellsize,
-        fy * Cellsize,
-        Cellsize,
-        Cellsize
-      );
-      contex.fillStyle = color;
-      contex.fill();
+canvas.addEventListener('mousedown', function (e) {
+  let cordX, cordY;
+  cordX = e.pageX - this.offsetLeft;
+  cordY = e.pageY - this.offsetTop;
+  let x = Math.trunc(cordX / Cellsize);
+  let y = Math.trunc(cordY / Cellsize);
+  if ((matrix[y][x] === true) || (matrix[y][x] === 1)) {
+    if (FinishButton) {
+      finishCords.x = x;
+      finishCords.y = y;
+      FinishButton = false;
+      DrawInCanvas(FinishColor, x, y);
     }
-    else if (isStartButtonPressed) {
-      startCords.x = fx;
-      startCords.y = fy;
-      isStartButtonPressed = true;
-
-      const color = 'green';
-      contex.beginPath();
-      contex.rect(
-        fx * Cellsize,
-        fy * Cellsize,
-        Cellsize,
-        Cellsize
-      );
-      contex.fillStyle = color;
-      contex.fill();
+    else if (StartButton) {
+      startCords.x = x;
+      startCords.y = y;
+      StartButton = false;
+      DrawInCanvas(StartColor, x, y);
+    }
+    if (CreateWallButton) {
+      matrix[y][x] = false;
+      DrawMaze(MatrixSize, MatrixSize)
     }
   }
-  else {
+  else if (!RemoveWallButton) {
     alert("Это стена!");
+  }
+  else if (RemoveWallButton) {
+    matrix[y][x] = true;
+    DrawMaze(MatrixSize, MatrixSize)
   }
 });
 
 function DrawFinish() {
-  isFinisButtonPressed = true;
-  isStartButtonPressed = false;
+  CreateWallButton = false;
+  RemoveWallButton = false;
+  FinishButton = true;
+  StartButton = false;
 }
-
 function DrawStart() {
-  isStartButtonPressed = true;
-  isFinisButtonPressed = false;
+  CreateWallButton = false;
+  RemoveWallButton = false;
+  StartButton = true;
+  FinishButton = false;
 }
 
 //алгоритм А*
@@ -320,7 +297,7 @@ function isOpened(temp) {
 }
 
 function getMinCell() {//ищем минимальный f
-  let min = 9999999;
+  let min = 100000;
   let temp = new Cell(0, 0);
 
   for (let i = 0; i < OpenList.length; i++) {
@@ -353,7 +330,7 @@ function CheckPath(current) {
       OpenList.push(new Cell(x, y - 1));
       cell.x = x;
       cell.y = y - 1;
-     // cell.classList.add("currentCell")
+      // cell.classList.add("currentCell")
       if (x === finishCords.x && y - 1 === finishCords.y) {
         breakFlag = true;
         return 0;
@@ -422,7 +399,7 @@ function CheckPath(current) {
       OpenList.push(new Cell(x + 1, y));
       cell.x = x + 1;
       cell.y = y;
-     // cell.classList.add("currentCell")
+      // cell.classList.add("currentCell")
       if (x + 1 === finishCords.x && y === finishCords.y) {
         breakFlag = true;
         return 0;
@@ -436,23 +413,15 @@ function CheckPath(current) {
   }
 }
 
-async function drawPath() {
+async function DrawPath() {
   let x = finishCords.x;
   let y = finishCords.y;
   let cell = new Cell(x, y);
- // cell.classList.remove("currentCell")
+  // cell.classList.remove("currentCell")
   while (x !== startCords.x || y !== startCords.y) {
-    if (x !== finishCords.x || y !== finishCords.y){
-    const color = 'blue';
-    contex.beginPath();
-    contex.rect(
-      x * Cellsize,
-      y * Cellsize,
-      Cellsize,
-      Cellsize
-    );
-    contex.fillStyle = color;
-    contex.fill();
+    if (x !== finishCords.x || y !== finishCords.y) {
+      const Pathcolor = 'blue';
+      DrawInCanvas(Pathcolor, x, y);
     }
     let temp = x;
     x = Graph[y][temp].X;
@@ -464,7 +433,6 @@ async function drawPath() {
   }
   //cell.classList.remove("path");
   //cell.classList.remove("currentCell");
-
 }
 
 async function aStar() {
@@ -482,7 +450,7 @@ async function aStar() {
     await new Promise(resolve => setTimeout(resolve, 10))
   }
   if (!flag) {
-    await drawPath()
+    await DrawPath()
   }
 
   OpenList.splice(0, OpenList.length);
