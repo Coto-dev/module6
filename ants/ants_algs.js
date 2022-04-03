@@ -1,10 +1,11 @@
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
-var ant_count = 50;
+var ant_count = 100;
 var ant = new Array(ant_count);
 const speed = 1;
 const time = 60;
-const size_world=90;
+const size_world=160;
+const size_ant = 5;
 var world=[];
 var fer_to_home = [];
 fer_to_home[0] = {
@@ -151,7 +152,7 @@ function createWorld(){//инициализирует мир
 function drawAnt(){
     ctx.fillStyle = 'blue';
     for(let i=0;i<ant_count;i++)
-        ctx.fillRect(ant[i].x*10, 10*ant[i].y,10,10);
+        ctx.fillRect(ant[i].x*size_ant, size_ant*ant[i].y,size_ant,size_ant);
 }
 
 //-1-стена
@@ -163,27 +164,27 @@ function drawField(){
 		for (var j=0; j<size_world; j++){
 			if (world[i][j].map==-1){//стена
 				ctx.fillStyle = 'black';
-				ctx.fillRect(i*10, j*10, 10, 10);
+				ctx.fillRect(i*size_ant, j*size_ant, size_ant, size_ant);
 			}
 			else
 				if(world[i][j].map>0){
 					ctx.fillStyle = 'green';
-					ctx.fillRect(i*10, 10*j,20,20);
+					ctx.fillRect(i*size_ant, size_ant*j,2*size_ant,2*size_ant);
 				} 
 		}
 	}
 	ctx.fillStyle = 'green';
 	for(let i=0;i<fer_eat.length;i++){
-		ctx.fillRect(fer_eat[i].x*10+Math.round(Math.random()*7), fer_eat[i].y*10+Math.round(Math.random()*7), 3, 3);
+		ctx.fillRect(fer_eat[i].x*size_ant+Math.round(Math.random()*7), fer_eat[i].y*size_ant+Math.round(Math.random()*7), size_ant-3, size_ant-3);
 	}
 	ctx.fillStyle = 'brown';
 	for(let i=0;i<fer_to_home.length;i++){
-		ctx.fillRect(fer_to_home[i].x*10+Math.round(Math.random()*7), fer_to_home[i].y*10+Math.round(Math.random()*7), 3, 3);
+		ctx.fillRect(fer_to_home[i].x*size_ant+Math.round(Math.random()*7), fer_to_home[i].y*size_ant+Math.round(Math.random()*7), size_ant-3, size_ant-3);
 	}
     drawAnt();
 	
 	ctx.fillStyle = 'red';
-		ctx.fillRect(home.x*10, home.y*10, 20, 20);
+		ctx.fillRect(home.x*size_ant, home.y*size_ant, size_ant*2, 2*size_ant);
 }
 
 
@@ -263,29 +264,33 @@ return p/k;
 function cross_to_home(ant, X, Y){
 	let i = X, j=Y, k=0, p=0;
 	if(ant.x+i+Math.abs(X)<size_world && ant.x+i-Math.abs(X)>0 && ant.y+j+Math.abs(Y)<size_world && ant.y+j-Math.abs(Y)>0){
+		if(world[ant.x+i][ant.y+j].map<-1) p+=1000000;
 		p+=world[ant.x+i][ant.y+j].to_home;
 		i+=X; j+=Y;	k++;
 	}
 	if(ant.x+i+Math.abs(X)<size_world && ant.x+i-Math.abs(X)>0 && ant.y+j+Math.abs(Y)<size_world && ant.y+j-Math.abs(Y)>0){
+		if(world[ant.x+i][ant.y+j].map<-1) p+=1000000;
 		p+=world[ant.x+i][ant.y+j].to_home;
 		i+=X; j+=Y;	k++;
 	}
 	if(ant.x+i+Math.abs(X)<size_world && ant.x+i-Math.abs(X)>0 && ant.y+j+Math.abs(Y)<size_world && ant.y+j-Math.abs(Y)>0){
+		if(world[ant.x+i-X][ant.y+j-Y].map<-1 || world[ant.x+i+X][ant.y+j+Y].map<-1 ||world[ant.x+i][ant.y+j].map<-1) p+=1000000;
 		p+=world[ant.x+i-X][ant.y+j-Y].to_home;
 		p+=world[ant.x+i+X][ant.y+j+Y].to_home;
 		p+=world[ant.x+i][ant.y+j].to_home;
 		i+=X; j+=Y;k+=3;
 	}
 	if(ant.x+i+Math.abs(X)<size_world && ant.x+i-Math.abs(X)>0 && ant.y+j+Math.abs(Y)<size_world && ant.y+j-Math.abs(Y)>0 && k<10){
+		if(world[ant.x+i-X][ant.y+j-Y].map<-1 || world[ant.x+i+X][ant.y+j+Y].map<-1 ||world[ant.x+i][ant.y+j].map<-1) p+=1000000;
 		p+=world[ant.x+i-X][ant.y+j-Y].to_home;
 		p+=world[ant.x+i+X][ant.y+j+Y].to_home;
 		p+=world[ant.x+i][ant.y+j].to_home;
 		k+=3;
 	}
 	if(ant.x+i+2*Math.abs(X)<size_world && ant.x+i-2*Math.abs(X)>0 && ant.y+j+2*Math.abs(Y)<size_world && ant.y+j-2*Math.abs(Y)>0 && k<10){
+		if(world[ant.x+i-2*X][ant.y+j-2*Y].map<-1 || world[ant.x+i+2*X][ant.y+j+2*Y].map<-1) p+=1000000;
 		p+=world[ant.x+i-2*X][ant.y+j-2*Y].to_home;
 		p+=world[ant.x+i+2*X][ant.y+j+2*Y].to_home;
-		p+=world[ant.x+i][ant.y+j].to_home;
 		i+=X; j+=Y;k+=2;
 	} 
 	return p/k;
@@ -306,6 +311,7 @@ function NewAngle_eat(ant){
 		sec3 = cross_to_home(ant, 1, 0);
 		sec4 = diagonal_to_home(ant, -1, -1);
 		sec5 = diagonal_to_home(ant, 1, 1);
+		angle = Math.PI/4;
 	 }
 	 else if (ant.angle>=Math.PI/3 && ant.angle<=2*Math.PI/3)//3
 	 {
@@ -314,6 +320,7 @@ function NewAngle_eat(ant){
 		sec3 = diagonal_to_home(ant, 1, -1);
 		sec4 = cross_to_home(ant, -1, 0);
 		sec5 = cross_to_home(ant, 1, 0);
+		angle = Math.PI/2;
 	 }
 	 else if (ant.angle>=2*Math.PI/3 && ant.angle<=5*Math.PI/6)//4
 	 {
@@ -322,6 +329,7 @@ function NewAngle_eat(ant){
 		sec3 = cross_to_home(ant, 0, -1);
 		sec4 = diagonal_to_home(ant, -1, -1);
 		sec5 = diagonal_to_home(ant, 1, 1);
+		angle = 3*Math.PI/4;
 	 }
 	 else if (ant.angle>=5*Math.PI/6 && ant.angle<=7*Math.PI/6)//5
 	 {
@@ -330,6 +338,7 @@ function NewAngle_eat(ant){
 		sec3 = diagonal_to_home(ant, -1, -1);
 		sec4 = cross_to_home(ant, 0, 1);
 		sec5 = cross_to_home(ant, 0, -1);
+		angle = Math.PI;
 	 }
 	 else if (ant.angle>=7*Math.PI/6 && ant.angle<=4*Math.PI/3)//6
 	 {
@@ -338,6 +347,7 @@ function NewAngle_eat(ant){
 		sec3 = cross_to_home(ant, -1, 0);
 		sec4 = diagonal_to_home(ant, 1, 1);
 		sec5 = diagonal_to_home(ant, -1, -1);
+		angle = 5*Math.PI/4;
 	 }
 	 else if (ant.angle>=4*Math.PI/3 && ant.angle<=5*Math.PI/3)//7
 	 {
@@ -346,6 +356,7 @@ function NewAngle_eat(ant){
 		sec3 = diagonal_to_home(ant, -1, 1);
 		sec4 = cross_to_home(ant, 1, 0);
 		sec5 = cross_to_home(ant, -1, 0);
+		angle = 3*Math.PI/2;
 	 }
 	 else if (ant.angle>=5*Math.PI/3 && ant.angle<=11*Math.PI/6)//8
 	 {
@@ -354,6 +365,7 @@ function NewAngle_eat(ant){
 		sec3 = cross_to_home(ant, 0, -1);
 		sec4 = diagonal_to_home(ant, -1, -1);
 		sec5 = diagonal_to_home(ant, 1, 1);
+		angle = 7*Math.PI/4;
 	 }
 	 else{//1
 		sec1 = cross_to_home(ant, 0, -1);
@@ -361,16 +373,18 @@ function NewAngle_eat(ant){
 		sec3 = diagonal_to_home(ant, 1, -1);
 		sec4 = cross_to_home(ant, -1, 0);
 		sec5 = cross_to_home(ant, 1, 0);
+		angle = 0;
 	 }
-	 if(sec1+sec2+sec3+sec4+sec5<=0) return (Math.floor((Math.random()*100))%6 * (Math.PI/4));
-		 else{
-			let k= (Math.random()*100000)%(sec1+sec2+sec3+sec4+sec5);
-			if(k<sec1)	return 0;
-			else if(k<sec1+sec2) return Math.PI/5;
-			else if(k<sec1+sec2+sec3) return -Math.PI/5;
-			else if(k<sec1+sec2+sec3+sec4) return Math.PI/3;
-			else return -Math.PI/3;
-		 }
+	 if(sec1+sec2+sec3+sec4+sec5<=10) return angle+Math.random()*360*Math.PI/(Math.random()*10); //(((Math.random()*100))%2 * (Math.PI/4))/50;//(Math.floor((Math.random()*100))%6 * (Math.PI/4));
+	 else{
+		let k= (Math.random()*100000)%(sec1+sec2+sec3+sec4+sec5);
+		console.log(k);
+		if(k<sec1)	return 0;
+		else if(k<sec1+sec2) return angle+Math.PI/4;
+		else if(k<sec1+sec2+sec3) return angle-Math.PI/4;
+		else if(k<sec1+sec2+sec3+sec4) return angle + Math.PI/2;
+		else return angle-Math.PI/2;
+	 }
 }
 
 
@@ -383,10 +397,12 @@ function NewAngle_eat(ant){
 function diagonal_eat(ant, X, Y){
 	let i = X, j=Y, k=0, p=0;
 	if(ant.x+i<size_world && ant.x+i>=0 && ant.y+j<size_world && ant.y+j>=0){
+		if(world[ant.x+i][ant.y+j].map>0) p+=1000000;
 		p=world[ant.x+i][ant.y+j].eat;
 		i+=X; j+=Y;	k++;
 	}
 	while(ant.x+i<size_world && ant.x+i>=0 && ant.y+j<size_world && ant.y+j>=0&&k<10){
+		if(world[ant.x+i-X][ant.y+j].map>0 || world[ant.x+i][ant.y+j-Y].map>0 ||world[ant.x+i][ant.y+j].map>0) p+=1000000;
 		p+=world[ant.x+i-X][ant.y+j].eat;
 		p+=world[ant.x+i][ant.y+j-Y].eat;
 		p+=world[ant.x+i][ant.y+j].eat;
@@ -398,29 +414,33 @@ function diagonal_eat(ant, X, Y){
 function cross_eat(ant, X, Y){
 		let i = X, j=Y, k=0, p=0;
 		if(ant.x+i+Math.abs(X)<size_world && ant.x+i-Math.abs(X)>0 && ant.y+j+Math.abs(Y)<size_world && ant.y+j-Math.abs(Y)>0){
+			if(world[ant.x+i][ant.y+j].map>0)p+=1000000;
 			p+=world[ant.x+i][ant.y+j].eat;
 			i+=X; j+=Y;	k++;
 		}
 		if(ant.x+i+Math.abs(X)<size_world && ant.x+i-Math.abs(X)>0 && ant.y+j+Math.abs(Y)<size_world && ant.y+j-Math.abs(Y)>0){
+			if(world[ant.x+i][ant.y+j].map>0)p+=1000000;
 			p+=world[ant.x+i][ant.y+j].eat;
 			i+=X; j+=Y;	k++;
 		}
 		if(ant.x+i+Math.abs(X)<size_world && ant.x+i-Math.abs(X)>0 && ant.y+j+Math.abs(Y)<size_world && ant.y+j-Math.abs(Y)>0){
+			if(world[ant.x+i-X][ant.y+j-Y].map>0 || world[ant.x+i+X][ant.y+j+Y].map>0 ||world[ant.x+i][ant.y+j].map>0) p+=1000000;
 			p+=world[ant.x+i-X][ant.y+j-Y].eat;
 			p+=world[ant.x+i+X][ant.y+j+Y].eat;
 			p+=world[ant.x+i][ant.y+j].eat;
 			i+=X; j+=Y;k+=3;
 		}
 		if(ant.x+i+Math.abs(X)<size_world && ant.x+i-Math.abs(X)>0 && ant.y+j+Math.abs(Y)<size_world && ant.y+j-Math.abs(Y)>0 && k<10){
+			if(world[ant.x+i-X][ant.y+j-Y].map>0 || world[ant.x+i+X][ant.y+j+Y].map>0 ||world[ant.x+i][ant.y+j].map>0) p+=1000000;
 			p+=world[ant.x+i-X][ant.y+j-Y].eat;
 			p+=world[ant.x+i+X][ant.y+j+Y].eat;
 			p+=world[ant.x+i][ant.y+j].eat;
 			k+=3;
 		}
 		if(ant.x+i+2*Math.abs(X)<size_world && ant.x+i-2*Math.abs(X)>0 && ant.y+j+2*Math.abs(Y)<size_world && ant.y+j-2*Math.abs(Y)>0 && k<10){
+			if(world[ant.x+i-X][ant.y+j-Y].map>0 || world[ant.x+i+X][ant.y+j+Y].map>0 ||world[ant.x+i][ant.y+j].map>0) p+=1000000;
 			p+=world[ant.x+i-2*X][ant.y+j-2*Y].eat;
 			p+=world[ant.x+i+2*X][ant.y+j+2*Y].eat;
-			p+=world[ant.x+i][ant.y+j].eat;
 			i+=X; j+=Y;k+=2;
 		} 
 		return p/k;
@@ -441,6 +461,7 @@ function cross_eat(ant, X, Y){
 			sec3 = cross_eat(ant, 1, 0);
 			sec4 = diagonal_eat(ant, -1, -1);
 			sec5 = diagonal_eat(ant, 1, 1);
+			angle = Math.PI/4;
 		 }
 		 else if (ant.angle>=Math.PI/3 && ant.angle<=2*Math.PI/3)//3
 		 {
@@ -449,6 +470,7 @@ function cross_eat(ant, X, Y){
 			sec3 = diagonal_eat(ant, 1, -1);
 			sec4 = cross_eat(ant, -1, 0);
 			sec5 = cross_eat(ant, 1, 0);
+			angle = Math.PI/2;
 		 }
 		 else if (ant.angle>=2*Math.PI/3 && ant.angle<=5*Math.PI/6)//4
 		 {
@@ -457,6 +479,7 @@ function cross_eat(ant, X, Y){
 			sec3 = cross_eat(ant, 0, -1);
 			sec4 = diagonal_eat(ant, -1, -1);
 			sec5 = diagonal_eat(ant, 1, 1);
+			angle = 3*Math.PI/4;
 		 }
 		 else if (ant.angle>=5*Math.PI/6 && ant.angle<=7*Math.PI/6)//5
 		 {
@@ -465,6 +488,7 @@ function cross_eat(ant, X, Y){
 			sec3 = diagonal_eat(ant, -1, -1);
 			sec4 = cross_eat(ant, 0, 1);
 			sec5 = cross_eat(ant, 0, -1);
+			angle = Math.PI;
 		 }
 		 else if (ant.angle>=7*Math.PI/6 && ant.angle<=4*Math.PI/3)//6
 		 {
@@ -473,6 +497,7 @@ function cross_eat(ant, X, Y){
 			sec3 = cross_eat(ant, -1, 0);
 			sec4 = diagonal_eat(ant, 1, 1);
 			sec5 = diagonal_eat(ant, -1, -1);
+			angle = 5*Math.PI/4;
 		 }
 		 else if (ant.angle>=4*Math.PI/3 && ant.angle<=5*Math.PI/3)//7
 		 {
@@ -481,6 +506,7 @@ function cross_eat(ant, X, Y){
 			sec3 = diagonal_eat(ant, -1, 1);
 			sec4 = cross_eat(ant, 1, 0);
 			sec5 = cross_eat(ant, -1, 0);
+			angle = 3*Math.PI/2;
 		 }
 		 else if (ant.angle>=5*Math.PI/3 && ant.angle<=11*Math.PI/6)//8
 		 {
@@ -489,6 +515,7 @@ function cross_eat(ant, X, Y){
 			sec3 = cross_eat(ant, 0, -1);
 			sec4 = diagonal_eat(ant, -1, -1);
 			sec5 = diagonal_eat(ant, 1, 1);
+			angle = 7*Math.PI/4;
 		 }
 		 else{//1
 			sec1 = cross_eat(ant, 0, -1);
@@ -496,34 +523,47 @@ function cross_eat(ant, X, Y){
 			sec3 = diagonal_eat(ant, 1, -1);
 			sec4 = cross_eat(ant, -1, 0);
 			sec5 = cross_eat(ant, 1, 0);
+			angle = 0;
 		 }
-		 if(sec1+sec2+sec3+sec4+sec5<=0) return (Math.floor((Math.random()*100))%6 * (Math.PI/4));
+		 if(sec1+sec2+sec3+sec4+sec5<=10) return angle+Math.random()*360*Math.PI/(Math.random()*10); //(((Math.random()*100))%2 * (Math.PI/4))/50;//(Math.floor((Math.random()*100))%6 * (Math.PI/4));
 		 else{
 			let k= (Math.random()*100000)%(sec1+sec2+sec3+sec4+sec5);
+			console.log(k);
 			if(k<sec1)	return 0;
-			else if(k<sec1+sec2) return Math.PI/5;
-			else if(k<sec1+sec2+sec3) return -Math.PI/5;
-			else if(k<sec1+sec2+sec3+sec4) return Math.PI/3;
-			else return -Math.PI/3;
+			else if(k<sec1+sec2) return angle+Math.PI/4;
+			else if(k<sec1+sec2+sec3) return angle-Math.PI/4;
+			else if(k<sec1+sec2+sec3+sec4) return angle + Math.PI/2;
+			else return angle-Math.PI/2;
 		 }
 	}
+
+function eat(ant){
+	for(let i=0;i<4;i++){
+		//if()
+	}
+}
+
 function ant_algoritm(){
 	update_fer();
 	console.log(ant);
 	//console.log(fer_to_home);
-	//console.log(world);
+	console.log(world);
     for(let i=0;i<ant_count;i++){
 		//ant[i].angle += NewAngle(ant[i]);
 		//ant[i].angle += (Math.floor((Math.random()*100))%6 * (Math.PI/4));
 		//ant[i].angle = ant[i].angle %(2*Math.PI);
 		if (ant[i].eat == 0){	
 			new_fer_to_home(i);
+			ant[i].angle = NewAngle_to_home(ant[i]);
 		}
 		else {
 			new_fer_eat(i);
+			ant[i].angle = NewAngle_eat(ant[i]);
 			}
-        var x = Math.round(ant[i].x + speed*Math.cos(ant[i].angle));
-        var y = Math.round(ant[i].y + speed*Math.sin(ant[i].angle));
+		//ant[i].angle = ant[i].angle %(2*Math.PI);
+		
+        var x = Math.round(ant[i].x + 1.1*speed*Math.cos(ant[i].angle));
+        var y = Math.round(ant[i].y + 1.1*speed*Math.sin(ant[i].angle));
 		for(let j = 0;j<5;j++){
 		}
 		if(x<0){
@@ -531,7 +571,7 @@ function ant_algoritm(){
 			ant[i].angle+=Math.PI;
 		}
 		else if(x>=size_world){
-			x=79;
+			x=size_world-1;
 			ant[i].angle+=Math.PI;
 		}
 		if(y<0){
@@ -539,7 +579,7 @@ function ant_algoritm(){
 			ant[i].angle+=Math.PI;
 		}
 		else if(y>=size_world){
-			y=79;
+			y=size_world-1;
 			ant[i].angle+=Math.PI;
 		}
 		if(world[x][y].map==-1){
@@ -556,14 +596,7 @@ function ant_algoritm(){
 			}
 		if(world[ant[i].x][ant[i].y].map<-1)
 			ant[i].eat = 0;
-			if (ant[i].eat == 0){	
-				ant[i].angle += NewAngle_to_home(ant[i]);
-				//ant[i].angle = ant[i].angle %(2*Math.PI);
-			}
-			else {
-				ant[i].angle += NewAngle_eat(ant[i]);
-				//ant[i].angle = ant[i].angle %(2*Math.PI);
-			}
+
 		//console.log(fer_eat);
 	}
     //setTimeout(drawField,900);
@@ -578,8 +611,8 @@ function start_(){
     ant_algoritm();
 }
 
-home.x=40;
-home.y=40;
+home.x=80;
+home.y=80;
 createColony();
 createWorld();
 
@@ -595,6 +628,8 @@ createWorld();
 
 world[10][40].map = 5;
 world[33][20].map = 5;
+world[110][40].map = 5;
+world[80][60].map = 5;
 
 //world[33][20]=-5;
 world[home.x][home.y].map=-2;
