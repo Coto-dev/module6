@@ -2,6 +2,8 @@ const wallColor = "black";
 const freeColor = "#ccc";
 const FinishColor = 'red';
 const StartColor = 'green';
+const Pathcolor = '#049898';
+const CurrentColor = "#255069";
 var matrix = [];
 var MatrixSize = 30;
 var canvas = document.getElementById('canvas');
@@ -416,7 +418,6 @@ async function DrawPath() {
   let y = finishCords.y;
   while (x !== startCords.x || y !== startCords.y) {
     if (x !== finishCords.x || y !== finishCords.y) {
-      const Pathcolor = '#1bc2ae';
       DrawInCanvas(Pathcolor, x, y);
     }
     let temp = x;
@@ -430,7 +431,6 @@ async function DrawPath() {
 
 async function DrawCurrent() {
   if (cell.x !== finishCords.x || cell.y !== finishCords.y){
-    const CurrentColor = "#255069";
     DrawInCanvas(CurrentColor, cell.x, cell.y);
   }
 }
