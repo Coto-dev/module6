@@ -1,8 +1,7 @@
 var canvas = document.getElementById("canvas"),
-         context = canvas.getContext("2d"),
-         w = canvas.width,
-         h=canvas.height;
-
+context = canvas.getContext("2d"),
+w = canvas.width,
+h=canvas.height;
      var mouse = { x:0, y:0};
      var draw = false;
 

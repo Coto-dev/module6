@@ -9,6 +9,13 @@ body {
     animation: gradient 10s ease infinite;
 }
 
+#space {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #000000;
+}
+
 #canvas{
     background-color: #19202a;
     border:2px solid #073a3a;
@@ -20,7 +27,8 @@ body {
 }
 
 .text{
-    color:  #049898; 
+    color:  #049898;
+     
 }
 
 .Text{
@@ -43,8 +51,11 @@ body {
     margin-right:3%;
     height:50px;
     width:180px;
-    background-color:  #3bb8b8;
+    border-color:  #1f7e7e;
+    background-color:  #0B0C10;
     border-radius: 10px;
+    color: #049898;
+    font-size: large;
 }
 
 .range{
@@ -52,7 +63,7 @@ body {
     margin-left: 30px;
     margin-right:3%;
     width:300px;
-    background: #3bb8b8;
+    background-color: #049898;
 }
 
 #rangeValue{

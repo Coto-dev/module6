@@ -1,5 +1,5 @@
 const wallColor = "black";
-const freeColor = "white";
+const freeColor = "#ccc";
 const FinishColor = 'red';
 const StartColor = 'green';
 var matrix = [];
@@ -420,7 +420,7 @@ async function DrawPath() {
   // cell.classList.remove("currentCell")
   while (x !== startCords.x || y !== startCords.y) {
     if (x !== finishCords.x || y !== finishCords.y) {
-      const Pathcolor = 'blue';
+      const Pathcolor = '#1bc2ae';
       DrawInCanvas(Pathcolor, x, y);
     }
     let temp = x;

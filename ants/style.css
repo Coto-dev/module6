@@ -44,9 +44,7 @@ body {
     width:200px;
     background-color: #3f85d4;
 }
-.butt:hover {
-    background-color: #6DD5FA;
-}
+
 .float-container {
     margin-left: 230px;
 }

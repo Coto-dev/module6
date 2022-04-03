@@ -1,49 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="style.css">
-    
-    
-    <title>Интересные алогоритмы</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="style.css">
+
+
+  <title>Интересные алогоритмы</title>
 </head>
+
 <body>
 
-    <div class="sidenav">
-     <a href="../index.html">На Главную</a>
-      <a href="../a-star/a-star_view.html">А*</a>
-      <a href="../clustering/clustering_view.html">Алгоритм Кластеризации</a>
-      <a href="../genetic/genetic_view.html">Генетический алгортим</a>
-      <a href="../ants/ants_view.html">Муравьиный алгоритм</a>
-      <a href="../decision_tree/decision_tree_view.html">Дерево Решений</a>
-      <a href="../neural_network/neural_network_view.html">Нейронная сеть</a>
-    </div>
-    
-    <div class="main">
-      <h2>Муравьинный алгоритм</h2>    
-    </div>
-         
-    <div class="float-container">
+  <div class="sidenav">
+    <a href="../index.html">На Главную</a>
+    <a href="../a-star/a-star_view.html">А*</a>
+    <a href="../clustering/clustering_view.html">Алгоритм Кластеризации</a>
+    <a href="../genetic/genetic_view.html">Генетический алгортим</a>
+    <a href="../ants/ants_view.html">Муравьиный алгоритм</a>
+    <a href="../decision_tree/decision_tree_view.html">Дерево Решений</a>
+    <a href="../neural_network/neural_network_view.html">Нейронная сеть</a>
+  </div>
 
-      <div class="float-child1">
-        <canvas id="canvas" width="800px" height="800px"></canvas>
+  <div class="main">
+    <h2 class="text">Муравьинный алгоритм</h2>
+  </div>
+
+  <div class="float-container">
+
+    <div class="float-child1">
+      <canvas id="canvas" width="800px" height="800px"></canvas>
+    </div>
+
+    <div class="float-child2">
+      <div class="forbutton">
+        <button class="butt" id="file">Добавить мир</button>
+        <button class="butt" id="draw">Начать рисовать</button>
+        <input name="size_world" type="number" />
+        <button class="butt">Очистить мир</button>
+        <button class="butt" id="home">Разместить колонию</button>
+        <button class="butt">Разместить еду</button>
       </div>
-      
-      <div class="float-child2">
-        <div class="forbutton">
-          <button class="butt" id="file">Добавить мир</button>
-          <button class="butt" id="draw">Начать рисовать</button>
-          <input name="size_world" type="number" />
-          <button class="butt">Очистить мир</button>
-          <button class="butt" id="home">Разместить колонию</button>
-          <button class="butt">Разместить еду</button>
-        </div>
     </div>
 
   </div>
-  
-  
-  
-  <script src="ants_algs.js"> </script> 
-    </body>
+
+
+
+  <script src="ants_algs.js"> </script>
+</body>
+
 </html>
