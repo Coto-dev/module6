@@ -252,7 +252,7 @@ class Node {
   }
 
 }
-
+var current = [];
 function createMatrix() {
   for (let i = 0; i < MatrixSize; i++) {
     Graph[i] = new Array(MatrixSize);
@@ -313,10 +313,12 @@ function getMinCell() {//ищем минимальный f
   return temp;
 }
 
+var cell = new Cell(0, 0);
+
 function CheckPath(current) {
   let x = current.x;
   let y = current.y;
-  let cell = new Cell(0, 0);
+
 
   OpenList.splice(index, 1);
   CloseList.push(current);
@@ -330,7 +332,6 @@ function CheckPath(current) {
       OpenList.push(new Cell(x, y - 1));
       cell.x = x;
       cell.y = y - 1;
-      // cell.classList.add("currentCell")
       if (x === finishCords.x && y - 1 === finishCords.y) {
         breakFlag = true;
         return 0;
@@ -353,7 +354,6 @@ function CheckPath(current) {
       OpenList.push(new Cell(x, y + 1));
       cell.y = y + 1;
       cell.x = x;
-      //cell.classList.add("currentCell")
       if (x === finishCords.x && y + 1 === finishCords.y) {
         breakFlag = true;
         return 0;
@@ -376,7 +376,6 @@ function CheckPath(current) {
       OpenList.push(new Cell(x - 1, y));
       cell.x = x - 1;
       cell.y = y;
-      //cell.classList.add("currentCell")
       if (x - 1 === finishCords.x && y === finishCords.y) {
         breakFlag = true;
         return 0;
@@ -399,7 +398,6 @@ function CheckPath(current) {
       OpenList.push(new Cell(x + 1, y));
       cell.x = x + 1;
       cell.y = y;
-      // cell.classList.add("currentCell")
       if (x + 1 === finishCords.x && y === finishCords.y) {
         breakFlag = true;
         return 0;
@@ -416,8 +414,6 @@ function CheckPath(current) {
 async function DrawPath() {
   let x = finishCords.x;
   let y = finishCords.y;
-  let cell = new Cell(x, y);
-  // cell.classList.remove("currentCell")
   while (x !== startCords.x || y !== startCords.y) {
     if (x !== finishCords.x || y !== finishCords.y) {
       const Pathcolor = '#1bc2ae';
@@ -428,11 +424,15 @@ async function DrawPath() {
     y = Graph[y][temp].Y;
     cell.x = x;
     cell.y = y;
-    //cell.classList.add("path");
     await new Promise(resolve => setTimeout(resolve, 30))
   }
-  //cell.classList.remove("path");
-  //cell.classList.remove("currentCell");
+}
+
+async function DrawCurrent() {
+  if (cell.x !== finishCords.x || cell.y !== finishCords.y){
+    const CurrentColor = "#255069";
+    DrawInCanvas(CurrentColor, cell.x, cell.y);
+  }
 }
 
 async function aStar() {
@@ -442,6 +442,7 @@ async function aStar() {
   while (!breakFlag) {
     var min = getMinCell();
     CheckPath(min);
+    DrawCurrent();
     if (OpenList.length <= 0) {
       flag = true
       alert("Путь не был найден")
