@@ -274,10 +274,20 @@ let index = 0;
 let breakFlag = false;
 let OpenList = [];
 let CloseList = [];
-let changeList = []
+
+var sel = document.getElementById('mySelect').selectedIndex;
+var options = document.getElementById('mySelect').options;
 
 function GetDist(first, second) {
-  return Math.abs(first.x - second.x) + Math.abs(first.y - second.y);//эвристическая функция для h
+  if (sel === 0) {
+    return Math.abs(first.x - second.x) + Math.abs(first.y - second.y);//эвристическая функция манх
+  }
+  if (sel === 1) {
+    return Math.max(Math.abs(first.x - second.x), Math.abs(first.y - second.y));//эвристическая функция манх
+  }
+  if (sel === 2) {
+    return Math.pow(Math.pow(first.x - second.x, 2) + Math.pow(first.y - second.y, 2),1/2);//эвристическая функция манх
+  }
 }
 
 function isClosed(temp) {
@@ -423,20 +433,32 @@ async function DrawPath() {
     let temp = x;
     x = Graph[y][temp].X;
     y = Graph[y][temp].Y;
-    cell.x = x;
-    cell.y = y;
-    await new Promise(resolve => setTimeout(resolve, 30))
+    await new Promise(resolve => setTimeout(resolve, 20))
   }
 }
 
 async function DrawCurrent() {
-  if (cell.x !== finishCords.x || cell.y !== finishCords.y){
-    DrawInCanvas(CurrentColor, cell.x, cell.y);
+  if (OpenList[1].x !== finishCords.x || OpenList[1].y !== finishCords.y) {
+    if ((matrix[OpenList[1].y][OpenList[1].x] === true) || (matrix[OpenList[1].y][OpenList[1].x] === 1)) {
+      DrawInCanvas(CurrentColor, OpenList[1].x, OpenList[1].y);
+    }
+  }
+  if (matrix[startCords.y + 1][startCords.x] !== false) {
+    DrawInCanvas(CurrentColor, startCords.x, startCords.y + 1);
+  }
+  if (matrix[startCords.y - 1][startCords.x] !== false) {
+    DrawInCanvas(CurrentColor, startCords.x, startCords.y - 1);
+  }
+  if (matrix[startCords.y][startCords.x + 1] !== false) {
+    DrawInCanvas(CurrentColor, startCords.x + 1, startCords.y);
+  }
+  if (matrix[startCords.y][startCords.x - 1] !== false) {
+    DrawInCanvas(CurrentColor, startCords.x - 1, startCords.y);
   }
 }
 
-async function aStar() {
-  let flag = false
+async function AStar() {
+  let flag = false;
   OpenList.push(startCords);
   CheckPath(startCords)
   while (!breakFlag) {
@@ -444,18 +466,17 @@ async function aStar() {
     CheckPath(min);
     DrawCurrent();
     if (OpenList.length <= 0) {
-      flag = true
+      flag = true;
       alert("Путь не был найден")
       break;
     }
-    await new Promise(resolve => setTimeout(resolve, 10))
+    await new Promise(resolve => setTimeout(resolve, 15))
   }
   if (!flag) {
     await DrawPath()
   }
 
   OpenList.splice(0, OpenList.length);
-  changeList.splice(0, changeList.length);
   CloseList.splice(0, CloseList.length);
   index = 0;
   breakFlag = false;
@@ -463,9 +484,9 @@ async function aStar() {
 
 async function FindingPath() {
   createMatrix();
-  if (startCords != null && finishCords != null) {
-    await aStar()
+  if (startCords.x !== 0 && startCords.x !== 0 && finishCords.x !== 0 && finishCords.y !== 0) {
+    await AStar()
   } else {
-    alert("please, input start and finish cells")
+    alert("Выберите старт и финиш!")
   }
 }
