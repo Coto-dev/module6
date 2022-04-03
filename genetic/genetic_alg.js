@@ -13,25 +13,34 @@ canvas.addEventListener('mousedown',function(e){
     ctx.arc(x , y ,8,0,Math.PI*2);
     ctx.fill();
 });
-canvas.clear = function() {
+function clear(){
     ctx.clearRect(0, 0, 800, 730);
     ctx.fillStyle = "black";
+     dots = [];
+     alert('1');
 }
 function getRandom(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min; //Максимум и минимум включаются
   }
-
-function start(){
+  function delay(delayInms) {
+    return new Promise(resolve => {
+    setTimeout(() => {
+    resolve(2);
+    }, delayInms);
+    });
+    }
+async function start(){
     var population = [],count=0;
 createPopulation(population);
-while (count<1000){
+while (count<10000){
 getCross(population);
 population = selection(population);
 createPath(population[0]);
-console.log(population);
+//console.log(population);
 count++;
+await delay(10);
 }
 }
 
