@@ -1,6 +1,6 @@
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
-var ant_count = 30;
+var ant_count = 20;
 var ant = new Array(ant_count);
 const speed = 1.1;
 const time = 100;
@@ -374,7 +374,7 @@ function NewAngle_eat(ant){//у него есть еда и он хочет до
 	 console.log(ant.angle);
 	 if(sec1+sec2+sec3+sec4+sec5<=0) return (Math.random()*1/4)-1/8;
 		 else{
-			let k= Math.round(Math.random()*1000000)%(sec1+sec2+sec3+sec4+sec5);
+			let k= Math.round(Math.random()*10000000)%(sec1+sec2+sec3+sec4+sec5);
 			if(k<sec1)	return 0;
 			else if(k<sec1+sec2) return 2/6;
 			else if(k<sec1+sec2+sec3) return -2/6;
@@ -544,20 +544,20 @@ function ant_algoritm(){
 		else if(ant[i].angle<0)ant[i].angle+=2;
 		
 		if( ant[i].angle<=1/2){
-        	var x = Math.round(ant[i].x + speed*Math.cos(ant[i].angle*Math.PI));
-        	var y = Math.round(ant[i].y + speed*Math.sin(ant[i].angle*Math.PI));
+        	var x = Math.round(ant[i].x + speed*Math.cos(-ant[i].angle*Math.PI));
+        	var y = Math.round(ant[i].y + speed*Math.sin(-ant[i].angle*Math.PI));
 		}
 		else if( ant[i].angle<=1){
-        	var x = Math.round(ant[i].x - speed*Math.cos((1-ant[i].angle)*Math.PI));
-        	var y = Math.round(ant[i].y + speed*Math.sin((1-ant[i].angle)*Math.PI));
+        	var x = Math.round(ant[i].x - speed*Math.cos(-(1-ant[i].angle)*Math.PI));
+        	var y = Math.round(ant[i].y + speed*Math.sin(-(1-ant[i].angle)*Math.PI));
 		}
 		else if( ant[i].angle<=3/2){
-        	var x = Math.round(ant[i].x - speed*Math.cos((ant[i].angle-1)*Math.PI));
-        	var y = Math.round(ant[i].y - speed*Math.sin((ant[i].angle-1)*Math.PI));
+        	var x = Math.round(ant[i].x - speed*Math.cos(-(ant[i].angle-1)*Math.PI));
+        	var y = Math.round(ant[i].y - speed*Math.sin(-(ant[i].angle-1)*Math.PI));
 		}
 		else {
-        	var x = Math.round(ant[i].x + speed*Math.cos((2-ant[i].angle)*Math.PI));
-        	var y = Math.round(ant[i].y - speed*Math.sin((2-ant[i].angle)*Math.PI));
+        	var x = Math.round(ant[i].x + speed*Math.cos(-(2-ant[i].angle)*Math.PI));
+        	var y = Math.round(ant[i].y - speed*Math.sin(-(2-ant[i].angle)*Math.PI));
 		}
 
 		if(x<0){
@@ -623,7 +623,9 @@ createWorld();
 //world[0][20]=-5;
 
 world[10][14].map = 5;
-world[33][40].map = 5;
+world[11][14].map = 5;
+world[33][46].map = 5;
+world[32][46].map = 5;
 //for(let i=0;i<10;i++){
 //	world[i][10].map=-1;
 //	world[10][i].map=-1;
@@ -637,6 +639,6 @@ drawField();
 //drawField();
 //ant_algoritm();
 
- setInterval(ant_algoritm, 10);
+ setInterval(ant_algoritm, 100);
 
 ant.show;
