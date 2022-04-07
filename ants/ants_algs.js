@@ -193,14 +193,16 @@ function createColony() {
             x: home.x,//Math.floor(Math.random()*100)%80,
             y: home.y,//Math.floor(Math.random()*100)%80,
 			eat: 0,
-            angle: (Math.random()*10)%2
+            angle: (Math.random()*10)%2,
+			dist_time: time
         };
         for(let i=1;i<ant_count;i++){
             ant[i]={
 			 	x: home.x,//Math.floor(Math.random()*100)%80,
 				y: home.y,//Math.floor(Math.random()*100)%80,
 				eat: 0,
-				angle:(Math.random()*10)%2
+				angle:(Math.random()*10)%2,
+				dist_time: time
         };
         }
 }
@@ -230,20 +232,20 @@ function update_fer(){
 
 function new_fer_to_home(i){
 	fer_to_home.push({
-		time: time,
+		time: ant[i].dist_time,
 		x: ant[i].x,
 		y: ant[i].y,
 	})
-	world[ant[i].x][ant[i].y].to_home += time;
+	world[ant[i].x][ant[i].y].to_home += ant[i].dist_time;
 }
 
 function new_fer_eat(i){
 	fer_eat.push({
-		time: time,
+		time: ant[i].dist_time,
 		x: ant[i].x,
 		y: ant[i].y,
 	})
-	world[ant[i].x][ant[i].y].eat += time;
+	world[ant[i].x][ant[i].y].eat += ant[i].dist_time;
 }
 
 function diagonal_to_home(ant, X, Y){
@@ -531,6 +533,7 @@ function ant_algoritm(){
 	//console.log(fer_to_home);
 	//console.log(world);
     for(let i=0;i<ant_count;i++){
+		ant[i].dist_time*=0.99;
 		if (ant[i].eat == 0){	
 			new_fer_to_home(i);
 			ant[i].angle += NewAngle_to_home(ant[i]);
@@ -585,11 +588,13 @@ function ant_algoritm(){
 		}
 		if(world[ant[i].x][ant[i].y].map>0)
 			{
+				ant[i].dist_time=time;
 				ant[i].eat = world[ant[i].x][ant[i].y].map;
 				ant[i].angle = 1+ ant[i].angle;
 			}
 		if(world[ant[i].x][ant[i].y].map<-1){
 			ant[i].eat = 0;
+			ant[i].dist_time=time;
 			ant[i].angle = 1 + ant[i].angle;
 		}
 
@@ -624,14 +629,15 @@ createWorld();
 
 world[10][14].map = 5;
 world[11][14].map = 5;
-world[33][46].map = 5;
-world[32][46].map = 5;
+world[33][66].map = 5;
+world[32][66].map = 5;
 //for(let i=0;i<10;i++){
 //	world[i][10].map=-1;
 //	world[10][i].map=-1;
 //}
 //world[33][20]=-5;
 world[home.x][home.y].map=-2;
+world[home.x-1][-1+home.y].map=-2;
 
 drawField();
 //setTimeout(ant_algoritm,2000);
@@ -639,6 +645,6 @@ drawField();
 //drawField();
 //ant_algoritm();
 
- setInterval(ant_algoritm, 100);
+ setInterval(ant_algoritm, 10);
 
 ant.show;
