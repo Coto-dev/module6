@@ -17,19 +17,17 @@ var dataset = [
 ];
 
 class Node {
-    constructor(index, value, left, right) {
-        this.index = index;
-        this.value = value;
-        this.left = left;
-        this.right = right;
-        this.domElement = null;
-        this.Value = null;
+    constructor(name, data, parent, childrens) {
+        this.name = name;
+        this.data = data;
+        this.parent = parent;
+        this.childrens = childrens;
     }
 }
 
 class Tree {
     constructor() {
-
+        this.root = new Node();
     }
 }
 
@@ -40,13 +38,6 @@ class ForEntropy {
         this.value = value;
         this.entropy = entropy;
         this.res = res;
-    }
-    removeAll() {
-        this.positive = 0;
-        this.negative = 0;
-        this.value = 0;
-        this.entropy = 0;
-        this.res = 0;
     }
 }
 
@@ -106,10 +97,12 @@ function Entropy(group) {
         pn = attr[i].negative / attr[i].res;
         negative = -pn * getLog(2, pn);
         entropy = positive + negative;
+        attr[i].entropy = entropy;
         if (i !== 0) {
             attr[i].entropy = entropy * (attr[i].res / attr[0].res);
         }
     }
+    console.log(attr);
     return attr;
 }
 
@@ -122,13 +115,35 @@ function Gain() {
     for (var i = 0; i < dataset[0].length - 1; i++) {
         var attr = [];
         attr = Entropy(i);
-        console.log(attr);
+        var summentr = 0;
         for (var k = 1; k < attr.length; k++) {
-            var summentr = 0;
-            summentr = summentr + attr[k].entropy;
+            if (!Number.isNaN(attr[k].entropy)) {
+                summentr = summentr + attr[k].entropy;
+            }
         }
         gains[i] = attr[0].entropy - summentr;
     }
-    console.log(gains);
+    return gains;
 }
-Gain();
+
+function getMaxGain() {
+    var gains = [];
+    gains = Gain();
+    var maxgain = -1;
+    for (var i = 0; i < gains.length; i++) {
+        var maxgainattr;
+        if (gains[i] > maxgain) {
+            maxgainattr = i;
+        }
+    }
+    return maxgainattr;
+}
+
+function getBranch() {
+    var attrIndex;
+    attrIndex = getMaxGain();
+    var attr = [];
+    attr = getUniqueValues(attrIndex);
+    Brunch = new Node(attr[0],)
+    console.log(Brunch);
+}
