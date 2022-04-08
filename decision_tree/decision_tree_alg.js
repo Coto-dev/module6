@@ -34,11 +34,19 @@ class Tree {
 }
 
 class ForEntropy {
-    constructor(positive, negative, value, entropy) {   
+    constructor(positive, negative, value, entropy, res) {
         this.positive = positive;
         this.negative = negative;
         this.value = value;
         this.entropy = entropy;
+        this.res = res;
+    }
+    removeAll() {
+        this.positive = 0;
+        this.negative = 0;
+        this.value = 0;
+        this.entropy = 0;
+        this.res = 0;
     }
 }
 var attr = [];
@@ -50,11 +58,11 @@ function getUniqueValues(index) {
 
 function countUniqueValues(group) {
     temp = getUniqueValues(group);
-    for (var k = 0; k < 3; k++) {
-        attr[k] = new ForEntropy(0, 0, temp[k], 0);
+    for (var k = 0; k < temp.length; k++) {
+        attr[k] = new ForEntropy(0, 0, temp[k], 0, 0);
     }
 
-    for (var k = 1; k < 3; k++) {
+    for (var k = 1; k < temp.length; k++) {
         let pos = 1;
         let neg = 1;
         for (var i = 0; i < dataset.length; i++) {
@@ -67,27 +75,55 @@ function countUniqueValues(group) {
                 }
             }
         }
+        attr[k].res = attr[k].negative + attr[k].positive;
+    }
+    let pos = 1;
+    let neg = 1;
+    for (var i = 0; i < dataset.length; i++) {
+        if (dataset[i][dataset[0].length - 1] === "yes") {
+            attr[0].positive = pos++;
+        }
+        if (dataset[i][dataset[0].length - 1] === "no") {
+            attr[0].negative = neg++;
+        }
+        attr[0].res = attr[0].negative + attr[0].positive;
     }
 }
-entropy();
-function entropy() {
-    countUniqueValues(2);
-    console.log(attr);
+
+function Entropy(group) {
+    countUniqueValues(group);
     var entropy = 0;
     var pp, pn;
     let positive;
     let negative;
-    for (var i = 1; i < attr.length; i++) {
-        pp = attr[i].positive / (dataset.length - 1);
-        positive = -pp * Math.log(pp);
+    for (var i = 0; i < attr.length; i++) {
+        pp = attr[i].positive / attr[i].res;
+        positive = -pp * getLog(2, pp);
 
-        pn = attr[i].negative / (dataset.length - 1);
-        negative = -pn * Math.log(pn);
+        pn = attr[i].negative / attr[i].res;
+        negative = -pn * getLog(2, pn);
         entropy = positive + negative;
-        attr[i].entropy = entropy;
+        if (i !== 0) {
+            attr[i].entropy = entropy * (attr[i].res / attr[0].res);
+        }
     }
-
-    console.log(attr[1].entropy);
 }
 
+function getLog(x, y) {
+    return Math.log(y) / Math.log(x);
+}
 
+function Gain() {
+    var gains = [];
+    var summentr = 0;
+    for (var i = 0; i < dataset[0].length - 1; i++) {
+        Entropy(i);
+        for (var k = 1; k < attr.length; k++) {
+            summentr += attr[k].entropy;
+        }
+        gains[i] = attr[0].entropy - summentr;
+        attr.removeAll();
+    }
+    console.log(gains);
+}
+Gain();
