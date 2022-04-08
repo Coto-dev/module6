@@ -49,7 +49,6 @@ class ForEntropy {
         this.res = 0;
     }
 }
-var attr = [];
 
 function getUniqueValues(index) {
     let values = dataset.map(data => data[index]);
@@ -57,7 +56,9 @@ function getUniqueValues(index) {
 }
 
 function countUniqueValues(group) {
+    var temp = [];
     temp = getUniqueValues(group);
+    var attr = [];
     for (var k = 0; k < temp.length; k++) {
         attr[k] = new ForEntropy(0, 0, temp[k], 0, 0);
     }
@@ -88,10 +89,12 @@ function countUniqueValues(group) {
         }
         attr[0].res = attr[0].negative + attr[0].positive;
     }
+    return attr;
 }
 
 function Entropy(group) {
-    countUniqueValues(group);
+    var attr = []
+    attr = countUniqueValues(group);
     var entropy = 0;
     var pp, pn;
     let positive;
@@ -107,6 +110,7 @@ function Entropy(group) {
             attr[i].entropy = entropy * (attr[i].res / attr[0].res);
         }
     }
+    return attr;
 }
 
 function getLog(x, y) {
@@ -115,14 +119,15 @@ function getLog(x, y) {
 
 function Gain() {
     var gains = [];
-    var summentr = 0;
     for (var i = 0; i < dataset[0].length - 1; i++) {
-        Entropy(i);
+        var attr = [];
+        attr = Entropy(i);
+        console.log(attr);
         for (var k = 1; k < attr.length; k++) {
-            summentr += attr[k].entropy;
+            var summentr = 0;
+            summentr = summentr + attr[k].entropy;
         }
         gains[i] = attr[0].entropy - summentr;
-        attr.removeAll();
     }
     console.log(gains);
 }
