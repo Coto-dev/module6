@@ -317,7 +317,6 @@ function CheckPath(current) {
   let x = current.x;
   let y = current.y;
 
-
   OpenList.splice(index, 1);
   CloseList.push(current);
   if (y - 1 >= 0 && Graph[y][x].value !== 0 && !isClosed(new Cell(x, y - 1))) {//пока не долшли до конца

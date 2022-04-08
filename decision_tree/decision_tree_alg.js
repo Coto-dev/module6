@@ -17,11 +17,12 @@ var Dataset = [
 ];
 
 class Node {
-    constructor(name, data, parent, childrens) {
+    constructor(name, data, predict, parent, childrens) {
         this.name = name;
         this.data = data;
         this.parent = parent;
         this.childrens = childrens;
+        this.predict = predict;
     }
 }
 
@@ -152,15 +153,48 @@ function CreateAndCopyDataset(data, dataset) {
     return data;
 }
 
+function changeData(attribut, group, dataset) {
+    var data = [];
+    for (var i = 0; i < dataset.length; i++) {
+        var count = 0;
+        for (var j = 0; j < dataset[0].length; j++) {
+            data[count] = new Array();
+            if (dataset[i][group] === attribut) {
+                for (var r = 0; r < dataset.length; r++) {
+                    for (var c = 0; c < dataset[0].length; c++) {
+                        data[count][c] = dataset[r][c];
+                    }
+                }
+                count++;
+            }
+
+        }
+    }
+    console.log(data);
+    return data;
+}
+
+function getRoot() {
+    Branch = new Node('root', Dataset);
+    var tree = new Tree(Branch);
+    return Branch;
+}
+
 function getBranch() {
     Branch = new Node('root', Dataset);
     var tree = new Tree(Branch);
+
     var attrIndex = getMaxGain(Branch);
-    console.log(attrIndex);
     var attr = [];
     attr = getUniqueValues(attrIndex, Branch.data);
-    Brunch = new Node(attr[0])
-    console.log(Brunch)
+
+    for (var i = 1; i < attr.length; i++) {
+        var data = [];
+        data = changeData(attr[i], attrIndex, Branch.data);
+
+        //Brunch = new Node(attr[i])
+        // getBranch();
+    }
 
 }
 getBranch();
