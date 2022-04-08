@@ -1,4 +1,4 @@
-var dataset = [
+var Dataset = [
     ["outlook", "temperature", "humidity", "windy", "play"],
     ["overcast", "hot", "high", "FALSE", "yes"],
     ["overcast", "cool", "normal", "TRUE", "yes"],
@@ -26,8 +26,8 @@ class Node {
 }
 
 class Tree {
-    constructor() {
-        this.root = new Node();
+    constructor(Branch) {
+        this.root = Branch;
     }
 }
 
@@ -41,14 +41,17 @@ class ForEntropy {
     }
 }
 
-function getUniqueValues(index) {
+function getUniqueValues(index, dataset) {
     let values = dataset.map(data => data[index]);
     return [...new Set(values)];
 }
 
-function countUniqueValues(group) {
+function countUniqueValues(group, Branch) {
+    var dataset = [];
+    dataset = CreateAndCopyDataset(dataset, Branch.data);
+
     var temp = [];
-    temp = getUniqueValues(group);
+    temp = getUniqueValues(group, dataset);
     var attr = [];
     for (var k = 0; k < temp.length; k++) {
         attr[k] = new ForEntropy(0, 0, temp[k], 0, 0);
@@ -83,9 +86,9 @@ function countUniqueValues(group) {
     return attr;
 }
 
-function Entropy(group) {
+function Entropy(group, Branch) {
     var attr = []
-    attr = countUniqueValues(group);
+    attr = countUniqueValues(group, Branch);
     var entropy = 0;
     var pp, pn;
     let positive;
@@ -102,7 +105,6 @@ function Entropy(group) {
             attr[i].entropy = entropy * (attr[i].res / attr[0].res);
         }
     }
-    console.log(attr);
     return attr;
 }
 
@@ -110,11 +112,11 @@ function getLog(x, y) {
     return Math.log(y) / Math.log(x);
 }
 
-function Gain() {
+function Gain(Branch) {
     var gains = [];
-    for (var i = 0; i < dataset[0].length - 1; i++) {
+    for (var i = 0; i < Branch.data[0].length - 1; i++) {
         var attr = [];
-        attr = Entropy(i);
+        attr = Entropy(i, Branch);
         var summentr = 0;
         for (var k = 1; k < attr.length; k++) {
             if (!Number.isNaN(attr[k].entropy)) {
@@ -126,24 +128,39 @@ function Gain() {
     return gains;
 }
 
-function getMaxGain() {
+function getMaxGain(Branch) {
     var gains = [];
-    gains = Gain();
+    gains = Gain(Branch);
     var maxgain = -1;
     for (var i = 0; i < gains.length; i++) {
         var maxgainattr;
         if (gains[i] > maxgain) {
             maxgainattr = i;
+            maxgain = gains[i];
         }
     }
     return maxgainattr;
 }
 
-function getBranch() {
-    var attrIndex;
-    attrIndex = getMaxGain();
-    var attr = [];
-    attr = getUniqueValues(attrIndex);
-    Brunch = new Node(attr[0],)
-    console.log(Brunch);
+function CreateAndCopyDataset(data, dataset) {
+    for (var i = 0; i < dataset.length; i++) {
+        data[i] = new Array;
+        for (var j = 0; j < dataset[0].length; j++) {
+            data[i][j] = dataset[i][j];
+        }
+    }
+    return data;
 }
+
+function getBranch() {
+    Branch = new Node('root', Dataset);
+    var tree = new Tree(Branch);
+    var attrIndex = getMaxGain(Branch);
+    console.log(attrIndex);
+    var attr = [];
+    attr = getUniqueValues(attrIndex, Branch.data);
+    Brunch = new Node(attr[0])
+    console.log(Brunch)
+
+}
+getBranch();
