@@ -43,12 +43,6 @@ function randomInteger(min, max) {
   return Math.floor(rand);
 }
 
-function rangeViewer() {
-  document.getElementById("MatrixSize").addEventListener("input", function () {
-    document.getElementById("rangeValue").textContent = document.getElementById("MatrixSize").value;
-  });
-}
-
 const erasers = {
   x: 0, y: 0
 }
@@ -226,6 +220,7 @@ function DrawFinish() {
   FinishButton = true;
   StartButton = false;
 }
+
 function DrawStart() {
   CreateWallButton = false;
   RemoveWallButton = false;
@@ -244,15 +239,6 @@ class Node {
     this.X = X;
     this.Y = Y;
   }
-  removeAll() {
-    this.value = 0;
-    this.f = 0;
-    this.g = 0;
-    this.h = 0;
-    this.X = 0;
-    this.Y = 0;
-  }
-
 }
 var current = [];
 function createMatrix() {
@@ -283,10 +269,10 @@ function GetDist(first, second) {
     return Math.abs(first.x - second.x) + Math.abs(first.y - second.y);//эвристическая функция манх
   }
   if (sel === 1) {
-    return Math.max(Math.abs(first.x - second.x), Math.abs(first.y - second.y));//эвристическая функция манх
+    return Math.max(Math.abs(first.x - second.x), Math.abs(first.y - second.y));//эвристическая функция 
   }
   if (sel === 2) {
-    return Math.pow(Math.pow(first.x - second.x, 2) + Math.pow(first.y - second.y, 2),1/2);//эвристическая функция манх
+    return Math.sqrt(Math.pow(first.x - second.x, 2) + Math.pow(first.y - second.y, 2));//эвристическая функция манх
   }
 }
 
@@ -399,7 +385,7 @@ function CheckPath(current) {
       Graph[y][x - 1].f = Graph[y][x - 1].h + Graph[y][x - 1].g;
     }
   }
-  //right
+  //
   if (x + 1 < MatrixSize && Graph[y][x + 1].value !== 0 && !isClosed(new Cell(x + 1, y))) {
     if (!isOpened(new Cell(x + 1, y))) {
       Graph[y][x + 1].X = x;
@@ -441,6 +427,11 @@ async function DrawCurrent() {
   if (OpenList[1].x !== finishCords.x || OpenList[1].y !== finishCords.y) {
     if ((matrix[OpenList[1].y][OpenList[1].x] === true) || (matrix[OpenList[1].y][OpenList[1].x] === 1)) {
       DrawInCanvas(CurrentColor, OpenList[1].x, OpenList[1].y);
+    }
+  }
+  if (cell.x !== finishCords.x || cell.y !== finishCords.y) {
+    if ((matrix[cell.y][cell.x] === true) || (matrix[cell.y][cell.x] === 1)) {
+      DrawInCanvas(CurrentColor, cell.x, cell.y);
     }
   }
   if (matrix[startCords.y + 1][startCords.x] !== false) {
