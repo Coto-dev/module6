@@ -31,9 +31,6 @@ class Tree {
     }
 }
 
-var Branch = getRoot();
-getBranch(Branch);
-
 class ForEntropy {
     constructor(positive, negative, value, entropy, res) {
         this.positive = positive;
@@ -43,6 +40,10 @@ class ForEntropy {
         this.res = res;
     }
 }
+
+var attr = [];
+var Branch = getRoot();
+getBranch(Branch);
 
 function getUniqueValues(index, dataset) {
     let values = dataset.map(data => data[index]);
@@ -55,9 +56,9 @@ function countUniqueValues(group, Branch) {
 
     var temp = [];
     temp = getUniqueValues(group, dataset);
-    var attr = [];
+
     for (var k = 0; k < temp.length; k++) {
-         attr[k] = new ForEntropy(0, 0, temp[k], 0, 0);
+        attr[k] = new ForEntropy(0, 0, temp[k], 0, 0);
     }
 
     for (var k = 1; k < temp.length; k++) {
@@ -86,12 +87,10 @@ function countUniqueValues(group, Branch) {
         }
         attr[0].res = attr[0].negative + attr[0].positive;
     }
-    return attr;
 }
 
 function Entropy(group, Branch) {
-    var attr = []
-    attr = countUniqueValues(group, Branch);
+    countUniqueValues(group, Branch);
     var entropy = 0;
     var pp, pn;
     let positive;
@@ -108,7 +107,6 @@ function Entropy(group, Branch) {
             attr[i].entropy = entropy * (attr[i].res / attr[0].res);
         }
     }
-    return attr;
 }
 
 function getLog(x, y) {
@@ -120,8 +118,7 @@ function Gain(Branch) {
     var data = [];
     data = CreateAndCopyDataset(data, Branch.data)
     for (var i = 0; i < Branch.data[0].length - 1; i++) {
-        var attr = [];
-        attr = Entropy(i, Branch);
+        Entropy(i, Branch);
         var summentr = 0;
         for (var k = 1; k < attr.length; k++) {
             if (!Number.isNaN(attr[k].entropy)) {
@@ -181,17 +178,16 @@ function getRoot() {
 function getBranch(Branch) {
     console.log(Branch);
     var attrIndex = getMaxGain(Branch);
-    var attr = [];
-    attr = getUniqueValues(attrIndex, Branch.data);
+    var attrib = [];
+    attrib = getUniqueValues(attrIndex, Branch.data);
 
     for (var i = 1; i < attr.length; i++) {
         var data = [];
-        data = changeData(attr[i], attrIndex, Branch.data);
+        data = changeData(attrib[i], attrIndex, Branch.data);
         while (data.length !== 1) {
-            Branch = new Node(attr[i], data, Branch, attr[0])
-            getBranch();
+            Branch = new Node(attrib[i], data, Branch, attrib[0])
             console.log(Branch);
+            getBranch();
         }
     }
-
 }
