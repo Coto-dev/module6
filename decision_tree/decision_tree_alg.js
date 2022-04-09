@@ -45,7 +45,7 @@ var breakFlag = false;
 var attr = [];
 var Branch = getRoot();
 getBranch(Branch);
-
+var tree;
 function getUniqueValues(index, dataset) {
     let values = dataset.map(data => data[index]);
     return [...new Set(values)];
@@ -167,13 +167,19 @@ function changeData(attribut, group, dataset) {
             }
             count++;
         }
+        else if (i === 0) {
+            for (var c = 0; c < dataset[0].length; c++) {
+                data[count][c] = dataset[i][c];
+            }
+            count++;
+        }
     }
     return data;
 }
 
 function getRoot() {
     var Branch = new Node('root', Dataset);
-    var tree = new Tree(Branch);
+    tree = new Tree(Branch);
     return Branch;
 }
 
@@ -202,21 +208,19 @@ function getBranch(Branch) {
     var attrIndex = getMaxGain(Branch);
     var attrib = [];
     attrib = getUniqueValues(attrIndex, Branch.data);
-
-    for (var i = 1; i < attr.length; i++) {
+    for (var i = 1; i < attrib.length; i++) {
         var data = [];
         data = changeData(attrib[i], attrIndex, Branch.data);
-        while (data.length !== 1) {
+        if (data.length !== 1) {
             Branch = new Node(attrib[i], data, Branch, attrib[0])
             if (!isLeaf(Branch)) {
-                console.log(Branch);
                 getBranch(Branch);
+                console.log(Branch);
             }
             else {
                 Branch.result = data[1][data[0].length - 1];
                 console.log(Branch);
                 Branch = Branch.predict;
-                break;
             }
         }
     }
