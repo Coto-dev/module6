@@ -17,11 +17,12 @@ var Dataset = [
 ];
 
 class Node {
-    constructor(name, data, predict, parent) {
+    constructor(name, data, predict, parent, result) {
         this.name = name;
         this.data = data;
         this.predict = predict;
         this.parent = parent;
+        this.result = result;
     }
 }
 
@@ -40,7 +41,7 @@ class ForEntropy {
         this.res = res;
     }
 }
-
+var breakFlag = false;
 var attr = [];
 var Branch = getRoot();
 getBranch(Branch);
@@ -107,6 +108,7 @@ function Entropy(group, Branch) {
             attr[i].entropy = entropy * (attr[i].res / attr[0].res);
         }
     }
+
 }
 
 function getLog(x, y) {
@@ -175,6 +177,25 @@ function getRoot() {
     return Branch;
 }
 
+function isLeaf(Branch) {
+    var data = [];
+    var county = 0;
+    var countn = 0;
+    data = CreateAndCopyDataset(data, Branch.data);
+    for (var i = 1; i < data.length; i++) {
+        if (data[i][data[0].length - 1] === 'yes') {
+            county++;
+        }
+        else if (data[i][data[0].length - 1] === 'no') {
+            countn++;
+        }
+    }
+    if ((countn === data.length - 1) || (county === data.length - 1)) {
+        return true;
+    }
+    else return false;
+}
+
 function getBranch(Branch) {
     console.log(Branch);
     var attrIndex = getMaxGain(Branch);
@@ -185,9 +206,16 @@ function getBranch(Branch) {
         var data = [];
         data = changeData(attrib[i], attrIndex, Branch.data);
         while (data.length !== 1) {
-            Branch = new Node(attrib[i], data, Branch, attrib[0])
-            console.log(Branch);
-            getBranch();
+            if (!isLeaf) {
+                Branch = new Node(attrib[i], data, Branch, attrib[0])
+                console.log(Branch);
+                getBranch(Branch);
+            }
+            else {
+                Branch.result = data[1][data[0].length-1];
+                console.log(Branch);
+            }
+            break;
         }
     }
 }
