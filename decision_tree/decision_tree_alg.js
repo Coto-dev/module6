@@ -179,9 +179,10 @@ function getRoot() {
 
 function isLeaf(Branch) {
     var data = [];
-    var county = 0;
-    var countn = 0;
+    var county = 1;
+    var countn = 1;
     data = CreateAndCopyDataset(data, Branch.data);
+    console.log(data);
     for (var i = 1; i < data.length; i++) {
         if (data[i][data[0].length - 1] === 'yes') {
             county++;
@@ -206,16 +207,17 @@ function getBranch(Branch) {
         var data = [];
         data = changeData(attrib[i], attrIndex, Branch.data);
         while (data.length !== 1) {
-            if (!isLeaf) {
-                Branch = new Node(attrib[i], data, Branch, attrib[0])
+            Branch = new Node(attrib[i], data, Branch, attrib[0])
+            if (!isLeaf(Branch)) {
                 console.log(Branch);
                 getBranch(Branch);
             }
             else {
-                Branch.result = data[1][data[0].length-1];
+                Branch.result = data[1][data[0].length - 1];
                 console.log(Branch);
+                Branch = Branch.predict;
+                break;
             }
-            break;
         }
     }
 }
