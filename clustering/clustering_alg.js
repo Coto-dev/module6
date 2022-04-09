@@ -37,23 +37,34 @@ function getRandomColor() {
 function getRandomFloat(min, max) {
     return Math.random() * (max - min) + min;
 }
-
-//   function delay(delayInms) {
-//     return new Promise(resolve => {
-//     setTimeout(() => {
-//     resolve(2);
-//     }, delayInms);
-//     });
-//     }
+function drawDots(){
+    ctx.fillStyle = "#1bc2ae";
+    for (let i=0;i<dots.length;i++){
+        ctx.beginPath();
+        ctx.arc(dots[i][0], dots[i][1], 15, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
+  function delay(delayInms) {
+    return new Promise(resolve => {
+    setTimeout(() => {
+    resolve(2);
+    }, delayInms);
+    });
+    }
 
 function ClusteringKmeans(centroid) {
+    
     centroidXY = [],
         dotsToCentroid = [],
         centroidXYBegin = [], step = 0,
         color = [], sumcentroidsX = [],
         sumcentroidsY = [], kolvoCenters = [];
-    if (centroid == 0)
-        centroid = prompt('Сколь центроидов?', 2)
+    if (centroid == 0){
+        centroid = prompt('Сколь центроидов?', 2);
+        ctx.clearRect(0, 0, 800, 730);
+    }
+    drawDots();
     if (dots.length < centroid) {
         alert('Ошибка');
         canvas.clear();
@@ -109,7 +120,7 @@ function ClusteringKmeans(centroid) {
 
                 ctx.beginPath();
                 ctx.fillStyle = color[dotsToCentroid[h]];
-                ctx.arc(dots[h][0], dots[h][1], 10, 0, Math.PI * 2);
+                ctx.arc(dots[h][0], dots[h][1], 15, 0, Math.PI * 2);
                 ctx.fill();
                 sumcentroidsX[dotsToCentroid[h]] += dots[h][0];
                 sumcentroidsY[dotsToCentroid[h]] += dots[h][1];
@@ -136,8 +147,11 @@ function ClusteringHierarchical(centroid) {
     var clusters = [], sumX = 0, sumY = 0, centroids = [];
     var minn = 1000, constI, constJ, count = 0;
     var h = [], container = [[]];
-    if (centroid == 0)
+    if (centroid == 0){
         centroid = prompt('Сколь центроидов?', 2);
+        ctx.clearRect(0, 0, 800, 730);
+    }
+    drawDots();
     if (dots.length < centroid) {
         alert('Ошибка');
         canvas.clear();
@@ -207,9 +221,9 @@ function ClusteringHierarchical(centroid) {
             //  ctx.fillStyle = color[constI];
             //  ctx.arc(dots[container[constI][i]][0] , dots[container[constI][i]][1] ,25,0,Math.PI*2);
             //  ctx.fill();
-            ctx.lineWidth = 10;
+            ctx.lineWidth = 5;
             ctx.strokeStyle = color[constI];
-            ctx.arc(dots[container[constI][i]][0], dots[container[constI][i]][1], 10, 0, Math.PI * 2);
+            ctx.arc(dots[container[constI][i]][0], dots[container[constI][i]][1], 15, 0, Math.PI * 2);
             ctx.stroke();
             //ctx.fill();
             sumX += dots[container[constI][i]][0];
@@ -258,8 +272,11 @@ function Ostnov(centroid) {
     }
 
 
-    if (centroid == 0)
+    if (centroid == 0){
         centroid = prompt('Сколь центроидов?', 2);
+        ctx.clearRect(0, 0, 800, 730);
+    }
+    drawDots();
     if (dots.length < centroid) {
         alert('Ошибка');
         canvas.clear();
@@ -343,11 +360,14 @@ function Ostnov(centroid) {
 
 }
 
-function match() {
+ function match() {
+    ctx.clearRect(0, 0, 800, 730);
+    drawDots();
     var centroid = prompt('Сколь центроидов?', 2)
+    Ostnov(centroid);
     ClusteringHierarchical(centroid);
     ClusteringKmeans(centroid);
-    Ostnov(centroid);
+  
 }
 
 

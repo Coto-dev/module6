@@ -2,8 +2,8 @@ var canvas = document.getElementById("canvas"),
     ctx = canvas.getContext("2d");
 var dots = [];
 constMutation = 10;
-ConstRelativeChance = 20;
-const populationSize = 50;
+ConstRelativeChance = 10;
+const populationSize = 100;
 canvas.addEventListener('mousedown', function (e) {
     var x, y;
     x = e.pageX - this.offsetLeft;
