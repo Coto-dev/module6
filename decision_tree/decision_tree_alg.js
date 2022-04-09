@@ -17,12 +17,11 @@ var Dataset = [
 ];
 
 class Node {
-    constructor(name, data, predict, parent, childrens) {
+    constructor(name, data, predict, parent) {
         this.name = name;
         this.data = data;
-        this.parent = parent;
-        this.childrens = childrens;
         this.predict = predict;
+        this.parent = parent;
     }
 }
 
@@ -31,6 +30,9 @@ class Tree {
         this.root = Branch;
     }
 }
+
+var Branch = getRoot();
+getBranch(Branch);
 
 class ForEntropy {
     constructor(positive, negative, value, entropy, res) {
@@ -55,7 +57,7 @@ function countUniqueValues(group, Branch) {
     temp = getUniqueValues(group, dataset);
     var attr = [];
     for (var k = 0; k < temp.length; k++) {
-        attr[k] = new ForEntropy(0, 0, temp[k], 0, 0);
+         attr[k] = new ForEntropy(0, 0, temp[k], 0, 0);
     }
 
     for (var k = 1; k < temp.length; k++) {
@@ -115,6 +117,8 @@ function getLog(x, y) {
 
 function Gain(Branch) {
     var gains = [];
+    var data = [];
+    data = CreateAndCopyDataset(data, Branch.data)
     for (var i = 0; i < Branch.data[0].length - 1; i++) {
         var attr = [];
         attr = Entropy(i, Branch);
@@ -155,35 +159,27 @@ function CreateAndCopyDataset(data, dataset) {
 
 function changeData(attribut, group, dataset) {
     var data = [];
+    var count = 0;
     for (var i = 0; i < dataset.length; i++) {
-        var count = 0;
-        for (var j = 0; j < dataset[0].length; j++) {
-            data[count] = new Array();
-            if (dataset[i][group] === attribut) {
-                for (var r = 0; r < dataset.length; r++) {
-                    for (var c = 0; c < dataset[0].length; c++) {
-                        data[count][c] = dataset[r][c];
-                    }
-                }
-                count++;
+        data[count] = new Array();
+        if (dataset[i][group] === attribut) {
+            for (var c = 0; c < dataset[0].length; c++) {
+                data[count][c] = dataset[i][c];
             }
-
+            count++;
         }
     }
-    console.log(data);
     return data;
 }
 
 function getRoot() {
-    Branch = new Node('root', Dataset);
+    var Branch = new Node('root', Dataset);
     var tree = new Tree(Branch);
     return Branch;
 }
 
-function getBranch() {
-    Branch = new Node('root', Dataset);
-    var tree = new Tree(Branch);
-
+function getBranch(Branch) {
+    console.log(Branch);
     var attrIndex = getMaxGain(Branch);
     var attr = [];
     attr = getUniqueValues(attrIndex, Branch.data);
@@ -191,10 +187,11 @@ function getBranch() {
     for (var i = 1; i < attr.length; i++) {
         var data = [];
         data = changeData(attr[i], attrIndex, Branch.data);
-
-        //Brunch = new Node(attr[i])
-        // getBranch();
+        while (data.length !== 1) {
+            Branch = new Node(attr[i], data, Branch, attr[0])
+            getBranch();
+            console.log(Branch);
+        }
     }
 
 }
-getBranch();
