@@ -17,12 +17,13 @@ var Dataset = [
 ];
 
 class Node {
-    constructor(name, data, predict, parent, result) {
+    constructor(name, data, predict, parent, result, child) {
         this.name = name;
         this.data = data;
         this.predict = predict;
         this.parent = parent;
         this.result = result;
+        this.child = [];
     }
 }
 
@@ -211,8 +212,11 @@ function getBranch(Branch) {
     for (var i = 1; i < attrib.length; i++) {
         var data = [];
         data = changeData(attrib[i], attrIndex, Branch.data);
-        if (data.length !== 1) {
-            Branch = new Node(attrib[i], data, Branch, attrib[0])
+        if (data.length !== 2) {
+
+            var buf = new Node(attrib[i], data, Branch, attrib[0]);
+            Branch.child[Branch.child.length] = buf;
+            Branch = buf;
             if (!isLeaf(Branch)) {
                 getBranch(Branch);
                 console.log(Branch);
