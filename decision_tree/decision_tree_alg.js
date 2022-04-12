@@ -69,17 +69,6 @@ var Dataset = [
     ["sunny", "mild", "normal", "TRUE", "yes"]
 ];
 
-var Dataset = [
-    ["Соперник" ,"Играем" ,"Лидеры" ,"Дождь" ,"Победа" ],
-    ["Выше" ,"Дома" ,"На месте" ,"Да" ,"no" ],
-    ["Выше" ,"Дома" ,"На месте" ,"Нет" ,"yes" ],
-    ["Выше" ,"Дома" ,"Пропускают" ,"Нет" ,"no" ],
-    ["Ниже" ,"Дома" ,"Пропускают" ,"Нет" ,"yes" ],
-    ["Ниже" ,"В гостях" ,"Пропускают" ,"Нет" ,"no" ],
-    ["Ниже" ,"Дома" ,"Пропускают" ,"Да" ,"yes" ],
-    ["Выше" ,"В гостях" ,"На месте" ,"Да" ,"no" ],
-    ["Ниже" ,"В гостях" ,"На месте" ,"Нет" ,"yes" ]
-];
 
 class Node {
     constructor(name, data, predict, parent, result, child) {
@@ -107,13 +96,14 @@ class ForEntropy {
         this.res = res;
     }
 }
-
+var ul = document.getElementById("root");
 var tree;
 var attr = [];
 
-function BuildTree(){
+function BuildTree() {
     var Branch = getRoot();
     getBranch(Branch);
+    drawTree(tree.root, ul);
 }
 
 function getUniqueValues(index, dataset) {
@@ -260,10 +250,10 @@ function isLeaf(Branch) {
     data = CreateAndCopyDataset(data, Branch.data);
     console.log(data);
     for (var i = 1; i < data.length; i++) {
-        if (data[i][data[0].length - 1] === 'yes') {
+        if (data[i][data[0].length - 1] === 'CAO') {
             county++;
         }
-        else if (data[i][data[0].length - 1] === 'no') {
+        else if (data[i][data[0].length - 1] === 'THAP') {
             countn++;
         }
     }
@@ -283,23 +273,33 @@ function getBranch(Branch) {
         data = changeData(attrib[i], attrIndex, Branch.data);
         var buf = new Node(attrib[i], data, Branch, attrib[0]);
         Branch.child[Branch.child.length] = buf;
-        getBranch(Branch.child[i-1]);
+        getBranch(Branch.child[i - 1]);
+    }
+}
+
+function DetourTree() {
+
+}
+
+
+function drawTree(node, treeEl) {
+    let li = document.createElement("li");
+    let a = document.createElement("a");
+    a.href = "#";
+    a.textContent = node.name;
+    li.appendChild(a);
+    treeEl.appendChild(li);
+
+    if (node.child.length === 0) {
+        return;
     }
 
-    // for(var i = 1; i<attrib.length; i++) {
-    //     if (data.length !== 2) {
-    //         var buf = new Node(attrib[i], data, Branch, attrib[0]);
-    //         Branch.child[Branch.child.length] = buf;
-    //         Branch=buf;
-    //         if (!isLeaf(Branch)) {
-    //             getBranch(Branch);
-    //             console.log(Branch);
-    //         }
-    //         else {
-    //             Branch.result = data[1][data[0].length - 1];
-    //             console.log(Branch);
-    //             Branch = Branch.predict;
-    //         }
-    //     }
-    // }
+    let ul = document.createElement("ul");
+    li.appendChild(ul);
+
+    for (let i = node.child.length - 1; i >= 0; i--) {
+        if (node.child[i].name !== undefined) {
+            drawTree(node.child[i], ul);
+        }
+    }
 }

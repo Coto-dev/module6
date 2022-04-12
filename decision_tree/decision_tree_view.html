@@ -25,18 +25,21 @@
   <div class="float-container">
 
     <div class="float-child1">
-      <canvas id="canvas" width="800px" height="730px"></canvas>
+      <div class="tree">
+        <ul id="root">
+        
+        </ul>
+        </div>
     </div>
 
     <div class="float-child2">
       <div class="forbutton">
         <button class="butt" onclick="BuildTree()">Построить дерево</button>
         <button class="butt">Показать решение</button>
-        <div class="butt">
-          <label class="butt" for="upload">Выбрать файл</label>
-          <span class="butt">Файл не выбран</span>
-          <input type="file" id='upload' name="upload" accept=".csv, .txt">
-        </div>
+        <label class="forlabel" for="upload">Выбрать файл:</label>
+        <p> <input type="file" id='upload' name="upload" accept=".csv, .txt">
+        <p> <label class="forlabel" for="upload">Ввести вручную:</label>
+        <p> <input type="text" id="textdata">
       </div>
     </div>
 
