@@ -52,6 +52,18 @@ function transformToMatrix(array) {
 }
 
 var Dataset = [
+    ["Соперник", "Играем", "Лидеры", "Дождь", "Победа"],
+    ["Выше", "Дома", "На месте", "Да", "Нет"],
+    ["Выше", "Дома", "На месте", "Нет", "Да"],
+    ["Выше", "Дома", "Пропускают", "Нет", "Нет"],
+    ["Ниже", "Дома", "Пропускают", "Нет", "Да"],
+    ["Ниже", "В гостях", "Пропускают", "Нет", "Нет"],
+    ["Ниже", "Дома", "Пропускают", "Да", "Да"],
+    ["Выше", "В гостях", "На месте", "Да", "Нет"],
+    ["Ниже", "В гостях", "На месте", "Нет", "Да"]
+];
+
+var Dataset = [
     ["outlook", "temperature", "humidity", "windy", "play"],
     ["overcast", "hot", "high", "FALSE", "yes"],
     ["overcast", "cool", "normal", "TRUE", "yes"],
@@ -69,6 +81,25 @@ var Dataset = [
     ["sunny", "mild", "normal", "TRUE", "yes"]
 ];
 
+var Dataset = [
+    ["usd", "lamphat", "nctt", "slkt", "play "],
+    ["TANG", "GIAM", "THAP", "TB", "THAP "],
+    ["TANG", "TANG", "THAP", "TB", "CAO "],
+    ["TANG", "ON DINH", "CAO", "TB", "CAO "],
+    ["TANG", "TANG", "THAP", "THAP", "CAO "],
+    ["TANG", "GIAM", "TB", "THAP", "CAO "],
+    ["TANG", "GIAM", "CAO", "THAP", "THAP "],
+    ["TB", "ON DINH", "TB", "CAO", "THAP "],
+    ["TB", "GIAM", "THAP", "CAO", "THAP "],
+    ["TB", "TANG", "TB", "THAP", "THAP "],
+    ["TB", "ON DINH", "CAO", "TB", "CAO "],
+    ["TB", "GIAM", "CAO", "CAO", "CAO "],
+    ["GIAM", "ON DINH", "CAO", "THAP", "THAP "],
+    ["GIAM", "GIAM", "CAO", "CAO", "CAO "],
+    ["GIAM", "TANG", "CAO", "TB", "THAP "],
+    ["GIAM", "TANG", "THAP", "THAP", "THAP "],
+    ["GIAM", "ON DINH", "CAO", "TB", "CAO "]
+];
 
 class Node {
     constructor(name, data, predict, parent, result, child) {
@@ -96,7 +127,10 @@ class ForEntropy {
         this.res = res;
     }
 }
+
 var ul = document.getElementById("root");
+const posstr = "CAO ";
+const negstr = "THAP ";
 var tree;
 var attr = [];
 
@@ -127,10 +161,10 @@ function countUniqueValues(group, Branch) {
         let neg = 1;
         for (var i = 0; i < dataset.length; i++) {
             if (dataset[i][group] === attr[k].value) {
-                if (dataset[i][dataset[0].length - 1] === "yes") {
+                if (dataset[i][dataset[0].length - 1] === posstr) {
                     attr[k].positive = pos++;
                 }
-                if (dataset[i][dataset[0].length - 1] === "no") {
+                if (dataset[i][dataset[0].length - 1] === negstr) {
                     attr[k].negative = neg++;
                 }
             }
@@ -140,10 +174,10 @@ function countUniqueValues(group, Branch) {
     let pos = 1;
     let neg = 1;
     for (var i = 0; i < dataset.length; i++) {
-        if (dataset[i][dataset[0].length - 1] === "yes") {
+        if (dataset[i][dataset[0].length - 1] === posstr) {
             attr[0].positive = pos++;
         }
-        if (dataset[i][dataset[0].length - 1] === "no") {
+        if (dataset[i][dataset[0].length - 1] === negstr) {
             attr[0].negative = neg++;
         }
         attr[0].res = attr[0].negative + attr[0].positive;
@@ -272,6 +306,7 @@ function getBranch(Branch) {
         var data = [];
         data = changeData(attrib[i], attrIndex, Branch.data);
         var buf = new Node(attrib[i], data, Branch, attrib[0]);
+
         Branch.child[Branch.child.length] = buf;
         getBranch(Branch.child[i - 1]);
     }
@@ -280,7 +315,6 @@ function getBranch(Branch) {
 function DetourTree() {
 
 }
-
 
 function drawTree(node, treeEl) {
     let li = document.createElement("li");
