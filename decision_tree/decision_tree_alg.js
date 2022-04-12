@@ -1,56 +1,3 @@
-function parseCSVtoMatrix(strCSV) {
-    var buff = parseCSV(strCSV);
-    return transformToMatrix(buff);
-}
-
-function parseCSVtoArray(strCSV) {
-    let data = []
-    let regex = /("([^"]|"")*"|([^",\n]*))?(,|\n)?/
-    let size = 0;
-    let check = false;
-    while (regex.test) {
-        let buff = regex.exec(strCSV);
-        if (buff[0] === "") {
-            break;
-        }
-        let current = buff[1]
-        if (buff[1][0] === '"') {
-            current = "";
-            for (let i = 1; i < buff[1].length - 1; i++) {
-                current += buff[1][i];
-            }
-        }
-        data[data.length] = current
-        if ((!check) && (buff[4] === '\n')) {
-            check = true;
-            size++;
-        }
-        else {
-            if (!check) {
-                size++;
-            }
-        }
-        strCSV = strCSV.replace(regex, "")
-    }
-
-    data[data.length] = size;
-    return data;
-}
-
-function transformToMatrix(array) {
-    var matrix = []
-    var count = 0;
-    for (var i = 0; i < (array.length - 1) / array[array.length - 1]; i++) {
-        matrix[i] = []
-        for (var j = 0; j < array[array.length - 1]; j++) {
-            matrix[i][j] = array[count];
-            count++;
-        }
-    }
-
-    return matrix;
-}
-
 var Dataset = [
     ["Соперник", "Играем", "Лидеры", "Дождь", "Победа"],
     ["Выше", "Дома", "На месте", "Да", "Нет"],
@@ -128,14 +75,17 @@ class ForEntropy {
     }
 }
 
-var ul = document.getElementById("root");
+
 const posstr = "CAO ";
 const negstr = "THAP ";
-var tree;
+
 var attr = [];
+var tree;
 
 function BuildTree() {
+    tree = new Tree(null);
     var Branch = getRoot();
+    var ul = document.getElementById("root");
     getBranch(Branch);
     drawTree(tree.root, ul);
 }
@@ -291,7 +241,12 @@ function isLeaf(Branch) {
             countn++;
         }
     }
-    if ((countn === data.length - 1) || (county === data.length - 1)) {
+    if (countn === data.length - 1) {
+        Branch.result = "yes";
+        return true;
+    }
+    else if (county === data.length - 1) {
+        Branch.result = "no";
         return true;
     }
     else return false;
@@ -308,7 +263,12 @@ function getBranch(Branch) {
         var buf = new Node(attrib[i], data, Branch, attrib[0]);
 
         Branch.child[Branch.child.length] = buf;
-        getBranch(Branch.child[i - 1]);
+        if (!isLeaf(Branch)) {
+            getBranch(Branch.child[i - 1]);
+        }
+        else {
+
+        }
     }
 }
 
