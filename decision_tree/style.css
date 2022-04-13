@@ -27,12 +27,12 @@ body {
 }
 
 .text{
-    color:  #049898;
-     
+    color:  #049898;   
+    margin-top: 35px;
 }
 
 .Text{
-    margin-top: 70px;
+    margin-top: 50px;
     margin-left: 30px;
     font-size: x-large;
     color:  #049898;
@@ -266,6 +266,3 @@ right connector from last child*/
 .tree li a:hover+ul ul::before{
 	border-color:  #94a0b4;
 }
-
-/*Thats all. I hope you enjoyed it.
-Thanks :)*/

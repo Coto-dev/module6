@@ -47,6 +47,5 @@ function transformToMatrix(array) {
             count++;
         }
     }
-
     return matrix;
 }

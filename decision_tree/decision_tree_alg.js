@@ -1,16 +1,4 @@
 var Dataset = [
-    ["Соперник", "Играем", "Лидеры", "Дождь", "Победа"],
-    ["Выше", "Дома", "На месте", "Да", "Нет"],
-    ["Выше", "Дома", "На месте", "Нет", "Да"],
-    ["Выше", "Дома", "Пропускают", "Нет", "Нет"],
-    ["Ниже", "Дома", "Пропускают", "Нет", "Да"],
-    ["Ниже", "В гостях", "Пропускают", "Нет", "Нет"],
-    ["Ниже", "Дома", "Пропускают", "Да", "Да"],
-    ["Выше", "В гостях", "На месте", "Да", "Нет"],
-    ["Ниже", "В гостях", "На месте", "Нет", "Да"]
-];
-
-var Dataset = [
     ["outlook", "temperature", "humidity", "windy", "play"],
     ["overcast", "hot", "high", "FALSE", "yes"],
     ["overcast", "cool", "normal", "TRUE", "yes"],
@@ -48,6 +36,18 @@ var Dataset = [
     ["GIAM", "ON DINH", "CAO", "TB", "CAO "]
 ];
 
+var Dataset = [
+    ["Соперник", "Играем", "Лидеры", "Дождь", "Победа"],
+    ["Выше", "Дома", "На месте", "Идет", "Нет"],
+    ["Выше", "Дома", "На месте", "Не идет", "Да"],
+    ["Выше", "Дома", "Пропускают", "Не идет", "Нет"],
+    ["Ниже", "Дома", "Пропускают", "Не идет", "Да"],
+    ["Ниже", "В гостях", "Пропускают", "Не идет", "Нет"],
+    ["Ниже", "Дома", "Пропускают", "Идет", "Да"],
+    ["Выше", "В гостях", "На месте", "Идет", "Нет"],
+    ["Ниже", "В гостях", "На месте", "Не идет", "Да"]
+];
+
 class Node {
     constructor(name, data, predict, parent, result, child) {
         this.name = name;
@@ -75,15 +75,13 @@ class ForEntropy {
     }
 }
 
-
-const posstr = "CAO ";
-const negstr = "THAP ";
+const posstr = "Да";
+const negstr = "Нет";
 
 var attr = [];
 var tree;
 
 function BuildTree() {
-    tree = new Tree(null);
     var Branch = getRoot();
     var ul = document.getElementById("root");
     getBranch(Branch);
@@ -232,45 +230,38 @@ function isLeaf(Branch) {
     var county = 1;
     var countn = 1;
     data = CreateAndCopyDataset(data, Branch.data);
-    console.log(data);
     for (var i = 1; i < data.length; i++) {
-        if (data[i][data[0].length - 1] === 'CAO') {
+        if (data[i][data[0].length - 1] === posstr) {
             county++;
         }
-        else if (data[i][data[0].length - 1] === 'THAP') {
+        else if (data[i][data[0].length - 1] === negstr) {
             countn++;
         }
     }
     if (countn === data.length - 1) {
-        Branch.result = "yes";
-        return true;
+        Branch.result = posstr;
     }
     else if (county === data.length - 1) {
-        Branch.result = "no";
-        return true;
+        Branch.result = negstr;
     }
-    else return false;
+    return Branch;
 }
 
 function getBranch(Branch) {
-    console.log(Branch);
     var attrIndex = getMaxGain(Branch);
     var attrib = [];
     attrib = getUniqueValues(attrIndex, Branch.data);
+    Branch = isLeaf(Branch);
+    console.log(Branch);
     for (var i = 1; i < attrib.length; i++) {
         var data = [];
         data = changeData(attrib[i], attrIndex, Branch.data);
         var buf = new Node(attrib[i], data, Branch, attrib[0]);
-
         Branch.child[Branch.child.length] = buf;
-        if (!isLeaf(Branch)) {
-            getBranch(Branch.child[i - 1]);
-        }
-        else {
-
-        }
+        getBranch(Branch.child[i - 1]);
     }
 }
+
 
 function DetourTree() {
 
@@ -280,7 +271,13 @@ function drawTree(node, treeEl) {
     let li = document.createElement("li");
     let a = document.createElement("a");
     a.href = "#";
-    a.textContent = node.name;
+    if (node.result === undefined) {
+        a.textContent = node.name;
+    }
+    else{
+        a.textContent = node.name + "→" + node.result;
+    }
+
     li.appendChild(a);
     treeEl.appendChild(li);
 
