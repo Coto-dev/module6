@@ -1,6 +1,7 @@
 var canvas = document.getElementById("canvas"),
     ctx = canvas.getContext("2d");
 var dots = [];
+var flag = true;
 constMutation = 10;
 ConstRelativeChance = 10;
 const populationSize = 100;
@@ -15,12 +16,23 @@ canvas.addEventListener('mousedown', function (e) {
     ctx.fillStyle = Fcolor;
     ctx.fill();
 });
-function clear() {
+function clearFull() {
     ctx.clearRect(0, 0, 800, 730);
     ctx.fillStyle = "black";
     dots = [];
-    alert('1');
+    flag = false;
 }
+
+var counterVal = 0;
+function updateCounter() {
+    updateDisplay(++counterVal);
+}
+
+function updateDisplay(val) {
+    document.getElementById("counter-label").innerHTML = val;
+}
+
+
 function getRandom(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -33,17 +45,34 @@ function delay(delayInms) {
         }, delayInms);
     });
 }
+function drawDots(){
+    ctx.fillStyle = "#1bc2ae";
+    for (let i=0;i<dots.length;i++){
+        ctx.beginPath();
+        ctx.arc(dots[i][0], dots[i][1], 15, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
+function stopAll(){
+    flag = false;
+}
 async function start() {
+    counterVal = 0;
+    if (dots.length>1){
+    flag = true;
     var population = [], count = 0;
     createPopulation(population);
-    while (count < 10000) {
+    while (flag) {
         getCross(population);
         population = selection(population);
         createPath(population[0]);
-        //console.log(population);
+
         count++;
-        await delay(10);
+        await delay(5);
+        updateCounter();
     }
+}
+else alert('Fail');
 }
 
 function getCross(population) {
@@ -69,11 +98,10 @@ function getCross(population) {
     }
 
     for (let i = 0; i < IndexParents.length - 1; i += 2) {
-        //console.log(population[i],' ',population[i+1]);
+
         childFirst = [], childSecond = [];
         for (let indexX = 0; indexX < parentSizeOne; indexX++) {
-            //    console.log(population[i][indexX]);
-            //     console.log('-----------------');
+
             childFirst.push(population[i][indexX])
         }
         for (let indexY = parentSizeOne; indexY < dots.length; indexY++) {
@@ -100,8 +128,7 @@ function getCross(population) {
             if (!childSecond.includes(population[i + 1][indexX]))
                 childSecond.push(population[i + 1][indexX])
         }
-        // console.log(childFirst);
-        // console.log(childSecond);
+
         if (getRandom(0, 100) > constMutation)
             childFirst = mutation(childFirst);
         if (getRandom(0, 100) > constMutation)
@@ -110,15 +137,12 @@ function getCross(population) {
         childSecond = findPath(childSecond);
         population.push(childFirst);
         population.push(childSecond);
-        //    console.log(childFirst);
-        //    console.log(childSecond);
-        //child = findPath(childFirst);
-        //    console.log('-------------------------------');
+
     }
 
 
 
-    //console.log(IndexParents);
+
 }
 
 
@@ -150,13 +174,10 @@ function selection(population) {
 
                 gen = population[i];
                 constI = i;
-                // console.log(gen);
+               
             }
         }
-        // if (population.includes(gen)){
-        // delete population[constI];
-        // console.log(newPopulation);
-        // }
+ 
         newPopulation.push(gen);
 
     }
@@ -217,9 +238,9 @@ function createPopulation(population) {
 }
 function findPath(randomMass) {
     var sumOfPaths = 0, x = 0, y = 0, s = 0;
-    // console.log(randomMass);
+  
     for (let i = 0; i < randomMass.length; i++) {
-        // console.log(randomMass[i]);
+       
         x = dots[randomMass[i]][0];
         y = dots[randomMass[i]][1];
         if (i < randomMass.length - 1)
@@ -227,7 +248,7 @@ function findPath(randomMass) {
         else s = Math.sqrt(((x - dots[randomMass[0]][0]) ** 2) + ((y - dots[randomMass[0]][1]) ** 2));
         sumOfPaths += s;
     }
-    // console.log(sumOfPaths);
+  
     randomMass.push(sumOfPaths)
     return randomMass;
 
