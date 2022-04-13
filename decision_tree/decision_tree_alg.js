@@ -16,6 +16,19 @@ var Dataset = [
     ["sunny", "mild", "normal", "TRUE", "yes"]
 ];
 
+
+
+var Dataset = [
+    ["Соперник", "Играем", "Лидеры", "Дождь", "Победа"],
+    ["Выше", "Дома", "На месте", "Идет", "Нет"],
+    ["Выше", "Дома", "На месте", "Не идет", "Да"],
+    ["Выше", "Дома", "Пропускают", "Не идет", "Нет"],
+    ["Ниже", "Дома", "Пропускают", "Не идет", "Да"],
+    ["Ниже", "В гостях", "Пропускают", "Не идет", "Нет"],
+    ["Ниже", "Дома", "Пропускают", "Идет", "Да"],
+    ["Выше", "В гостях", "На месте", "Идет", "Нет"],
+    ["Ниже", "В гостях", "На месте", "Не идет", "Да"]
+];
 var Dataset = [
     ["usd", "lamphat", "nctt", "slkt", "play "],
     ["TANG", "GIAM", "THAP", "TB", "THAP "],
@@ -34,18 +47,6 @@ var Dataset = [
     ["GIAM", "TANG", "CAO", "TB", "THAP "],
     ["GIAM", "TANG", "THAP", "THAP", "THAP "],
     ["GIAM", "ON DINH", "CAO", "TB", "CAO "]
-];
-
-var Dataset = [
-    ["Соперник", "Играем", "Лидеры", "Дождь", "Победа"],
-    ["Выше", "Дома", "На месте", "Идет", "Нет"],
-    ["Выше", "Дома", "На месте", "Не идет", "Да"],
-    ["Выше", "Дома", "Пропускают", "Не идет", "Нет"],
-    ["Ниже", "Дома", "Пропускают", "Не идет", "Да"],
-    ["Ниже", "В гостях", "Пропускают", "Не идет", "Нет"],
-    ["Ниже", "Дома", "Пропускают", "Идет", "Да"],
-    ["Выше", "В гостях", "На месте", "Идет", "Нет"],
-    ["Ниже", "В гостях", "На месте", "Не идет", "Да"]
 ];
 
 class Node {
@@ -75,8 +76,8 @@ class ForEntropy {
     }
 }
 
-const posstr = "Да";
-const negstr = "Нет";
+const posstr = "CAO ";
+const negstr = "THAP ";
 
 var attr = [];
 var tree;
@@ -227,8 +228,8 @@ function getRoot() {
 
 function isLeaf(Branch) {
     var data = [];
-    var county = 1;
-    var countn = 1;
+    var county = 0;
+    var countn = 0;
     data = CreateAndCopyDataset(data, Branch.data);
     for (var i = 1; i < data.length; i++) {
         if (data[i][data[0].length - 1] === posstr) {
@@ -238,25 +239,37 @@ function isLeaf(Branch) {
             countn++;
         }
     }
-    if (countn === data.length - 1) {
-        Branch.result = posstr;
+    if (data[data.length - 1][1] === undefined) {
+        if (countn === data.length - 2) {
+            return true;
+        }
+        else if (county === data.length - 2) {
+            return true;
+        }
     }
-    else if (county === data.length - 1) {
-        Branch.result = negstr;
+    else {
+        if (countn === data.length - 1) {
+            return true;
+        }
+        else if (county === data.length - 1) {
+            return true;
+        }
     }
-    return Branch;
+
+    return false;
 }
 
 function getBranch(Branch) {
     var attrIndex = getMaxGain(Branch);
     var attrib = [];
     attrib = getUniqueValues(attrIndex, Branch.data);
-    Branch = isLeaf(Branch);
     console.log(Branch);
+
     for (var i = 1; i < attrib.length; i++) {
         var data = [];
         data = changeData(attrib[i], attrIndex, Branch.data);
         var buf = new Node(attrib[i], data, Branch, attrib[0]);
+
         Branch.child[Branch.child.length] = buf;
         getBranch(Branch.child[i - 1]);
     }
@@ -271,10 +284,27 @@ function drawTree(node, treeEl) {
     let li = document.createElement("li");
     let a = document.createElement("a");
     a.href = "#";
+    var data = [];
+    data = CreateAndCopyDataset(data, node.data);
+
+    if (data[data.length - 1][1] === undefined) {
+        if (data.length === 3) {
+            node.result = data[1][data[0].length - 1];
+        }
+    }
+    else {
+        if (data.length === 2) {
+            node.result = data[1][data[0].length - 1];
+        }
+    }
+    if (isLeaf(node)) {
+        node.result = data[1][data[0].length - 1];
+    }
+
     if (node.result === undefined) {
         a.textContent = node.name;
     }
-    else{
+    else {
         a.textContent = node.name + "→" + node.result;
     }
 
