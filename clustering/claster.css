@@ -1,5 +1,6 @@
 html, body {
-    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 body {
@@ -28,7 +29,8 @@ body {
 
 .text{
     color:  #049898;
-     
+     display: flex;
+
 }
 
 .Text{
@@ -39,15 +41,15 @@ body {
 }
 
 .forbutton{
-  width: 500px;
-  height: 730px;
+    display: flex;
+    flex-direction: column;
   background-color: #0B0C10;
   border-radius: 25px;
 }
 
 .butt{
-    margin-top: 50px;
-    margin-left: 30px;
+    margin-top: 20px;
+    margin-left: 100px;
     margin-right:3%;
     height:50px;
     width:180px;
@@ -77,16 +79,24 @@ body {
 }
 
 .float-container {
+    /* padding-top: 150px; */
+    display: flex;
+
+    
     margin-left: 230px;
 }
 
 .float-child1{
-    float: left;
+    display: flex;
+    
 }
 
 .float-child2{
-    float: right;
-    margin-right:100px;
+    display: flex;
+    align-items: flex-start;
+
+    /* float: right;
+    margin-right:100px; */
 }
 
 .sidenav {
@@ -114,24 +124,10 @@ body {
 }
 
 .main {
+    display: flex;
+    justify-content: flex-start;
     margin-left: 190px; 
     font-size: 28px; 
     padding: 0px 10px;
 }
 
-@media screen and (max-height: 450px) {
-    .sidenav {padding-top: 15px;}
-    .sidenav a {font-size: 18px;}
-}
-
-@keyframes gradient {
-    0% {
-        background-position: 0 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0 50%;
-    }
-}
