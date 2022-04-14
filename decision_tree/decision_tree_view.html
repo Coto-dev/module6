@@ -8,7 +8,6 @@
 </head>
 
 <body>
-
   <div class="sidenav">
     <a href="../index.html">На Главную</a>
     <a href="../a-star/a-star_view.html">А*</a>
@@ -23,7 +22,6 @@
     <h2 class="text">Дерево решений</h2>
   </div>
   <div class="float-container">
-
     <div class="float-child1">
       <div class="tree">
         <ul id="root">
@@ -34,17 +32,19 @@
     <div class="float-child2">
       <div class="forbutton">
         <button class="butt" onclick="BuildTree()">Построить дерево</button>
-        <button class="butt">Показать решение</button>
-        <a href="#" id="clear"></a>
-        <label class="forlabel" for="upload">Выбрать файл:</label>
+        <button class="butt" onclick="DetourButton()">Показать решение</button>
+        <button class="butt" onclick="ClearTree()">Очистить</button>
+        <p class="forlabel">Выбрать файл:</p>
         <p> <input type="file" id='upload' name="upload" accept=".csv, .txt">
         <p> <label class="forlabel" for="upload">Ввести вручную:</label>
         <p> <input type="text" id="textdata">
+          <input type="submit" class="butt" value="отправить"/>
       </div>
     </div>
 
   </div>
   <script src="decision_tree_alg.js"></script>
+  <script src="parser.js"></script>
 </body>
 
 </html>

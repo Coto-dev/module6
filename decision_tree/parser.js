@@ -1,3 +1,10 @@
+var upload = document.getElementById("upload");
+const textInput = document.getElementById('textInput');
+
+var files = upload.files;
+var test = document.getElementById('textdata');
+console.log(test);
+
 function parseCSVtoMatrix(strCSV) {
     var buff = parseCSV(strCSV);
     return transformToMatrix(buff);

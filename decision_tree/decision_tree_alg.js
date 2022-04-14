@@ -1,24 +1,4 @@
 var Dataset = [
-    ["outlook", "temperature", "humidity", "windy", "play"],
-    ["overcast", "hot", "high", "FALSE", "yes"],
-    ["overcast", "cool", "normal", "TRUE", "yes"],
-    ["overcast", "mild", "high", "TRUE", "yes"],
-    ["overcast", "hot", "normal", "FALSE", "yes"],
-    ["rainy", "mild", "high", "FALSE", "yes"],
-    ["rainy", "cool", "normal", "FALSE", "yes"],
-    ["rainy", "cool", "normal", "TRUE", "no"],
-    ["rainy", "mild", "normal", "FALSE", "yes"],
-    ["rainy", "mild", "high", "TRUE", "no"],
-    ["sunny", "hot", "high", "FALSE", "no"],
-    ["sunny", "hot", "high", "TRUE", "no"],
-    ["sunny", "mild", "high", "FALSE", "no"],
-    ["sunny", "cool", "normal", "FALSE", "yes"],
-    ["sunny", "mild", "normal", "TRUE", "yes"]
-];
-
-
-
-var Dataset = [
     ["Соперник", "Играем", "Лидеры", "Дождь", "Победа"],
     ["Выше", "Дома", "На месте", "Идет", "Нет"],
     ["Выше", "Дома", "На месте", "Не идет", "Да"],
@@ -28,25 +8,6 @@ var Dataset = [
     ["Ниже", "Дома", "Пропускают", "Идет", "Да"],
     ["Выше", "В гостях", "На месте", "Идет", "Нет"],
     ["Ниже", "В гостях", "На месте", "Не идет", "Да"]
-];
-var Dataset = [
-    ["usd", "lamphat", "nctt", "slkt", "play "],
-    ["TANG", "GIAM", "THAP", "TB", "THAP "],
-    ["TANG", "TANG", "THAP", "TB", "CAO "],
-    ["TANG", "ON DINH", "CAO", "TB", "CAO "],
-    ["TANG", "TANG", "THAP", "THAP", "CAO "],
-    ["TANG", "GIAM", "TB", "THAP", "CAO "],
-    ["TANG", "GIAM", "CAO", "THAP", "THAP "],
-    ["TB", "ON DINH", "TB", "CAO", "THAP "],
-    ["TB", "GIAM", "THAP", "CAO", "THAP "],
-    ["TB", "TANG", "TB", "THAP", "THAP "],
-    ["TB", "ON DINH", "CAO", "TB", "CAO "],
-    ["TB", "GIAM", "CAO", "CAO", "CAO "],
-    ["GIAM", "ON DINH", "CAO", "THAP", "THAP "],
-    ["GIAM", "GIAM", "CAO", "CAO", "CAO "],
-    ["GIAM", "TANG", "CAO", "TB", "THAP "],
-    ["GIAM", "TANG", "THAP", "THAP", "THAP "],
-    ["GIAM", "ON DINH", "CAO", "TB", "CAO "]
 ];
 
 class Node {
@@ -76,9 +37,9 @@ class ForEntropy {
     }
 }
 
-const posstr = "CAO ";
-const negstr = "THAP ";
-
+const posstr = "Да";
+const negstr = "Нет";
+var List = document.getElementById('root');
 var attr = [];
 var tree;
 
@@ -275,9 +236,18 @@ function getBranch(Branch) {
     }
 }
 
+function DetourButton() {
+    DetourTree(tree.root);
+}
 
-function DetourTree() {
-
+function DetourTree(node) {
+    for (let i = node.child.length - 1; i >= 0; i--) {
+        if (node.child[i].name !== undefined) {
+            //if (node.child[i].name ===) {
+                DetourTree(node.child[i], ul);
+            //}
+        }
+    }
 }
 
 function drawTree(node, treeEl) {
@@ -287,16 +257,6 @@ function drawTree(node, treeEl) {
     var data = [];
     data = CreateAndCopyDataset(data, node.data);
 
-    if (data[data.length - 1][1] === undefined) {
-        if (data.length === 3) {
-            node.result = data[1][data[0].length - 1];
-        }
-    }
-    else {
-        if (data.length === 2) {
-            node.result = data[1][data[0].length - 1];
-        }
-    }
     if (isLeaf(node)) {
         node.result = data[1][data[0].length - 1];
     }
@@ -323,4 +283,8 @@ function drawTree(node, treeEl) {
             drawTree(node.child[i], ul);
         }
     }
+}
+
+function ClearTree() {
+    List.innerHTML = '';
 }
