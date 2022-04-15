@@ -3,7 +3,12 @@ const textInput = document.getElementById('textInput');
 
 var files = upload.files;
 var test = document.getElementById('textdata');
-console.log(test);
+
+function DetourButton() {
+    var data = [];
+    data = parseCSVtoArray(test.value);
+    DetourTree(tree.root, data);
+}
 
 function parseCSVtoMatrix(strCSV) {
     var buff = parseCSV(strCSV);

@@ -1,13 +1,21 @@
 var Dataset = [
-    ["Соперник", "Играем", "Лидеры", "Дождь", "Победа"],
-    ["Выше", "Дома", "На месте", "Идет", "Нет"],
-    ["Выше", "Дома", "На месте", "Не идет", "Да"],
-    ["Выше", "Дома", "Пропускают", "Не идет", "Нет"],
-    ["Ниже", "Дома", "Пропускают", "Не идет", "Да"],
-    ["Ниже", "В гостях", "Пропускают", "Не идет", "Нет"],
-    ["Ниже", "Дома", "Пропускают", "Идет", "Да"],
-    ["Выше", "В гостях", "На месте", "Идет", "Нет"],
-    ["Ниже", "В гостях", "На месте", "Не идет", "Да"]
+    ["usd", "lamphat", "nctt", "slkt", "play "],
+    ["TANG", "GIAM", "THAP", "TB", "THAP "],
+    ["TANG", "TANG", "THAP", "TB", "CAO "],
+    ["TANG", "ON DINH", "CAO", "TB", "CAO "],
+    ["TANG", "TANG", "THAP", "THAP", "CAO "],
+    ["TANG", "GIAM", "TB", "THAP", "CAO "],
+    ["TANG", "GIAM", "CAO", "THAP", "THAP "],
+    ["TB", "ON DINH", "TB", "CAO", "THAP "],
+    ["TB", "GIAM", "THAP", "CAO", "THAP "],
+    ["TB", "TANG", "TB", "THAP", "THAP "],
+    ["TB", "ON DINH", "CAO", "TB", "CAO "],
+    ["TB", "GIAM", "CAO", "CAO", "CAO "],
+    ["GIAM", "ON DINH", "CAO", "THAP", "THAP "],
+    ["GIAM", "GIAM", "CAO", "CAO", "CAO "],
+    ["GIAM", "TANG", "CAO", "TB", "THAP "],
+    ["GIAM", "TANG", "THAP", "THAP", "THAP "],
+    ["GIAM", "ON DINH", "CAO", "TB", "CAO "]
 ];
 
 class Node {
@@ -37,13 +45,14 @@ class ForEntropy {
     }
 }
 
-const posstr = "Да";
-const negstr = "Нет";
+const posstr = "THAP ";
+const negstr = "CAO ";
 var List = document.getElementById('root');
 var attr = [];
 var tree;
 
 function BuildTree() {
+    ClearTree();
     var Branch = getRoot();
     var ul = document.getElementById("root");
     getBranch(Branch);
@@ -236,16 +245,23 @@ function getBranch(Branch) {
     }
 }
 
-function DetourButton() {
-    DetourTree(tree.root);
-}
+function DetourTree(node, data) {
+    let li = document.createElement("li");
+    let a = document.createElement("a");
+    let ul = document.createElement("ul");
+    li.appendChild(ul);
+    console.log(data);
 
-function DetourTree(node) {
-    for (let i = node.child.length - 1; i >= 0; i--) {
-        if (node.child[i].name !== undefined) {
-            //if (node.child[i].name ===) {
-                DetourTree(node.child[i], ul);
-            //}
+    for (let j = 0; j < data.length; j++) {
+        for (let i = node.child.length - 1; i >= 0; i--) {
+            if (node.child[i].name !== undefined) {
+                if (node.child[i].name === data[j]) {
+                    if (j = data.length - 1 && node.child[i].name === data[j]) {
+                        console.log(node.child[i].result);
+                    }
+                    DetourTree(node.child[i], ul);
+                }
+            }
         }
     }
 }

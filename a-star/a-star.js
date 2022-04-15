@@ -8,6 +8,7 @@ var matrix = [];
 var MatrixSize = 30;
 var canvas = document.getElementById('canvas');
 var contex = canvas.getContext('2d');
+var speed = 3;
 
 class Cell {
   constructor(x, y) {
@@ -261,10 +262,8 @@ let breakFlag = false;
 let OpenList = [];
 let CloseList = [];
 
-var sel = document.getElementById('mySelect').selectedIndex;
-var options = document.getElementById('mySelect').options;
-
 function GetDist(first, second) {
+  var sel = document.getElementById('mySelect').selectedIndex;
   if (sel === 0) {
     return Math.abs(first.x - second.x) + Math.abs(first.y - second.y);//эвристическая функция манх
   }
@@ -447,7 +446,21 @@ async function DrawCurrent() {
   }
 }
 
+function SpeedSelection() {
+  document.getElementById("Speed").addEventListener("mouseup", function () {
+    speed = Number(document.getElementById("Speed").value);
+  });
+  let num = 5;
+  for (let i = 1; i <= 5; i++) {
+    if (speed <= i) {
+      num += 5;
+    }
+  }
+  return num;
+}
+
 async function AStar() {
+  var num;
   let flag = false;
   OpenList.push(startCords);
   CheckPath(startCords)
@@ -460,7 +473,8 @@ async function AStar() {
       alert("Путь не был найден")
       break;
     }
-    await new Promise(resolve => setTimeout(resolve, 15))
+    num = SpeedSelection();
+    await new Promise(resolve => setTimeout(resolve, num))
   }
   if (!flag) {
     await DrawPath()
