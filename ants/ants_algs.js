@@ -92,7 +92,7 @@ canvas.onmousemove = function(event){//это чтобы рисовать сте
 			world[x][y].map=eat_count;
 			world[x][(y-1)%80].map=eat_count;
 		}
-		else if(marker=3){
+		else if(marker==3){
 			for(let i=0;i<10;i++)
 			for(let j=0;j<10;j++){
 				world[x+5-i][y+5-j].map=0;
