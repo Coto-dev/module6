@@ -2,13 +2,13 @@
 function tableCreate() {
     var body = document.getElementsByTagName('body')[0];
     var tbl = document.createElement('table');
-    tbl.style.width = '735px';
-    tbl.style.height = '735px';
-    tbl.style.marginLeft = '200px';
+    tbl.style.width = '700px';
+    tbl.style.height = '700px';
     tbl.setAttribute('border', '1');
     tbl.setAttribute('cellpadding', '80');
-    tbl.setAttribute('cellspacing', '0');//cellpadding="80" cellspacing="0"
+    tbl.setAttribute('cellspacing', '0');
     var tbdy = document.createElement('tbody');
+    var divv = document.getElementsByTagName('div')[2];
     for (var i = 0; i < 5; i++) {
       var tr = document.createElement('tr');
       for (var j = 0; j < 5; j++) {
@@ -21,7 +21,8 @@ function tableCreate() {
       tbdy.appendChild(tr);
     }
     tbl.appendChild(tbdy);
-    body.appendChild(tbl)
+    divv.appendChild(tbl);
+
   }
 
   tableCreate();

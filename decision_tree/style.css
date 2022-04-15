@@ -9,13 +9,6 @@ body {
     animation: gradient 10s ease infinite;
 }
 
-#space {
-  position: absolute;
-  top: 0;
-  left: 0;
-  background: #000000;
-}
-
 .size{
     margin-left: 25px; 
 }
@@ -100,6 +93,8 @@ body {
 }
 
 .float-container {
+    display: flex;
+    flex-direction: column;
     margin-left: 230px;
 }
 
@@ -140,30 +135,12 @@ body {
 }
 
 .main {
+    display: flex;
     margin-left: 190px; 
     font-size: 28px; 
     padding: 0px 10px;
 }
 
-@media screen and (max-height: 450px) {
-    .sidenav {padding-top: 15px;}
-    .sidenav a {font-size: 18px;}
-}
-
-@keyframes gradient {
-    0% {
-        background-position: 0 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0 50%;
-    }
-}
-
-/*Now the CSS*/
-* {margin: 0; padding: 0;}
 
 .tree ul {
 	padding-top: 20px; position: relative;

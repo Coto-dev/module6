@@ -88,8 +88,6 @@ function ClusteringKmeans(centroid) {
         while (count < 7) {
 
             centroidXYBegin = centroidXY;
-            console.log(centroidXYBegin);
-            console.log(centroidXY);
             for (let i = 0; i < dots.length; i++) { // проходим по всем точкам
                 var s = 0, min = 10000;
 
@@ -114,8 +112,6 @@ function ClusteringKmeans(centroid) {
                 sumcentroidsY[index] = 0;
                 kolvoCenters[index] = 0;
             }
-            // await delay(1000);
-            // ctx.clearRect(0, 0, 800, 730);
             for (let h = 0; h < dotsToCentroid.length; h++) {
 
                 ctx.beginPath();
@@ -129,10 +125,6 @@ function ClusteringKmeans(centroid) {
             for (let h = 0; h < centroidXY.length; h++) {
                 centroidXY[h][0] = sumcentroidsX[h] / kolvoCenters[h];
                 centroidXY[h][1] = sumcentroidsY[h] / kolvoCenters[h];
-                // ctx.beginPath();
-                //  ctx.fillStyle = color[dotsToCentroid[h]];
-                //  ctx.arc(centroidXY[h][0] , centroidXY[h][1] ,30,0,Math.PI*2);
-                //  ctx.fill();
 
             }
             count++;
@@ -152,6 +144,13 @@ function ClusteringHierarchical(centroid) {
         ctx.clearRect(0, 0, 800, 730);
     }
     drawDots();
+    for(let i=0;i<dots.length;i++){
+        ctx.beginPath();
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = getRandomColor();
+        ctx.arc(dots[i][0], dots[i][1], 15, 0, Math.PI * 2);
+        ctx.stroke();
+    }
     if (dots.length < centroid) {
         alert('Ошибка');
         canvas.clear();
@@ -173,8 +172,6 @@ function ClusteringHierarchical(centroid) {
     count = container.length;
     while (count != centroid) {
         count = 0;
-        console.log('clusters.length', clusters.length);
-        console.log('clusters', clusters)
         minn = 10000;
         for (let i = 0; i < clusters.length; i++) {
             var s = 0, x, y;
@@ -185,7 +182,6 @@ function ClusteringHierarchical(centroid) {
                     s = Math.sqrt(((x - clusters[i][0]) ** 2) + ((y - clusters[i][1]) ** 2));
                     if (s < minn) {
                         minn = Math.min(minn, s);
-                        // console.log(minn);
                         constI = i;
                         constJ = j;
                     }
@@ -194,22 +190,13 @@ function ClusteringHierarchical(centroid) {
 
         }
 
-        //    h.push(container[constI]);
-        //     console.log('container[constI] ',container[constI]);
-
-        //     h.push(container[constJ]);
-        //     console.log('container[constJ] ',container[constJ]);
-
         for (let i = 0; i < container[constI].length; i++) {
             h.push(container[constI][i]);
-            console.log('container[constI][i] ', container[constI][i]);
         }
         for (let i = 0; i < container[constJ].length; i++) {
             h.push(container[constJ][i]);
-            console.log('container[constJ][i] ', container[constJ][i]);
         }
 
-        //delete container[constI];
         delete container[constJ];
         container[constI] = h;
 
@@ -218,32 +205,18 @@ function ClusteringHierarchical(centroid) {
         kolvoCenters = 0;
         for (let i = 0; i < container[constI].length; i++) {
             ctx.beginPath();
-            //  ctx.fillStyle = color[constI];
-            //  ctx.arc(dots[container[constI][i]][0] , dots[container[constI][i]][1] ,25,0,Math.PI*2);
-            //  ctx.fill();
-            ctx.lineWidth = 5;
+            ctx.lineWidth = 10;
             ctx.strokeStyle = color[constI];
             ctx.arc(dots[container[constI][i]][0], dots[container[constI][i]][1], 15, 0, Math.PI * 2);
             ctx.stroke();
-            //ctx.fill();
             sumX += dots[container[constI][i]][0];
             sumY += dots[container[constI][i]][1];
             kolvoCenters++;
         }
         clusters[constI][0] = sumX / kolvoCenters;
         clusters[constI][1] = sumY / kolvoCenters;
-
-
-
-
         delete clusters[constJ];
-        // console.log('cluster ',clusters);
-        console.log('container ', container);
-        // console.log('h ',h);
         h = [];
-        // console.log('h ',h);
-        //clusters.length--;
-        //container.length--;
         for (let i = 0; i < container.length; i++) {
             if (container[i] != undefined)
                 count++;
@@ -282,9 +255,7 @@ function Ostnov(centroid) {
         canvas.clear();
 
     }
-    for (let i = 0; i < dots.length; i++) {
-        color[i] = getRandomColor();
-    }
+
     for (let i = 0, j = 0; i < dots.length; i++) {
         var x, y;
         x = dots[i][0];
@@ -348,16 +319,13 @@ function Ostnov(centroid) {
             if (answer[i][j] != 0) {
                 ctx.beginPath();
                 ctx.lineWidth = 15;
-                ctx.strokeStyle = color[1];
+                ctx.strokeStyle ='black';
                 ctx.moveTo(dots[i][0], dots[i][1]);
                 ctx.lineTo(dots[j][0], dots[j][1]);
                 ctx.stroke();
             }
         }
     }
-
-    console.log(answer);
-
 }
 
  function match() {
