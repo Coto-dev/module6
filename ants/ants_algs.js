@@ -45,6 +45,9 @@ async  function clean(){
 	drawField();
 }
 
+function new_speed_iter(){
+	setTimeout(() => { clearInterval(interval); interval=setInterval(ant_algoritm, iter_time); }, 10);
+}
 
 async  function world1(){
 	for(let i=20;i<40;i++)
@@ -612,10 +615,10 @@ createWorld();
 
 world[home.x][home.y].map=-2;
 world[home.x-1][-1+home.y].map=-2;
-
+var interval;
 function start(){
 	createColony();
-	setInterval(ant_algoritm, iter_time);
+	interval = setInterval(ant_algoritm, iter_time);
 }
 
 

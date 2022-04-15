@@ -44,10 +44,11 @@
         <input placeholder="    Число муравьёв"name="ant_count" type="number" oninput="ant_count=parseInt(this.value)"class="butt"/>
         <button class="butt" onclick="start()">Начать</button>
         <b class="Text">Введите пахучесть феромона:</b><br>
-        <input type="range" min="50" max="500" value="100" class="range" oninput="time=parseInt(this.value)"><br>
+        <input type="range" min="50" max="500" value="100" class="range" oninput="time=parseInt(this.value)">
+        <span id="time">30</span><br>
         
         <b class="Text">Введите скорость работы алгоритма:</b><br>
-        <input type="range" min="10" max="1000" value="250" class="range"  onchange="iter_time = this.value"><br>
+        <input type="range" min="10" max="1000" value="250" class="range"  onchange="iter_time = this.value; new_speed_iter()"><br>
         
         <button  class="butt" onclick="world1()">карта 1</button>
         <button  class="butt" onclick="world2()">карта 2</button>
