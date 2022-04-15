@@ -44,10 +44,10 @@
         <input placeholder="    Число муравьёв"name="ant_count" type="number" oninput="ant_count=parseInt(this.value)"class="butt"/>
         <button class="butt" onclick="start()">Начать</button>
         <b class="Text">Введите пахучесть феромона:</b><br>
-        <input type="range" id="range" min="50" max="500" value="250" class="range" oninput="time=parseInt(this.value)"><br>
+        <input type="range" min="50" max="500" value="100" class="range" oninput="time=parseInt(this.value)"><br>
         
         <b class="Text">Введите скорость работы алгоритма:</b><br>
-        <input type="range" id="range" min="10" max="1000" value="250" class="range"  onchange="iter_time = this.value"><br>
+        <input type="range" min="10" max="1000" value="250" class="range"  onchange="iter_time = this.value"><br>
         
         <button  class="butt" onclick="world1()">карта 1</button>
         <button  class="butt" onclick="world2()">карта 2</button>
@@ -55,8 +55,9 @@
         <button class="butt" onclick="marker=0">Рисовать стены</button>
         <button class="butt" onclick="marker=2">Разместить колонию</button>
         <button class="butt"onclick="marker=1">Разместить еду</button>
-        <input  placeholder="    Cтоимость еды"name="eat" type="number" oninput="eat_count=parseInt(this.value)"class="butt"/>
+        <input  placeholder="    Cтоимость еды"name="eat" max="5" type="number" oninput="eat_count=parseInt(this.value)"class="butt"/>
         <button  class="butt" onclick="clean()">Очистить</button>
+        <button  class="butt" onclick="marker=3">Ластик</button>
         <span id="rangeValue">500</span>
       </div>
     </div>

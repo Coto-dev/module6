@@ -5,7 +5,7 @@ var ant = new Array(ant_count);
 const speed = 1.4;
 var marker=0;//0-стена 1-еда 2-дом
 var iter_time=10;//скорость работы алгоритма
-var eat_count=0;
+var eat_count=1;
 var time = 100;
 const size_world=80;
 var world=[];
@@ -44,17 +44,7 @@ async  function clean(){
 	createWorld();
 	drawField();
 }
-async  function eat(){
-	canvas.onclick = function(event){//это чтобы рисовать стены
-		var x = event.offsetX;
-		var y = event.offsetY;
-		x = Math.floor(x/10); //300 /10 = 30
-		y = Math.floor(y/10); //300 /10 = 
-		world[x][y].map = 1;
-		world[home.x][home.y].map=-2;
-		drawField();
-	}
-}
+
 
 async  function world1(){
 	for(let i=20;i<40;i++)
@@ -93,8 +83,6 @@ canvas.onmousemove = function(event){//это чтобы рисовать сте
 	if(event.buttons !== 1){return; }
 	var x = event.offsetX;
 	var y = event.offsetY;
-	//console.log(x);
-	//console.log(y);
 	x = Math.floor(x/10); //300 /10 = 30
 	y = Math.floor(y/10); //300 /10 = 
 	if(marker==0)
@@ -104,15 +92,20 @@ canvas.onmousemove = function(event){//это чтобы рисовать сте
 			world[x][y].map=eat_count;
 			world[x][(y-1)%80].map=eat_count;
 		}
+		else if(marker=3){
+			for(let i=0;i<10;i++)
+			for(let j=0;j<10;j++){
+				world[x+5-i][y+5-j].map=0;
+			}
+		}
 			else {
 				home.x=x;
 				home.y=y;
 				world[x][y].map=-2;
 			}
 	world[home.x][home.y].map=-2;
-	
-	//console.log(world);
 	drawField();
+	drawAnt();
 }
 
 function createWorld(){//инициализирует мир
@@ -131,8 +124,6 @@ function createWorld(){//инициализирует мир
 				to_home:0
 			};
 		}
-		//world[i][80-i]=-1;
-		//world[i][i]=-1;
 	}
 }
 
@@ -154,8 +145,24 @@ function drawField(){
 				ctx.fillRect(i*10, j*10, 10, 10);
 			}
 			else
-				if(world[i][j].map>0){
-					ctx.fillStyle = 'green';
+				if(world[i][j].map==1){
+					ctx.fillStyle = "#8afa34";
+					ctx.fillRect(i*10, 10*j,20,20);
+				} 
+				else if(world[i][j].map==2){
+					ctx.fillStyle = "#2bb52b";
+					ctx.fillRect(i*10, 10*j,20,20);
+				} 
+				else if(world[i][j].map==3){
+					ctx.fillStyle = "#228c22";
+					ctx.fillRect(i*10, 10*j,20,20);
+				} 
+				else if(world[i][j].map==4){
+					ctx.fillStyle = "#0e3b0e";
+					ctx.fillRect(i*10, 10*j,20,20);
+				} 
+				else if(world[i][j].map>4){
+					ctx.fillStyle = "#132712";
 					ctx.fillRect(i*10, 10*j,20,20);
 				} 
 			if(world[i][j].fer_eat<1)world[i][j].fer_eat=0;
@@ -179,21 +186,21 @@ function drawField(){
 
 function createColony() {
         ant[0]={
-            x: home.x,//Math.floor(Math.random()*100)%80,
-            y: home.y,//Math.floor(Math.random()*100)%80,
+            x: home.x,
+            y: home.y,
 			eat: 0,
             angle: (Math.random()*10)%2,
 			dist_time: time
         };
         for(let i=1;i<ant_count;i++){
             ant[i]={
-			 	x: home.x,//Math.floor(Math.random()*100)%80,
-				y: home.y,//Math.floor(Math.random()*100)%80,
+			 	x: home.x,
+				y: home.y,
 				eat: 0,
 				angle:(Math.random()*10)%2,
 				dist_time: time
         };
-        }
+    }
 }
 
 function update_fer(){
@@ -221,8 +228,6 @@ function update_fer(){
 		}
 		i++;
 	}
-	
-	
 }
 
 function new_fer_to_home(i){
@@ -252,7 +257,6 @@ function diagonal_to_home(ant, X, Y){
 	}
 	while(ant.x+i<size_world&&ant.x+i>=0&&ant.y+j<size_world&&ant.y+j>=0&&ant.x+i-Y<size_world && ant.x+i-Y>=0 && ant.y+j-X<size_world && ant.y+j-X>=0 && k<10){
     if(world[ant.x+i][ant.y+j].map<-1||world[ant.x+i-Y][ant.y+j].map<-1||world[ant.x+i][ant.y+j-X].map<-1) p+=1000000;
-    //console.log("asa");
 		p+=world[ant.x+i-Y][ant.y+j].to_home;
 		p+=world[ant.x+i][ant.y+j-X].to_home;
 		p+=world[ant.x+i][ant.y+j].to_home;
@@ -261,7 +265,7 @@ function diagonal_to_home(ant, X, Y){
 	return p/k;
 	}
 	
-	function cross_to_home(ant, X, Y){
+function cross_to_home(ant, X, Y){
 		let i = X, j=Y, k=0, p=0;
 		if(ant.x+i+Math.abs(Y)<size_world && ant.x+i-Math.abs(Y)>0 && ant.y+j+Math.abs(X)<size_world && ant.y+j-Math.abs(X)>0){
 			if(world[ant.x+i][ant.y+j].map<-1) p+=1000000;
@@ -367,8 +371,7 @@ function NewAngle_eat(ant){//у него есть еда и он хочет до
 		   sec4 = cross_to_home(ant, 0, -1);
 		   sec5 = cross_to_home(ant, 0, 1);
 		}
-	 //console.log((sec1+sec2+sec3+sec4+sec5));	 
-	 //console.log(ant.angle);
+
 	 if(sec1+sec2+sec3+sec4+sec5<=0) return (Math.random()*1/5)-1/10;
 		 else{
 			let k= Math.round(Math.random()*10000000)%(sec1+sec2+sec3+sec4+sec5);
@@ -511,7 +514,7 @@ function NewAngle_to_home(ant){//у него нет еды, он хочет ку
 			sec4 = cross_eat(ant, 0, -1);
 			sec5 = cross_eat(ant, 0, 1);
 		 }
-		// console.log((sec1+sec2+sec3+sec4+sec5));	 console.log(ant.angle);
+		
 		 if(sec1+sec2+sec3+sec4+sec5<=0) return (Math.random()*1/5)-1/10;
 		 else{
 			let k= Math.round(Math.random()*1000000)%(sec1+sec2+sec3+sec4+sec5);
@@ -527,9 +530,9 @@ function NewAngle_to_home(ant){//у него нет еды, он хочет ку
 
 function ant_algoritm(){
 	update_fer();
-	console.log(ant);
-	console.log(fer_to_home);
-	console.log(world);
+	//console.log(ant);
+	//console.log(fer_to_home);
+	//console.log(world);
     for(let i=0;i<ant_count;i++){
 		ant[i].dist_time*=0.99;
 		if (ant[i].eat == 0){	
@@ -595,37 +598,25 @@ function ant_algoritm(){
 			ant[i].dist_time=time;
 			ant[i].angle = 1 + ant[i].angle;
 		}
-
-		//console.log(fer_eat);
 	}
 
 	drawField();
 	drawAnt();
 }
 
-let count = 0;
+
 home.x=40;
 home.y=40;
-
 
 createWorld();
 
 world[home.x][home.y].map=-2;
 world[home.x-1][-1+home.y].map=-2;
+
 function start(){
 	createColony();
 	setInterval(ant_algoritm, iter_time);
 }
 
-/*home.x=15;
-home.y=10;
-createColony();
-createWorld();*/
-
-
 
 drawField();
-/*;
-setInterval(ant_algoritm, 10);*/
-
-ant.show;
