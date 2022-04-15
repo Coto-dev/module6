@@ -77,6 +77,11 @@ body {
     font-size:x-large;
     color: #049898;
 }
+#range{
+    margin-right:3%;
+    font-size:x-large;
+    color: #049898;
+}
 
 .butt:hover {
     background-color: #127b79;

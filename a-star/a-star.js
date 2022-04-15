@@ -301,8 +301,8 @@ function getMinCell() {//ищем минимальный f
     const dx = OpenList[i].x;
     const dy = OpenList[i].y;
 
-    if (Graph[dy][dx].f < min) {
-      min = Graph[dy][dx];
+    if (Graph[dy][dx].h < min) {
+      min = Graph[dy][dx].h;
       index = i;
       temp = new Cell(dx, dy);
     }
@@ -316,6 +316,7 @@ function CheckPath(current) {
   let x = current.x;
   let y = current.y;
 
+  OpenList.sort((a, b) => a.f - b.f);
   OpenList.splice(index, 1);
   CloseList.push(current);
   if (y - 1 >= 0 && Graph[y][x].value !== 0 && !isClosed(new Cell(x, y - 1))) {//пока не долшли до конца
@@ -403,6 +404,7 @@ function CheckPath(current) {
       Graph[y][x + 1].Y = y;
       Graph[y][x + 1].g = 10 + Graph[y][x].g;
       Graph[y][x + 1].f = Graph[y][x - 1].h + Graph[y][x + 1].g;
+
     }
   }
 }
@@ -422,27 +424,8 @@ async function DrawPath() {
 }
 
 async function DrawCurrent() {
-  if (OpenList[1].x !== finishCords.x || OpenList[1].y !== finishCords.y) {
-    if ((matrix[OpenList[1].y][OpenList[1].x] === true) || (matrix[OpenList[1].y][OpenList[1].x] === 1)) {
-      DrawInCanvas(CurrentColor, OpenList[1].x, OpenList[1].y);
-    }
-  }
   if (cell.x !== finishCords.x || cell.y !== finishCords.y) {
-    if ((matrix[cell.y][cell.x] === true) || (matrix[cell.y][cell.x] === 1)) {
-      DrawInCanvas(CurrentColor, cell.x, cell.y);
-    }
-  }
-  if (matrix[startCords.y + 1][startCords.x] !== false) {
-    DrawInCanvas(CurrentColor, startCords.x, startCords.y + 1);
-  }
-  if (matrix[startCords.y - 1][startCords.x] !== false) {
-    DrawInCanvas(CurrentColor, startCords.x, startCords.y - 1);
-  }
-  if (matrix[startCords.y][startCords.x + 1] !== false) {
-    DrawInCanvas(CurrentColor, startCords.x + 1, startCords.y);
-  }
-  if (matrix[startCords.y][startCords.x - 1] !== false) {
-    DrawInCanvas(CurrentColor, startCords.x - 1, startCords.y);
+    DrawInCanvas(CurrentColor, cell.x, cell.y);
   }
 }
 
@@ -450,7 +433,7 @@ function SpeedSelection() {
   document.getElementById("Speed").addEventListener("mouseup", function () {
     speed = Number(document.getElementById("Speed").value);
   });
-  let num = 5;
+  let num = 15;
   for (let i = 1; i <= 5; i++) {
     if (speed <= i) {
       num += 5;
