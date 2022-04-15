@@ -293,7 +293,7 @@ function isOpened(temp) {
   return false;
 }
 
-function getMinCell() {//ищем минимальный f
+function getMinCell() {
   let min = 100000;
   let temp = new Cell(0, 0);
 
@@ -316,7 +316,6 @@ function CheckPath(current) {
   let x = current.x;
   let y = current.y;
 
-  OpenList.sort((a, b) => a.f - b.f);
   OpenList.splice(index, 1);
   CloseList.push(current);
   if (y - 1 >= 0 && Graph[y][x].value !== 0 && !isClosed(new Cell(x, y - 1))) {//пока не долшли до конца
@@ -329,6 +328,7 @@ function CheckPath(current) {
       OpenList.push(new Cell(x, y - 1));
       cell.x = x;
       cell.y = y - 1;
+      DrawCurrent();
       if (x === finishCords.x && y - 1 === finishCords.y) {
         breakFlag = true;
         return 0;
@@ -340,7 +340,6 @@ function CheckPath(current) {
       Graph[y - 1][x].f = Graph[y - 1][x].h + Graph[y - 1][x].g;
     }
   }
-  //down
   if (y + 1 < MatrixSize && Graph[y + 1][x].value !== 0 && !isClosed(new Cell(x, y + 1))) {
     if (!isOpened(new Cell(x, y + 1))) {
       Graph[y + 1][x].X = x;
@@ -351,6 +350,7 @@ function CheckPath(current) {
       OpenList.push(new Cell(x, y + 1));
       cell.y = y + 1;
       cell.x = x;
+      DrawCurrent();
       if (x === finishCords.x && y + 1 === finishCords.y) {
         breakFlag = true;
         return 0;
@@ -362,7 +362,6 @@ function CheckPath(current) {
       Graph[y + 1][x].f = Graph[y + 1][x].h + Graph[y + 1][x].g;
     }
   }
-  //left
   if (x - 1 >= 0 && Graph[y][x - 1].value !== 0 && !isClosed(new Cell(x - 1, y))) {
     if (!isOpened(new Cell(x - 1, y))) {
       Graph[y][x - 1].X = x;
@@ -373,6 +372,7 @@ function CheckPath(current) {
       OpenList.push(new Cell(x - 1, y));
       cell.x = x - 1;
       cell.y = y;
+      DrawCurrent();
       if (x - 1 === finishCords.x && y === finishCords.y) {
         breakFlag = true;
         return 0;
@@ -384,7 +384,6 @@ function CheckPath(current) {
       Graph[y][x - 1].f = Graph[y][x - 1].h + Graph[y][x - 1].g;
     }
   }
-  //
   if (x + 1 < MatrixSize && Graph[y][x + 1].value !== 0 && !isClosed(new Cell(x + 1, y))) {
     if (!isOpened(new Cell(x + 1, y))) {
       Graph[y][x + 1].X = x;
@@ -395,6 +394,7 @@ function CheckPath(current) {
       OpenList.push(new Cell(x + 1, y));
       cell.x = x + 1;
       cell.y = y;
+      DrawCurrent();
       if (x + 1 === finishCords.x && y === finishCords.y) {
         breakFlag = true;
         return 0;
@@ -404,12 +404,13 @@ function CheckPath(current) {
       Graph[y][x + 1].Y = y;
       Graph[y][x + 1].g = 10 + Graph[y][x].g;
       Graph[y][x + 1].f = Graph[y][x - 1].h + Graph[y][x + 1].g;
-
     }
   }
 }
 
 async function DrawPath() {
+  var num;
+  num = SpeedSelection();
   let x = finishCords.x;
   let y = finishCords.y;
   while (x !== startCords.x || y !== startCords.y) {
@@ -419,13 +420,15 @@ async function DrawPath() {
     let temp = x;
     x = Graph[y][temp].X;
     y = Graph[y][temp].Y;
-    await new Promise(resolve => setTimeout(resolve, 20))
+    await new Promise(resolve => setTimeout(resolve, num))
   }
 }
 
 async function DrawCurrent() {
   if (cell.x !== finishCords.x || cell.y !== finishCords.y) {
-    DrawInCanvas(CurrentColor, cell.x, cell.y);
+    if (Graph[cell.y][cell.x].value !== 0) {
+      DrawInCanvas(CurrentColor, cell.x, cell.y);
+    }
   }
 }
 
