@@ -16,6 +16,11 @@ body {
     border-radius: 25px;
 }
 
+.range{
+    margin-top: 70px;
+    margin-left: 50px;
+}
+
 .size{
     margin-left: 25px; 
 }

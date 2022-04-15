@@ -25,6 +25,10 @@
     <h2 class="text">Муравьинный алгоритм</h2>
   </div>
 
+
+ 
+
+
   <div class="float-container">
 
     <div class="float-child1">
@@ -33,20 +37,33 @@
 
     <div class="float-child2">
       <div class="forbutton">
-        <button class="butt" id="file">Добавить мир</button>
-        <button class="butt" id="draw">Начать рисовать</button>
-        <input name="size_world" type="number" class="butt"/>
-        <button class="butt">Очистить мир</button>
-        <button class="butt" id="home">Разместить колонию</button>
-        <button class="butt">Разместить еду</button>
+        <b class="Text">Введите размер лабиринта:</b><br>
+          
+          
+      
+        <input placeholder="    Число муравьёв"name="ant_count" type="number" oninput="ant_count=parseInt(this.value)"class="butt"/>
+        <button class="butt" onclick="start()">Начать</button>
+        
+        <input type="range" id="range" min="50" max="500" value="250"oninput="time=parseInt(this.value)">
+        <input type="range" id="range" min="10" max="1000" value="250" class="range"  onchange="iter_time = this.value">
+        
+        <button  class="butt" onclick="world1()">карта 1</button>
+        <button  class="butt" onclick="world2()">карта 2</button>
+        
+        <button class="butt" onclick="marker=0">Рисовать стены</button>
+        <button class="butt" onclick="marker=2">Разместить колонию</button>
+        <button class="butt"onclick="marker=1">Разместить еду</button>
+        <input  placeholder="    Cтоимость еды"name="eat" type="number" oninput="eat_count=parseInt(this.value)"class="butt"/>
+        <button  class="butt" onclick="clean()">Очистить</button>
+        <span id="rangeValue">500</span>
       </div>
     </div>
 
   </div>
 
 
-
   <script src="ants_algs.js"> </script>
+  
 </body>
 
 </html>
