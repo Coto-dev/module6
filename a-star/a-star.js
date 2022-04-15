@@ -165,6 +165,7 @@ canvas.clear = function () {
   finishCords = new Cell(0, 0);
   FinishButton = false;
   StartButton = false;
+  matrix = [];
 }
 
 function CreateMazes() {
@@ -453,7 +454,6 @@ async function AStar() {
   while (!breakFlag) {
     var min = getMinCell();
     CheckPath(min);
-    DrawCurrent();
     if (OpenList.length <= 0) {
       flag = true;
       alert("Путь не был найден")
@@ -466,8 +466,8 @@ async function AStar() {
     await DrawPath()
   }
 
-  OpenList.splice(0, OpenList.length);
-  CloseList.splice(0, CloseList.length);
+  OpenList.length = 0;
+  CloseList.length = 0;
   index = 0;
   breakFlag = false;
 }

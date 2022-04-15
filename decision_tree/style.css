@@ -5,8 +5,6 @@ html, body {
 body {
     margin: 0;
     background: #0B0C10;
-    background-size: 400% 400%;
-    animation: gradient 10s ease infinite;
 }
 
 .size{

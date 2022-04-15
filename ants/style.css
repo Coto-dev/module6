@@ -20,14 +20,18 @@ body {
     font-size:x-large;
     color: #049898;
 }
+
 #speed{
     margin-right:3%;
     font-size:x-large;
     color: #049898;
 }
-.range{
+
+#smell{
     margin-top: 10px;
     margin-left: 30px;
+    font-size:x-large;
+    color: #049898;
 }
 
 .size{

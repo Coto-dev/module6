@@ -278,7 +278,12 @@ function drawTree(node, treeEl) {
     }
 
     if (node.result === undefined) {
-        a.textContent = node.name;
+        if (node.parent !== undefined) {
+            a.textContent = node.name + "←" + node.parent;
+        }
+        else {
+            a.textContent = node.name;
+        }
     }
     else {
         a.textContent = node.name + "→" + node.result;

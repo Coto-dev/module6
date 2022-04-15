@@ -37,6 +37,12 @@
           <input id="Speed" type="range" min="1" max="7" value="5" class="range"
             onchange="document.getElementById('range').innerHTML = this.value">
           <span id='range'>5</span>
+          <p><b class="Text">Выберите эвристическую функцию:</b><br>
+            <select id="mySelect">
+              <option>Манхэттенское расстояние</option>
+              <option>Расстояние Чебышева</option>
+              <option>Евклидово расстояние</option>
+            </select>
           <button class="butt" onclick="CreateMazes()">Сгенерировать лабиринт</button>
           <br>
           <button class="butt" onclick="DrawStart()">Старт</button>
@@ -47,12 +53,6 @@
           <br>
           <button class="butt" onclick="FindingPath()">Начать</button>
           <button class="butt" onclick="canvas.clear()">Очистить</button>
-        <p><b class="Text">Выберите эвристическую функцию:</b><br>
-          <select id="mySelect">
-            <option>Манхэттенское расстояние</option>
-            <option>Расстояние Чебышева</option>
-            <option>Евклидово расстояние</option>
-          </select>
       </div>
     </div>
     <div>
