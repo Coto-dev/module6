@@ -30,7 +30,7 @@ var home = {
 };
 
 async  function clean(){
-	setTimeout(() => { clearInterval(interval)}, 10);
+	if(start_alg!==0)setTimeout(() => { clearInterval(interval)}, 10);
 	for(let i=0;i<80;i++)
 	for(let j=0;j<80;j++)
 	{
@@ -540,7 +540,7 @@ function ant_algoritm(){
 	//console.log(ant);
 	//console.log(fer_to_home);
 	//console.log(world);
-    for(let i=0;i<ant_count;i++){
+    for(let i=0;i<ant_count&&start_alg===1;i++){
 		ant[i].dist_time*=0.99;
 		if (ant[i].eat === 0){	
 			new_fer_to_home(i);
@@ -606,9 +606,10 @@ function ant_algoritm(){
 			ant[i].angle = 1 + ant[i].angle;
 		}
 	}
-
+	
 	drawField();
-	drawAnt();
+	if(start_alg!==0)
+		drawAnt();
 }
 
 
