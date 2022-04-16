@@ -1,12 +1,13 @@
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 var ant_count = 70;
-var ant = new Array(ant_count);
+var ant = [];
 const speed = 1.4;
 var marker=0;//0-стена 1-еда 2-дом
 var iter_time=30;//скорость работы алгоритма
 var eat_count=1;
 var time = 100;
+var start_alg=0;
 const size_world=80;
 var world=[];
 var fer_to_home = [];
@@ -41,6 +42,7 @@ async  function clean(){
 	fer_eat=[];
 	fer_to_home=[];
 	world=[];
+	start_alg=0;
 	createWorld();
 	drawField();
 	setTimeout(() => { clearInterval(interval)}, 10);
@@ -109,7 +111,7 @@ canvas.onmousemove = function(event){//это чтобы рисовать сте
 			}
 	world[home.x][home.y].map=-2;
 	drawField();
-	drawAnt();
+	if(start_alg===1)drawAnt();
 }
 
 function createWorld(){//инициализирует мир
@@ -620,6 +622,7 @@ var interval;
 function start(){
 	createColony();
 	interval = setInterval(ant_algoritm, iter_time);
+	start_alg=1;
 }
 
 
