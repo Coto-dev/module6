@@ -30,6 +30,7 @@ var home = {
 };
 
 async  function clean(){
+	setTimeout(() => { clearInterval(interval)}, 10);
 	for(let i=0;i<80;i++)
 	for(let j=0;j<80;j++)
 	{
@@ -45,7 +46,7 @@ async  function clean(){
 	start_alg=0;
 	createWorld();
 	drawField();
-	setTimeout(() => { clearInterval(interval)}, 10);
+	
 }
 
 function new_speed_iter(){
@@ -91,14 +92,14 @@ canvas.onmousemove = function(event){//это чтобы рисовать сте
 	var y = event.offsetY;
 	x = Math.floor(x/10); //300 /10 = 30
 	y = Math.floor(y/10); //300 /10 = 
-	if(marker==0)
+	if(marker===0)
 		world[x][y].map=-1;
-		else if(marker==1)
+		else if(marker===1)
 		{
 			world[x][y].map=eat_count;
 			world[x][(y-1)%80].map=eat_count;
 		}
-		else if(marker==3){
+		else if(marker===3){
 			for(let i=0;i<10;i++)
 			for(let j=0;j<10;j++){
 				world[x+5-i][y+5-j].map=0;
@@ -146,24 +147,24 @@ function drawField(){
 	ctx.clearRect(0, 0, size_world*10, size_world*10);
 	for (var i=0; i<size_world; i++){
 		for (var j=0; j<size_world; j++){
-			if (world[i][j].map==-1){//стена
+			if (world[i][j].map===-1){//стена
 				ctx.fillStyle = 'black';
 				ctx.fillRect(i*10, j*10, 10, 10);
 			}
 			else
-				if(world[i][j].map==1){
+				if(world[i][j].map===1){
 					ctx.fillStyle = "#8afa34";
 					ctx.fillRect(i*10, 10*j,20,20);
 				} 
-				else if(world[i][j].map==2){
+				else if(world[i][j].map===2){
 					ctx.fillStyle = "#2bb52b";
 					ctx.fillRect(i*10, 10*j,20,20);
 				} 
-				else if(world[i][j].map==3){
+				else if(world[i][j].map===3){
 					ctx.fillStyle = "#228c22";
 					ctx.fillRect(i*10, 10*j,20,20);
 				} 
-				else if(world[i][j].map==4){
+				else if(world[i][j].map===4){
 					ctx.fillStyle = "#0e3b0e";
 					ctx.fillRect(i*10, 10*j,20,20);
 				} 
@@ -541,7 +542,7 @@ function ant_algoritm(){
 	//console.log(world);
     for(let i=0;i<ant_count;i++){
 		ant[i].dist_time*=0.99;
-		if (ant[i].eat == 0){	
+		if (ant[i].eat === 0){	
 			new_fer_to_home(i);
 			ant[i].angle += NewAngle_to_home(ant[i]);
 		}
@@ -586,7 +587,7 @@ function ant_algoritm(){
 			y=79;
 			ant[i].angle+=1;
 		}
-		if(world[x][y].map==-1){
+		if(world[x][y].map===-1){
 			ant[i].angle+=1;
 		}
 		else{

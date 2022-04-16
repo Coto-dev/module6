@@ -60,7 +60,7 @@ function ClusteringKmeans(centroid) {
         centroidXYBegin = [], step = 0,
         color = [], sumcentroidsX = [],
         sumcentroidsY = [], kolvoCenters = [];
-    if (centroid == 0){
+    if (centroid === 0){
         centroid = prompt('Сколь центроидов?', 2);
         ctx.clearRect(0, 0, 800, 730);
     }
@@ -139,7 +139,7 @@ function ClusteringHierarchical(centroid) {
     var clusters = [], sumX = 0, sumY = 0, centroids = [];
     var minn = 1000, constI, constJ, count = 0;
     var h = [], container = [[]];
-    if (centroid == 0){
+    if (centroid === 0){
         centroid = prompt('Сколь центроидов?', 2);
         ctx.clearRect(0, 0, 800, 730);
     }
@@ -170,13 +170,13 @@ function ClusteringHierarchical(centroid) {
         container[i, i] = [i];
     }
     count = container.length;
-    while (count != centroid) {
+    while (count !== centroid) {
         count = 0;
         minn = 10000;
         for (let i = 0; i < clusters.length; i++) {
             var s = 0, x, y;
             for (let j = 0; j < clusters.length; j++) {
-                if (i != j && clusters[i] != undefined && clusters[j] != undefined) {
+                if (i !== j && clusters[i] !== undefined && clusters[j] !== undefined) {
                     x = clusters[j][0];
                     y = clusters[j][1];
                     s = Math.sqrt(((x - clusters[i][0]) ** 2) + ((y - clusters[i][1]) ** 2));
@@ -218,7 +218,7 @@ function ClusteringHierarchical(centroid) {
         delete clusters[constJ];
         h = [];
         for (let i = 0; i < container.length; i++) {
-            if (container[i] != undefined)
+            if (container[i] !== undefined)
                 count++;
         }
     }
@@ -245,7 +245,7 @@ function Ostnov(centroid) {
     }
 
 
-    if (centroid == 0){
+    if (centroid === 0){
         centroid = prompt('Сколь центроидов?', 2);
         ctx.clearRect(0, 0, 800, 730);
     }
@@ -265,7 +265,7 @@ function Ostnov(centroid) {
     for (let i = 0; i < clusters.length; i++) {
         var s = 0, x, y;
         for (let j = 0; j < clusters.length; j++) {
-            if (i != j && clusters[i] != undefined && clusters[j] != undefined) {
+            if (i !== j && clusters[i] !== undefined && clusters[j] !== undefined) {
                 x = clusters[j][0];
                 y = clusters[j][1];
                 s = Math.sqrt(((x - clusters[i][0]) ** 2) + ((y - clusters[i][1]) ** 2));
@@ -286,7 +286,7 @@ function Ostnov(centroid) {
             for (let i = 0; i < n; i++)
                 if (used[i])
                     for (let j = 0; j < n; j++)
-                        if (!used[j] && matrix[i][j] > 0 && (miny == -1 || matrix[i][j] < matrix[miny][minx]))
+                        if (!used[j] && matrix[i][j] > 0 && (miny === -1 || matrix[i][j] < matrix[miny][minx]))
                             miny = i, minx = j;
             used[minx] = true;
             answer[miny][minx] = matrix[miny][minx];
@@ -316,7 +316,7 @@ function Ostnov(centroid) {
     }
     for (let i = 0; i < answer.length; i++) {
         for (let j = 0; j < answer.length; j++) {
-            if (answer[i][j] != 0) {
+            if (answer[i][j] !== 0) {
                 ctx.beginPath();
                 ctx.lineWidth = 15;
                 ctx.strokeStyle ='black';

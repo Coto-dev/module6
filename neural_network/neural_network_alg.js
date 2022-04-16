@@ -34,11 +34,11 @@ while(k--){
 }
 
 function clikTD(){
- if(this.style.background == 'white'){
+ if(this.style.background === 'white'){
  this.style.background = 'black';
  }
  else
- if(this.style.background == 'black'){
+ if(this.style.background === 'black'){
     this.style.background = 'white';
     }
  };
@@ -46,7 +46,7 @@ function clikTD(){
     var m, k;
     mass=[26];
     for (let i=0;i<26;i++){
-        if (i==0)
+        if (i===0)
         mass[i]=1;
         else
     mass[i]=0;
@@ -54,7 +54,7 @@ function clikTD(){
     m=document.querySelectorAll("td");
     k=m.length;
     while(k--){
-       if (m[k].style.background=='black')
+       if (m[k].style.background==='black')
        m[k].style.background='white';
     }
 
@@ -63,7 +63,7 @@ function clikTD(){
     var m, k;
     mass=[26];
     for (let i=0;i<26;i++){
-        if (i==0)
+        if (i===0)
         mass[i]=1;
         else
     mass[i]=0;
@@ -71,7 +71,7 @@ function clikTD(){
     m=document.querySelectorAll("td");
     k=m.length;
     while(k--){
-       if (m[k].style.background=='black')
+       if (m[k].style.background==='black')
        mass[k+1]=1;
     }
     answer(mass);
@@ -1284,7 +1284,7 @@ let N = [
               N[l][i]= 1 / (1 + Math.exp( -summator));
 
               
-                if (l!= netSize.length-1)
+                if (l!== netSize.length-1)
 
                 { N[l][0] = 1 }
 
@@ -1299,7 +1299,7 @@ let N = [
               constI=i;
               }
             }
-            if (constI+1!=10)
+            if (constI+1!==10)
             alert(constI+1);
             else alert(0);
           }

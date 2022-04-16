@@ -85,10 +85,10 @@ function getCross(population) {
         if (randomParents[i] > ConstRelativeChance)
             IndexParents.push(i);
     }
-    if (IndexParents.length % 2 != 0)
+    if (IndexParents.length % 2 !== 0)
         IndexParents.pop();
     var childFirst = [], childSecond = [], parentSizeOne = 0, parentSizeTwo = 0;
-    if (dots.length % 2 == 0) {
+    if (dots.length % 2 === 0) {
         parentSizeOne = Math.floor(dots.length / 2);
         parentSizeTwo = Math.floor(dots.length / 2);
     }
@@ -150,7 +150,7 @@ function mutation(child) {
     var mut = [];
     var i = getRandom(0, child.length - 1);
     var j = getRandom(0, child.length - 1);
-    while (i == j) {
+    while (i === j) {
         j = getRandom(0, child.length - 1);
     }
     var maxx = Math.max(i, j);
@@ -169,7 +169,7 @@ function selection(population) {
     while (newPopulation.length < populationSize) {
         var minn = 1000000, gen = [], constI = 0;
         for (let i = 0; i < population.length; i++) {
-            if (population[i] != undefined && minn > population[i][dots.length] && newPopulation.includes(gen) != true) {
+            if (population[i] !== undefined && minn > population[i][dots.length] && newPopulation.includes(gen) !== true) {
                 minn = population[i][dots.length];
 
                 gen = population[i];
