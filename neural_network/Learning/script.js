@@ -263,6 +263,33 @@ createArray_Error();
             }
           }
 
+          function checkAll(set=fullCheckSet) {
+            
+            netError = 0;
+      
+            for
+              (let sample = 0; sample < fullCheckSet.length; sample++) {//перебираем примеры проверочной выборки
+      
+                answer(set[sample][0]);
+                  //определяем, правильный ли ответ
+                  //для этого перебираем правильные ответы и ответы сети. Оба показателя - это массивы
+      
+                  for (let i = 0; i < set[sample][1].length; i++) {//
+      
+                    if ((set[sample][1][i]-Math.round(N[netSize.length-1][i]))!=0)
+                      {
+                        netError+=Math.abs(set[sample][1][i]-N[netSize.length-1][i]);
+      
+                             
+                      }
+
+                    }
+                  }
+                  console.log(`------------------------------------------------------------
+                    ошибка сети: ${netError}`);
+ 
+                  }
+
 
       function calculateError (y=trainingSet[0][1]) { 
 
