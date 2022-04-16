@@ -21,6 +21,21 @@ body {
     color: #049898;
 }
 
+.range{
+    margin-top: 15px;
+    margin-left: 30px;
+    margin-right:3%;
+    width:300px;
+    background-color: #049898;
+}
+
+
+#range{
+    margin-right:3%;
+    font-size:x-large;
+    color: #049898;
+}
+
 #speed{
     margin-right:3%;
     font-size:x-large;
